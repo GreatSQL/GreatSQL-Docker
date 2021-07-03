@@ -1,36 +1,13 @@
-# GreatSQL-Docker
+GreatSQL-Docker
 
-#### Description
-GreatSQL Docker镜像集
+####Introduction
 
-#### Software Architecture
-Software architecture description
+Docker image set related to GreatSQL software.
 
-#### Installation
+Dockerfiles can be used to customize and build docker images, [Click here to read more about dockerfiles]https://docs.docker.com/engine/reference/builder/).
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+How to build and run the great SQL software, please refer to the various directories.
 
-#### Instructions
+We welcome and encourage community users to suggest improvements or contribute code, ideas, and anything else that can help improve the project.
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Contribution
-
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
-
-
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+If you find any problems or bugs related to the GreatSQL-Docker, you can [submit issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues).
