@@ -1,6 +1,8 @@
-GreatSQL-Docker
+# GreatSQL-Docker
 
-# Introduction
+---
+
+## Introduction
 
 Docker image set related to GreatSQL software.
 
@@ -13,15 +15,15 @@ We welcome and encourage community users to suggest improvements or contribute c
 If you find any problems or bugs related to the GreatSQL-Docker, you can [submit issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues).
 
 
-# Quick reference
+## Quick reference
 - Maintained by: GreatSQL(greatsql@greatdb.com)
 - Where to get help: send mail to greatsql@greatdb.com
 
-# Supported tags
+## Supported tags
 - [8.0.23-centos8](https://hub.docker.com/layers/157763647/greatsql/greatsql/8.0.23-centos8/images/sha256-0635de0b4553f14ffad856ed1200fcaf2229657090aceaefba10bb7bfdecd036?context=repo), [latest](https://hub.docker.com/layers/156877878/greatsql/greatsql/latest/images/sha256-655ded37041c646afe96447a94c4caf41371bfad5ed4d6211515e4b40f44e730?context=repo)
 - [8.0.23-centos7](https://hub.docker.com/layers/155822456/greatsql/greatsql/8.0.23-centos7/images/sha256-655ded37041c646afe96447a94c4caf41371bfad5ed4d6211515e4b40f44e730?context=repo)
 
-# How to use this image
+## How to use this image
 Starting a GreatSQL instance is simple:
 ```
 $ docker run -d \
@@ -75,7 +77,7 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 1 row in set (0.00 sec)
 ```
 
-# How to use this image via docker-compose
+## How to use this image via docker-compose
 
 Example for docker-compose `/data/docker/mysql.yml`:
 ```
@@ -104,7 +106,7 @@ Run the command to enter container:
 $ docker exec -it mgr1 bash
 ```
 
-# How to create a new MGR cluster via docker-compse
+## How to create a new MGR cluster via docker-compse
 Example for docker-compose `/data/docker/mgr.yml`:
 ```
 version: '2'
@@ -185,7 +187,7 @@ $ docker exec -it mgr2 bash
 ```
 It looks ok.
 
-# Environment Variables
+## Environment Variables
 - **MYSQL_ROOT_PASSWORD**
 
 This variable is mandatory and specifies the password that will be set for the MySQL root superuser account.
