@@ -37,7 +37,7 @@ greatsql/greatsql
 *MYSQL_ALLOW_EMPTY_PASSWORD=1* set MySQL root user password as empty(by default),
 tag is the tag specifying the GreatSQL version you want. See the list above for relevant tags.
 
-# Connect to MySQL
+## Connect to MySQL
 Execute the following command to enter the container
 ```
 $ docker exec -it mgr1 bash
@@ -169,7 +169,7 @@ $ docker exec -it mgr1 bash
 1 rows in set (0.00 sec)
 ```
 
-Enter the first contaniner, and setup it as MGR SECONDARY node:
+Enter the second contaniner, and setup it as MGR SECONDARY node:
 ```
 $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
