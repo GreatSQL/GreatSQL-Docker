@@ -1,7 +1,8 @@
 FROM centos:7
+#FROM centos:8
+
 MAINTAINER greatsql@greatdb.com
 
-RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
 
 ENV MYSQL_DATA_DIR=/data/GreatSQL
@@ -12,8 +13,10 @@ ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
 ENV GREATSQL="GreatSQL-8.0.25-15-Linux.x86_64.glibc2.12"
 ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
-ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el7.x86_64.rpm"
 ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
+ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el7.x86_64.rpm"
+#for centos8
+#ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el8.x86_64.rpm"
 ENV GREATSQL_INIT="greatsql-init.sh"
 
 #Creating user mysql
