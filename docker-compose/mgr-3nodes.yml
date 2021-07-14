@@ -1,0 +1,55 @@
+version: '2'
+
+services:
+  mgr1:
+    image: greatsql/greatsql
+    container_name: mgr1
+    hostname: mgr1
+    network_mode: bridge
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_INIT_MGR: 1
+      MYSQL_MGR_LOCAL: '172.17.0.2:33061'
+      MYSQL_MGR_SEEDS: '172.17.0.2:33061,172.17.0.3:33061,172.17.0.4:33061'
+    extra_hosts:
+      - "mgr1:172.17.0.2"
+      - "mgr2:172.17.0.3"
+      - "mgr3:172.17.0.4"
+  mgr2:
+    image: greatsql/greatsql
+    container_name: mgr2
+    hostname: mgr2
+    network_mode: bridge
+    restart: unless-stopped
+    depends_on:
+      - "mgr1"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_INIT_MGR: 1
+      MYSQL_MGR_LOCAL: '172.17.0.3:33061'
+      MYSQL_MGR_SEEDS: '172.17.0.2:33061,172.17.0.3:33061,172.17.0.4:33061'
+    extra_hosts:
+      - "mgr1:172.17.0.2"
+      - "mgr2:172.17.0.3"
+      - "mgr3:172.17.0.4"
+  mgr3:
+    image: greatsql/greatsql
+    container_name: mgr3
+    hostname: mgr3
+    network_mode: bridge
+    restart: unless-stopped
+    depends_on:
+      - "mgr2"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_INIT_MGR: 1
+      MYSQL_MGR_LOCAL: '172.17.0.4:33061'
+      MYSQL_MGR_SEEDS: '172.17.0.2:33061,172.17.0.3:33061,172.17.0.4:33061'
+    extra_hosts:
+      - "mgr1:172.17.0.2"
+      - "mgr2:172.17.0.3"
+      - "mgr3:172.17.0.4"
