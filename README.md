@@ -19,8 +19,7 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 - 联系人: greatsql@greatdb.com
 
 ## 支持哪些tag
-- [8.0.23-centos8](https://hub.docker.com/layers/157763647/greatsql/greatsql/8.0.23-centos8/images/sha256-0635de0b4553f14ffad856ed1200fcaf2229657090aceaefba10bb7bfdecd036?context=repo), [latest](https://hub.docker.com/layers/156877878/greatsql/greatsql/latest/images/sha256-655ded37041c646afe96447a94c4caf41371bfad5ed4d6211515e4b40f44e730?context=repo)
-- [8.0.23-centos7](https://hub.docker.com/layers/155822456/greatsql/greatsql/8.0.23-centos7/images/sha256-655ded37041c646afe96447a94c4caf41371bfad5ed4d6211515e4b40f44e730?context=repo)
+- [8.0.25](https://hub.docker.com/layers/158734159/greatsql/greatsql/8.0.25/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo), [latest](https://hub.docker.com/layers/156877878/greatsql/greatsql/latest/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo)
 
 ## 如何使用GreatSQL镜像
 例如:
@@ -47,7 +46,7 @@ $ docker exec -it mgr1 bash
 [root@mgr1 /]# mysqladmin ping
 mysqld is alive
 [root@mgr1 /]# mysqladmin ver
-mysqladmin  Ver 8.0.23-14 for Linux on x86_64 (GreatSQL, Release 14, Revision 388a90b9c7f)
+mysqladmin  Ver 8.0.25 for Linux on x86_64 (MySQL Community Server - GPL)
 Copyright (c) 2018-2021 GreatOpenSource and/or its affiliates
 Copyright (c) 2009-2021 Percona LLC and/or its affiliates
 Copyright (c) 2000, 2021, Oracle and/or its affiliates.
@@ -56,7 +55,7 @@ Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
 owners.
 
-Server version        8.0.23-14
+Server version          8.0.25-15
 Protocol version    10
 Connection        Localhost via UNIX socket
 UNIX socket        /data/GreatSQL/mysql.sock
@@ -71,7 +70,7 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 +-----------+
 | version() |
 +-----------+
-| 8.0.23-14 |
+| 8.0.25-15 |
 +-----------+
 1 row in set (0.00 sec)
 ```
@@ -165,7 +164,7 @@ $ docker exec -it mgr1 bash
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | 202eb70c-e13a-11eb-b390-0242ac110002 | mgr1        |        3306 | ONLINE       | PRIMARY     | 8.0.23         |
+| group_replication_applier | 202eb70c-e13a-11eb-b390-0242ac110002 | mgr1        |        3306 | ONLINE       | PRIMARY     | 8.0.25         |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 1 rows in set (0.00 sec)
 ```
@@ -181,8 +180,8 @@ $ docker exec -it mgr2 bash
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
-| group_replication_applier | 202eb70c-e13a-11eb-b390-0242ac110002 | mgr1        |        3306 | ONLINE       | PRIMARY     | 8.0.23         |
-| group_replication_applier | 20851760-e13a-11eb-91e1-0242ac110003 | mgr2        |        3306 | ONLINE       | SECONDARY   | 8.0.23         |
+| group_replication_applier | 202eb70c-e13a-11eb-b390-0242ac110002 | mgr1        |        3306 | ONLINE       | PRIMARY     | 8.0.25         |
+| group_replication_applier | 20851760-e13a-11eb-91e1-0242ac110003 | mgr2        |        3306 | ONLINE       | SECONDARY   | 8.0.25         |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 2 rows in set (0.00 sec)
 ```
