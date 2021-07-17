@@ -11,7 +11,9 @@ ENV MYSQL_UID_GID=3306
 ENV MYSQL_EXTRACT_DIR=/usr/local
 ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
-ENV GREATSQL="GreatSQL-8.0.25-15-Linux.x86_64.glibc2.12"
+ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.17-x86_64-minimal"
+#for centos8
+#ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-x86_64-minimal"
 ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
 ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
 ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el7.x86_64.rpm"
@@ -29,7 +31,8 @@ COPY ${GREATSQL} ${MYSQL_EXTRACT_DIR}/${GREATSQL}
 COPY ${JEMALLOC_RPM} ${TMP_DIR}
 
 #Installing jemalloc & depend libs
-RUN yum install -y ${TMP_DIR}/${JEMALLOC_RPM} ; yum install -y ${DEP_LIBS}
+RUN yum install -y ${TMP_DIR}/${JEMALLOC_RPM}
+RUN yum install -y ${DEP_LIBS}
 
 RUN cd ${MYSQL_BASEDIR}/support-files && \
     cp -f my.cnf /etc/my.cnf ; \
