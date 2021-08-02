@@ -230,3 +230,9 @@ This is an optional variable. Set the mgr user name, default value: repl;
 - **MYSQL_MGR_USER_PWD**
 
 This is an optional variable. Set the mgr user password, default value: repl4MGR;
+
+## Contact Us
+please scan the qr code
+
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/143402_f9d6cb61_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
