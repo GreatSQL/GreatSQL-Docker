@@ -1,4 +1,4 @@
-FROM centos:8
+FROM docker.io/arm64v8/centos
 
 MAINTAINER greatsql@greatdb.com
 
@@ -10,12 +10,9 @@ ENV MYSQL_UID_GID=3306
 ENV MYSQL_EXTRACT_DIR=/usr/local
 ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
-#for centos8
-ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-x86_64-minimal"
+ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-aarch64-minimal"
 ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
 ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
-#for centos8
-ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el8.x86_64.rpm"
 ENV GREATSQL_INIT="greatsql-init.sh"
 
 #Creating user mysql
@@ -25,15 +22,12 @@ RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
 
 #Copying files
 COPY ${GREATSQL} ${MYSQL_EXTRACT_DIR}/${GREATSQL}
-COPY ${JEMALLOC_RPM} ${TMP_DIR}
 
-#Installing jemalloc & depend libs
-RUN yum install -y ${TMP_DIR}/${JEMALLOC_RPM}
+#Installing  depend libs
 RUN yum install -y ${DEP_LIBS}
 
 RUN cd ${MYSQL_BASEDIR}/support-files && \
     cp -f my.cnf /etc/my.cnf ; \
-    echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.1" >> /etc/sysconfig/mysql ; \
     echo "THP_SETTING=never" >> /etc/sysconfig/mysql ; \
     echo "export PATH=\$PATH:${MYSQL_BASEDIR}/bin" >> /etc/profile.d/mysql.sh ; \
     source /etc/profile.d/mysql.sh
@@ -44,8 +38,6 @@ RUN export PATH
 RUN mkdir -p ${MYSQL_DATA_DIR} && chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_BASEDIR} ; \
     chmod -R ug+rwX ${MYSQL_BASEDIR} ; \
     chmod -R ug+rwX /etc/my.cnf
-
-RUN rm -f ${TMP_DIR}/${JEMALLOC_RPM}
 
 COPY ${GREATSQL_INIT} /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
