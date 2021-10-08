@@ -12,7 +12,7 @@ How to build and run the great SQL software, please refer to the various directo
 
 We welcome and encourage community users to suggest improvements or contribute code, ideas, and anything else that can help improve the project.
 
-If you find any problems or bugs related to the GreatSQL-Docker, you can [submit issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues).
+If you find any problems or bugs related to the GreatSQL-Docker, you can [submit issue](https://github.com/GreatSQL/GreatSQL-Docker/issues).
 
 
 ## Quick reference
@@ -236,3 +236,5 @@ please scan the qr code
 
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/143402_f9d6cb61_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
+
+mail: greatsql@greatdb.com
