@@ -2,28 +2,27 @@
 
 ---
 
-## Introduction
+## 介绍
+GreatSQL软件相关Docker镜像集。
 
-Docker image set related to GreatSQL software.
+Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Dockerfiles的文档](https://docs.docker.com/engine/reference/builder/)。
 
-Dockerfiles can be used to customize and build docker images, [Click here to read more about dockerfiles]https://docs.docker.com/engine/reference/builder/).
+如何构建和运行GreatSQL软件，请参阅各个目录。
 
-How to build and run the great SQL software, please refer to the various directories.
+我们非常欢迎和鼓励社区用户提出改进建议或贡献代码、想法，以及其他任何可以帮助改进项目的做法。
 
-We welcome and encourage community users to suggest improvements or contribute code, ideas, and anything else that can help improve the project.
-
-If you find any problems or bugs related to the GreatSQL-Docker, you can [submit issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues).
+如果您发现任何GreatSQL-Docker项目相关的问题、bug，都可以[戳此提交issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues)，我们将尽快处理。
 
 
-## Quick reference
-- Maintained by: GreatSQL(greatsql@greatdb.com)
-- Where to get help: send mail to greatsql@greatdb.com
+## 快速使用
+- 维护者: GreatSQL(greatsql@greatdb.com)
+- 联系人: greatsql@greatdb.com
 
-## Supported tags
+## 支持哪些tag
 - [8.0.25](https://hub.docker.com/layers/158734159/greatsql/greatsql/8.0.25/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo), [latest](https://hub.docker.com/layers/156877878/greatsql/greatsql/latest/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo)
 
-## How to use this image
-Starting a GreatSQL instance is simple:
+## 如何使用GreatSQL镜像
+例如:
 ```
 $ docker run -d \
 --name mgr1 --hostname=mgr1 \
@@ -31,18 +30,18 @@ $ docker run -d \
 -e MYSQL_INIT_MGR=1 \
 greatsql/greatsql
 ```
-*--name mgr1* is the name you want to assign to your container,
-*--hostname=mgr1* set the container's hostname,
-*MYSQL_ALLOW_EMPTY_PASSWORD=1* set MySQL root user password as empty(by default),
-tag is the tag specifying the GreatSQL version you want. See the list above for relevant tags.
+*--name mgr1*，设定容器名称
+*--hostname=mgr1*，设定容器主机名
+*MYSQL_ALLOW_EMPTY_PASSWORD=1* 设定容器中的MySQL root用户是否采用空密码
+*greatsql/greatsql*，指定容器使用的镜像名
 
-## Connect to MySQL
-Execute the following command to enter the container
+## 连接（容器中的）MySQL
+运行下面的命令进入容器
 ```
 $ docker exec -it mgr1 bash
 ```
 
-You can execute client programs such as mysql or mysqladmin
+可以使用mysql 或 mysqladmin等客户端工具
 ```
 [root@mgr1 /]# mysqladmin ping
 mysqld is alive
@@ -76,9 +75,9 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 1 row in set (0.00 sec)
 ```
 
-## How to use this image via docker-compose
+## 如何通过 docker-compose 使用GreatSQL镜像
 
-Example for docker-compose `/data/docker/mysql.yml`:
+下面是一个docker-compose的配置文件参考 `/data/docker/mysql.yml`:
 ```
 version: '2'
 
@@ -95,18 +94,20 @@ services:
       MYSQL_INIT_MGR: 1
 ```
 
-Run `docker-compose -f /data/docker/mysql.yml up -d`to create a new container, run the command to check the container status:
+运行 `docker-compose -f /data/docker/mysql.yml up -d` 即可创建一个新容器。
+运行下面的命令查看容器运行状态:
 ```
 $ docker-compose -f /data/docker/mysql.yml ps
 ```
 
-Run the command to enter container:
+运行下面的命令进入容器:
 ```
 $ docker exec -it mgr1 bash
 ```
 
-## How to create a new MGR cluster via docker-compse
-Example for docker-compose `/data/docker/mgr.yml`:
+## 如何通过docker-compose构建MGR集群
+
+下面是一个docker-compose的配置文件参考 `/data/docker/mgr.yml`:
 ```
 version: '2'
 
@@ -145,12 +146,12 @@ services:
       - "mgr2:172.17.0.3"
 ```
 
-Start all the containers:
+启动所有容器:
 ```
 $ docker-compse -f /data/docker/mgr.yml up -d
 ```
 
-Enter the first contaniner, and setup it as MGR PRIMARY node:
+进入第一个容器，将其设置为MGR的PRIMARY节点
 ```
 $ docker exec -it mgr1 bash
 [root@mgr1 /]# mysql
@@ -168,7 +169,7 @@ $ docker exec -it mgr1 bash
 1 rows in set (0.00 sec)
 ```
 
-Enter the second contaniner, and setup it as MGR SECONDARY node:
+进入第二个容器，将其设置为SECONDARY节点
 ```
 $ docker exec -it mgr2 bash
 [root@mgr2 /]# mysql
@@ -184,55 +185,43 @@ $ docker exec -it mgr2 bash
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+
 2 rows in set (0.00 sec)
 ```
-It looks ok.
+看起来这就好了。
 
-## Environment Variables
+## 环境变量/参数介绍
 - **MYSQL_ROOT_PASSWORD**
-
-This variable is mandatory and specifies the password that will be set for the MySQL root superuser account.
+设置MySQL root账号的密码。如果下面指定了MYSQL_ALLOW_EMPTY_PASSWORD=1，则本参数无效。
 
 - **MYSQL_DATABASE**
-
-This variable is optional and allows you to specify the name of a database to be created on image startup.
+是否初始化一个新的数据库。
 
 - **MYSQL_ALLOW_EMPTY_PASSWORD**
-
-This is an optional variable. Set to a non-empty value, like yes, to allow the container to be started with a blank password for the root user. NOTE: Setting this variable to yes is not recommended unless you really know what you are doing, since this will leave your MySQL instance completely unprotected, allowing anyone to gain complete superuser access.
+是否设置MySQL root账号使用空密码，因为安全原因，不推荐这么做。
 
 - **MYSQL_RANDOM_ROOT_PASSWORD**
-
-This is an optional variable. Set to a non-empty value, like yes, to generate a random initial password for the root user (using pwmake). The generated root password will be printed to stdout (GENERATED ROOT PASSWORD: .....).
+设置MySQL root账号的密码采用随机生成方式。
 
 - **MYSQL_IBP**
-
-This is an optional variable. Set innodb_buffer_pool_size=1G, default value: 128M.
+设置innodb_buffer_pool_size，默认值：128M。
 
 - **MYSQL_MGR_NAME**
-
-This is an optional variable. Set group_replication_group_name=X, default value: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1".
+设置group_replication_group_name，默认值："aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1"。
 
 - **MYSQL_MGR_LOCAL**
-
-This is an optional variable. Set group_replication_local_address=X, default value: "172.17.0.2:33061".
+设置 group_replication_local_address，默认值："172.17.0.2:33061"。
 
 - **MYSQL_MGR_SEEDS**
-
-This is an optional variable. Set group_replication_group_seeds=X, default value: "172.17.0.2:33061,172.17.0.3:33061".
+设置 group_replication_group_seeds，默认值："172.17.0.2:33061,172.17.0.3:33061"。
 
 - **MYSQL_INIT_MGR**
-
-This is an optional variable. If it set to 1(default value is 0), it will create a new user for mgr, and create 'group_replication_recovery' mgr channel.
+是否初始化MGR相关设置，默认值：0（否）。如果设置为1（是），则会创建MGR服务所需账号，并设定运行 CHANGE MASTER TO 设置好MGR复制通道。
 
 - **MYSQL_MGR_USER**
-
-This is an optional variable. Set the mgr user name, default value: repl;
+设置MGR服务所需账号，默认值：repl。
 
 - **MYSQL_MGR_USER_PWD**
+设置MGR服务所需账号的密码，默认值：repl4MGR。
 
-This is an optional variable. Set the mgr user password, default value: repl4MGR;
-
-## Contact Us
-please scan the qr code
-
+## 联系我们
+扫码关注微信公众号
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0802/143402_f9d6cb61_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
