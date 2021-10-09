@@ -1,10 +1,11 @@
 
-## 关于裁剪说明
-为了让Docker镜像尽可能精简，GreatSQL在制作过程中将mysql router裁剪掉了，以及一些用不上的so文件。
+## 关于裁剪说明(How to minimal binary package when build docker image)
 
-下面是被裁剪文件的详细列表，如果不想要精简版本，可根据本项目提供的Dockerfile自行制作镜像文件。
+为了让Docker镜像尽可能精简，GreatSQL在制作过程中将mysql router裁剪掉了，以及一些用不上的so文件。(In order to make the Docker image as small as possible, GreatSQL cut out the mysql router and some unused library files)
+
+下面是被裁剪文件的详细列表，如果不想要精简版本，可根据本项目提供的[Dockerfile](https://github.com/GreatSQL/GreatSQL-Docker/blob/main/GreatSQL-8.0/Dockerfile)自行制作镜像文件。(The following is a detailed list of the cropped files. If you don't want a minimal package, you can make your own image file based on the [Dockerfile](https://github.com/GreatSQL/GreatSQL-Docker/blob/main/GreatSQL-8.0/Dockerfile))
 ```
-#裁剪bin目录
+#bin目录(cut out ./bin)
 $ cd bin
 $ rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdump myisamlog myisampack \
  mysqlcheck mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test \
@@ -12,7 +13,7 @@ $ rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdum
  mysql_secure_installation mysqlslap mysqltest mysqltest_safe_process mysql_upgrade mysqlxtest ps-admin \
  ps_mysqld_helper sst_dump zlib_decompress
 
-#裁剪lib目录
+#裁剪lib目录(cut out ./lib)
 $ cd lib
 $ rm -f libHotBackup.so libmysqlservices.a libperconaserverclient.* libcoredumper.a libnspr4.so \
  private/libnspr4.so libnss3.so private/libnss3.so libnssutil3.so private/libnssutil3.so libplc4.so \
