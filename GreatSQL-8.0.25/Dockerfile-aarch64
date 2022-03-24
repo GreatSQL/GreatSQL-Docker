@@ -1,0 +1,46 @@
+FROM docker.io/arm64v8/centos
+
+MAINTAINER greatsql@greatdb.com
+
+ENV LANG en_US.utf8
+
+ENV MYSQL_DATA_DIR=/data/GreatSQL
+ENV MYSQL_USER=mysql
+ENV MYSQL_UID_GID=3306
+ENV MYSQL_EXTRACT_DIR=/usr/local
+ENV TMP_DIR=/tmp
+ENV MYSQL_PORT=3306
+ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-aarch64-minimal"
+ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
+ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
+ENV GREATSQL_INIT="greatsql-init.sh"
+
+#Creating user mysql
+RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
+    useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin \
+        -c "MySQL User" ${MYSQL_USER}
+
+#Copying files
+COPY ${GREATSQL} ${MYSQL_EXTRACT_DIR}/${GREATSQL}
+
+#Installing  depend libs
+RUN yum install -y ${DEP_LIBS}
+
+RUN cd ${MYSQL_BASEDIR}/support-files && \
+    cp -f my.cnf /etc/my.cnf ; \
+    echo "THP_SETTING=never" >> /etc/sysconfig/mysql ; \
+    echo "export PATH=\$PATH:${MYSQL_BASEDIR}/bin" >> /etc/profile.d/mysql.sh ; \
+    source /etc/profile.d/mysql.sh
+RUN PATH="\$PATH:${MYSQL_BASEDIR}/bin"
+RUN export PATH
+
+#Creating datadir
+RUN mkdir -p ${MYSQL_DATA_DIR} && chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_BASEDIR} ; \
+    chmod -R ug+rwX ${MYSQL_BASEDIR} ; \
+    chmod -R ug+rwX /etc/my.cnf
+
+COPY ${GREATSQL_INIT} /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+EXPOSE ${MYSQL_PORT} ${MYSQL_PORT}0 ${MYSQL_PORT}1
+CMD ["mysqld"]
