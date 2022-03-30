@@ -85,7 +85,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 	_check_config "$@"
 
 	if [ -n "$INIT_TOKUDB" ]; then
-		export LD_PRELOAD=/usr/lib64/libjemalloc.so.1
+		export LD_PRELOAD=/usr/lib64/libjemalloc.so.2
 	fi
 	# Get config
 	DATADIR="$(_get_config 'datadir' "$@")"
@@ -113,6 +113,13 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			sed -i "s/MYSQL_IBP/128M/ig" /etc/my.cnf
 		fi
 
+		file_env 'MYSQL_MGR_VIEWID'
+		if [ "$MYSQL_MGR_VIEWID" ] ; then
+			sed -i "s/MYSQL_MGR_VIEWID/${MYSQL_MGR_VIEWID}/ig" /etc/my.cnf
+		else
+			sed -i "s/MYSQL_MGR_VIEWID/'AUTOMATIC'/ig" /etc/my.cnf
+		fi
+
 		file_env 'MYSQL_MGR_NAME'
 		if [ "$MYSQL_MGR_NAME" ] ; then
 			sed -i "s/MYSQL_MGR_NAME/${MYSQL_MGR_NAME}/ig" /etc/my.cnf
@@ -123,8 +130,11 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		file_env 'MYSQL_MGR_LOCAL'
 		if [ "${MYSQL_MGR_LOCAL}" ] ; then
 			sed -i "s/MYSQL_MGR_LOCAL/${MYSQL_MGR_LOCAL}/ig" /etc/my.cnf
+			REPORT_HOST=`echo $MYSQL_MGR_LOCAL|awk -F ':' '{print $1}'`
+			sed -i "s/REPORT_HOST/${REPORT_HOST}/g" /etc/my.cnf
 		else
 			sed -i "s/MYSQL_MGR_LOCAL/'172.17.0.2:33061'/ig" /etc/my.cnf
+			sed -i "s/REPORT_HOST/'172.17.0.2'/g" /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_SEEDS'
@@ -132,6 +142,13 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			sed -i "s/MYSQL_MGR_SEEDS/${MYSQL_MGR_SEEDS}/ig" /etc/my.cnf
 		else
 			sed -i "s/MYSQL_MGR_SEEDS/'172.17.0.2:33061,172.17.0.3:33061'/ig" /etc/my.cnf
+		fi
+
+		file_env 'MYSQL_MGR_ARBITRATOR'
+		if [ "${MYSQL_MGR_ARBITRATOR}" ] ; then
+			sed -i "s/MYSQL_MGR_ARBITRATOR/${MYSQL_MGR_ARBITRATOR}/ig" /etc/my.cnf
+		else
+			sed -i "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf
 		fi
 
 		mkdir -p "$DATADIR"
@@ -205,16 +222,13 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			fi
 
 			read -r -d '' mgrInit <<-EOSQL || true
-				CREATE USER ${MYSQL_MGR_USER} IDENTIFIED WITH mysql_native_password BY '${MYSQL_MGR_USER_PWD}';
+				CREATE USER IF NOT EXISTS ${MYSQL_MGR_USER} IDENTIFIED WITH mysql_native_password BY '${MYSQL_MGR_USER_PWD}';
 				GRANT REPLICATION SLAVE, BACKUP_ADMIN ON *.* TO ${MYSQL_MGR_USER};
 				CHANGE MASTER TO MASTER_USER='${MYSQL_MGR_USER}', MASTER_PASSWORD='${MYSQL_MGR_USER_PWD}' FOR CHANNEL 'group_replication_recovery';
-				RESET MASTER;
 			EOSQL
 		fi
 
 		"${mysql[@]}" <<-EOSQL
-			-- What's done in this file shouldn't be replicated
-			--  or products like mysql-fabric won't work
 			SET @@SESSION.SQL_LOG_BIN=0;
 			DELETE FROM mysql.user WHERE user NOT IN ('mysql.sys', 'mysqlxsys', 'mysql.infoschema', 'mysql.session', 'root') OR host NOT IN ('localhost') ;
 			ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
@@ -258,6 +272,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 				ALTER USER 'root'@'%' PASSWORD EXPIRE;
 			EOSQL
 		fi
+
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
 			echo >&2 'MySQL init process failed.'
 			exit 1
@@ -273,6 +288,19 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
       echo 'Initialization complete, now exiting!'
       exit 0
   fi
+fi
+
+if [ ${MYSQL_INIT_MGR} -eq 1 ]; then
+    if [ $MYSQL_MGR_START_AS_PRIMARY -eq 1 ]; then
+	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
+	sed -i "s/BOOTSTRAP_MGR/ON/ig" /etc/my.cnf
+    else
+	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
+	sed -i "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf
+    fi
+else
+    sed -i "s/START_MGR/OFF/ig" /etc/my.cnf
+    sed -i "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf
 fi
 
 exec "$@"

@@ -10,9 +10,11 @@ ENV MYSQL_UID_GID=3306
 ENV MYSQL_EXTRACT_DIR=/usr/local
 ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
-ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-aarch64-minimal"
+#for centos8
+ENV GREATSQL="GreatSQL-8.0.27-18-Linux-glibc2.28-aarch64"
 ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
 ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
+#for centos8
 ENV GREATSQL_INIT="greatsql-init.sh"
 
 #Creating user mysql
@@ -23,7 +25,12 @@ RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
 #Copying files
 COPY ${GREATSQL} ${MYSQL_EXTRACT_DIR}/${GREATSQL}
 
-#Installing  depend libs
+#Installing depend libs
+RUN rm -f /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo ; \
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo && \
+sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
+yum clean all && \
+yum makecache
 RUN yum install -y ${DEP_LIBS}
 
 RUN cd ${MYSQL_BASEDIR}/support-files && \

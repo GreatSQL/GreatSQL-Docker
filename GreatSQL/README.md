@@ -10,7 +10,8 @@ $ rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdum
  mysqlcheck mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test \
  mysql_ldb mysql_migrate_keyring mysqlrouter mysqlrouter_keyring mysqlrouter_passwd mysqlrouter_plugin_info \
  mysql_secure_installation mysqlslap mysqltest mysqltest_safe_process mysql_upgrade mysqlxtest ps-admin \
- ps_mysqld_helper sst_dump zlib_decompress
+ ps_mysqld_helper sst_dump zlib_decompress mysqlpump mysqldump mysqlshow mysqladmin mysqlbinlog mysql_tzinfo_to_sql \ 
+ mysql_config mysql_config_editor perror my_print_defaults mysql_ssl_rsa_setup mysqld_pre_systemd
 
 #裁剪lib目录
 $ cd lib
@@ -46,5 +47,14 @@ $ rm -fr auth_pam_compat.so auth_pam.so component_keyring_file.so component_mysq
  libtest_x_sessions_deinit.so libtest_x_sessions_init.so pfs_example_plugin_employee.so \
  procfs.so qa_auth_client.so qa_auth_interface.so qa_auth_server.so \
  replication_observers_example_plugin.so test_security_context.so test_services_plugin_registry.so \
- test_udf_services.so tokudb_backup.so udf_example.so
+ test_udf_services.so tokudb_backup.so udf_example.so \
+ semisync_master.so semisync_replica.so semisync_slave.so semisync_source.so test_* *test*
+```
+
+最后，对二进制文件执行 `strip` 缩减文件尺寸：
+```
+$ strip bin/*
+$ strip lib/*
+$ strip lib/plugin/*
+$ strip lib/private/*
 ```

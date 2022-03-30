@@ -11,11 +11,12 @@ ENV MYSQL_EXTRACT_DIR=/usr/local
 ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
 #for centos8
-ENV GREATSQL="GreatSQL-8.0.25-15-Linux-glibc2.28-x86_64-minimal"
+ENV GREATSQL="GreatSQL-8.0.27-18-Linux-glibc2.28-x86_64"
 ENV MYSQL_BASEDIR=${MYSQL_EXTRACT_DIR}/${GREATSQL}
 ENV DEP_LIBS="numactl-libs libaio readline-devel ncurses-devel"
 #for centos8
-ENV JEMALLOC_RPM="jemalloc-3.6.0-1.el8.x86_64.rpm"
+#get jemalloc package from https://centos.pkgs.org/8/epel-x86_64/jemalloc-5.2.1-2.el8.x86_64.rpm.html
+ENV JEMALLOC_RPM="jemalloc-5.2.1-2.el8.x86_64.rpm"
 ENV GREATSQL_INIT="greatsql-init.sh"
 
 #Creating user mysql
@@ -28,12 +29,17 @@ COPY ${GREATSQL} ${MYSQL_EXTRACT_DIR}/${GREATSQL}
 COPY ${JEMALLOC_RPM} ${TMP_DIR}
 
 #Installing jemalloc & depend libs
+RUN rm -f /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo ; \
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo && \
+sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
+yum clean all && \
+yum makecache
 RUN yum install -y ${TMP_DIR}/${JEMALLOC_RPM}
 RUN yum install -y ${DEP_LIBS}
 
 RUN cd ${MYSQL_BASEDIR}/support-files && \
     cp -f my.cnf /etc/my.cnf ; \
-    echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.1" >> /etc/sysconfig/mysql ; \
+    echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.2" >> /etc/sysconfig/mysql ; \
     echo "THP_SETTING=never" >> /etc/sysconfig/mysql ; \
     echo "export PATH=\$PATH:${MYSQL_BASEDIR}/bin" >> /etc/profile.d/mysql.sh ; \
     source /etc/profile.d/mysql.sh
