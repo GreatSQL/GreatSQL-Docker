@@ -98,6 +98,14 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			exit 1
 		fi
 
+		file_env 'MYSQL_SID'
+		SID=3306$(date +%N%1000|cut -b 1-3)
+		if [ "$MYSQL_SID" ] ; then
+			sed -i "s/MYSQL_SID/${MYSQL_SID}/ig" /etc/my.cnf
+		else
+			sed -i "s/MYSQL_SID/${SID}/ig" /etc/my.cnf
+		fi
+
 		file_env 'MYSQL_IBP'
 		if [ "$MYSQL_IBP" ] ; then
 			sed -i "s/MYSQL_IBP/${MYSQL_IBP}/ig" /etc/my.cnf

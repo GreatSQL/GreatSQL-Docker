@@ -5,7 +5,7 @@
 
 下面是被裁剪文件的详细列表，如果不想要精简版本，可根据本项目提供的[Dockerfile](https://github.com/GreatSQL/GreatSQL-Docker/blob/main/GreatSQL-8.0/Dockerfile)自行制作镜像文件。(The following is a detailed list of the cropped files. If you don't want a minimal package, you can make your own image file based on the [Dockerfile](https://github.com/GreatSQL/GreatSQL-Docker/blob/main/GreatSQL-8.0/Dockerfile))
 ```
-#bin目录(cut out ./bin)
+#裁剪bin目录(cut out ./bin)
 $ cd bin
 $ rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdump myisamlog myisampack \
  mysqlcheck mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test \
