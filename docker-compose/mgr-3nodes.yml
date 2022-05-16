@@ -53,7 +53,7 @@ services:
       MYSQL_INIT_MGR: 1
       MYSQL_MGR_LOCAL: '172.18.0.4:33061'
       MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'
-      MYSQL_MGR_ARBITRATOR: 1                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
+      MYSQL_MGR_ARBITRATOR: 0                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
 networks:
   mgr_net:  #创建独立MGR专属网络
     ipam:
