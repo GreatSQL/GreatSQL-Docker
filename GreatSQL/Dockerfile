@@ -25,6 +25,12 @@ RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
 
 #Copying files
 COPY greatsql-802516.tgz ${TMP_DIR}
+# greatsql-802516.tgz 压缩包中，包含以下几个rpm文件，请自行构建（并注意区分不同平台）
+# greatsql-client-8.0.25-16.1.el8.x86_64.rpm
+# greatsql-devel-8.0.25-16.1.el8.x86_64.rpm
+# greatsql-server-8.0.25-16.1.el8.x86_64.rpm
+# greatsql-shared-8.0.25-16.1.el8.x86_64.rpm
+#
 COPY ${JEMALLOC_RPM} ${TMP_DIR}
 
 #Installing jemalloc & depend libs
