@@ -1,6 +1,6 @@
 #!/bin/sh
 cd /usr/bin
-rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdump myisamlog myisampack mysqlcheck mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test mysql_ldb mysql_migrate_keyring  mysql_secure_installation mysqlslap mysqltest mysqltest_safe_process mysql_upgrade mysqlxtest ps-admin ps_mysqld_helper sst_dump zlib_decompress mysqlpump mysql_tzinfo_to_sql mysql_config mysql_config_editor perror
+rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdump myisamlog myisampack mysqlcheck mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test mysql_ldb mysql_migrate_keyring  mysql_secure_installation mysqlslap mysqltest mysqltest_safe_process mysql_upgrade mysqlxtest ps-admin ps_mysqld_helper sst_dump zlib_decompress mysqlpump mysql_config mysql_config_editor perror
 
 cd /usr/lib64/mysql
 rm -rf libHotBackup.so libmysqlservices.a libperconaserverclient.* libcoredumper.a libnspr4.so private/libnspr4.so libnss3.so private/libnss3.so libnssutil3.so private/libnssutil3.so libplc4.so private/libplc4.so libplds4.so private/libplds4.so libsmime3.so private/libsmime3.so libssl3.so private/libssl3.so mecab/
