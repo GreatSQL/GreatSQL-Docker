@@ -19,8 +19,9 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 - 联系人: greatsql@greatdb.com
 
 ## 支持哪些tag
-- [8.0.27](https://hub.docker.com/layers/158734159/greatsql/greatsql/8.0.27/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo), [latest](https://hub.docker.com/layers/156877878/greatsql/greatsql/latest/images/sha256-d9e0f455e3412127ed59ecc5f69b36a717303ff868cac128fe4d8a0ad6545a4a?context=repo)
-- [8.0.27-aarch64](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.27-aarch64/images/sha256-304b9d1bfc10898ffdab859399f02a6f929b51ca2d49e866d49f821cdfb59de9?context=explore), [latest-aarch64](https://hub.docker.com/layers/greatsql/greatsql/greatsql/latest-aarch64/images/sha256-304b9d1bfc10898ffdab859399f02a6f929b51ca2d49e866d49f821cdfb59de9?context=explore)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-37a515999357c072e01fcbb4fcbb5b9e14a29d7438b2244a23ef801b97f23071?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-37a515999357c072e01fcbb4fcbb5b9e14a29d7438b2244a23ef801b97f23071?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-1afccea97b04ea0885dccf818ed1ff7d26f57c66041f31be7ee569c6cd74b4e0?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-1afccea97b04ea0885dccf818ed1ff7d26f57c66041f31be7ee569c6cd74b4e0?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
+
 
 ## 如何使用GreatSQL镜像
 例如:
@@ -28,7 +29,6 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 $ docker run -d \
 --name mgr1 --hostname=mgr1 \
 -e MYSQL_ALLOW_EMPTY_PASSWORD=1 \
--e MYSQL_INIT_MGR=1 \
 greatsql/greatsql
 ```
 *--name mgr1*，设定容器名称
@@ -47,20 +47,20 @@ $ docker exec -it mgr1 bash
 [root@mgr1 /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
-Server version: 8.0.27-18 GreatSQL (GPL), Release 18, Revision 202203211301
+Server version: 8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f27394
 ...
-mysql  Ver 8.0.27-18 for Linux on x86_64 (GreatSQL (GPL), Release 18, Revision 202203211301)
+mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL (GPL), Release 24, Revision c2e83f27394)
 ...
 
 [root@GreatSQL][(none)]>\s
 ...
-Server version:        8.0.27-18 GreatSQL (GPL), Release 18, Revision 202203211301
+Server version:        8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f27394
 ...
 [root@GreatSQL][(none)]>select version();
 +-----------+
 | version() |
 +-----------+
-| 8.0.27-18 |
+| 8.0.32-24 |
 +-----------+
 1 row in set (0.00 sec)
 ```
@@ -81,7 +81,6 @@ services:
     environment:
       TZ: Asia/Shanghai
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_INIT_MGR: 1
 ```
 
 运行 `docker-compose -f /data/docker/mysql.yml up -d` 即可创建一个新容器。
@@ -177,9 +176,9 @@ $ mysql
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
-| group_replication_applier | d17d165a-ab7a-11ec-a8c0-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.27         | XCom                       |
-| group_replication_applier | d28c3916-ab7a-11ec-ab60-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.0.27         | XCom                       |
-| group_replication_applier | d3dc6855-ab7a-11ec-98a0-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.0.27         | XCom                       |
+| group_replication_applier | d17d165a-ab7a-11ec-a8c0-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | d28c3916-ab7a-11ec-ab60-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.0.32         | XCom                       |
+| group_replication_applier | d3dc6855-ab7a-11ec-98a0-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.0.32         | XCom                       |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，并且其中还包含一个ARBITRATOR节点（仲裁节点/投票节点）。
