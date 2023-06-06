@@ -13,7 +13,6 @@ ENV MYSQL_PORT=3306
 #for centos8
 ENV DEPS="numactl-libs libaio readline-devel ncurses-devel"
 #for centos8
-ENV GREATSQL_SHRINK="greatsql-shrink.sh"
 ENV GREATSQL_INIT="greatsql-init.sh"
 
 #Creating user mysql
@@ -22,7 +21,7 @@ RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
         -c "MySQL User" ${MYSQL_USER}
 
 #Copying files
-COPY greatsql-802516.tgz ${TMP_DIR}
+COPY greatsql-803224.tar.xz ${TMP_DIR}
 
 #Installing jemalloc & depend libs
 COPY CentOS-Base.repo /etc/yum.repos.d/
@@ -31,18 +30,17 @@ sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.
 yum clean all && \
 yum makecache
 RUN yum install -y ${DEPS}
-RUN cd ${TMP_DIR}; tar zxvf greatsql-802516.tgz; rpm -ivh greatsql*rpm --nodeps
 RUN unlink /etc/localtime; ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+#extract tarball
+RUN tar xf ${TMP_DIR}/greatsql-803224.tar.xz -C /
 COPY my.cnf /etc/my.cnf
+
 RUN echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.2" >> /etc/sysconfig/mysql ; \
     echo "THP_SETTING=never" >> /etc/sysconfig/mysql
 
 #Creating datadir
 RUN mkdir -p ${MYSQL_DATA_DIR} && chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR}; chmod -R ug+rwX /etc/my.cnf
-
-COPY ${GREATSQL_SHRINK} ${TMP_DIR}
-RUN /bin/sh -ex ${TMP_DIR}/${GREATSQL_SHRINK}
 
 COPY ${GREATSQL_INIT} /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
