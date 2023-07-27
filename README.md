@@ -183,6 +183,11 @@ $ mysql
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，并且其中还包含一个ARBITRATOR节点（仲裁节点/投票节点）。
 
+**注意：**
+
+1. 目前暂不支持通过 `docker-compose` 构建多主模式的MGR集群。
+1. 若想要在Docker中构建多主MGR集群，需要修改 `/etc/my.cnf` 中的选项 `loose-group_replication_single_primary_fast_mode = 0`，因为该快速单主选项不能兼容多主MGR模式。
+
 ## Docker-Compose环境变量/参数介绍
 - **MYSQL_ROOT_PASSWORD**
 设置MySQL root账号的密码。如果下面指定了MYSQL_ALLOW_EMPTY_PASSWORD=1，则本参数无效。
