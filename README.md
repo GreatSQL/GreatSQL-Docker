@@ -94,7 +94,7 @@ $ docker-compose -f /data/docker/mysql.yml ps
 $ docker exec -it mgr1 bash
 ```
 
-## 如何通过docker-compose构建MGR集群
+## 如何通过docker-compose构建MGR集群（单主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr.yml`:
 ```
@@ -169,7 +169,7 @@ $ docker-compse -f /data/docker/mgr.yml up -d
 
 进入第一个容器，确认实例启动并成为MGR的Primary节点：
 ```
-$ docker exec -it mgr1 bash
+$ docker exec -it mgr2 bash
 $ mysql
 ...
 [root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
@@ -183,10 +183,101 @@ $ mysql
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，并且其中还包含一个ARBITRATOR节点（仲裁节点/投票节点）。
 
-**注意：**
 
-1. 目前暂不支持通过 `docker-compose` 构建多主模式的MGR集群。
-1. 若想要在Docker中构建多主MGR集群，需要修改 `/etc/my.cnf` 中的选项 `loose-group_replication_single_primary_fast_mode = 0`，因为该快速单主选项不能兼容多主MGR模式。
+## 如何通过docker-compose构建MGR集群（多主模式）
+
+下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
+```
+version: '2'
+
+services:
+  mgr2:
+    image: greatsql/greatsql
+    container_name: mgr2    #设定容器名字
+    hostname: mgr2          #设定容器中的主机名
+    networks:               #指定容器使用哪个专用网络
+      mgr_net:
+        ipv4_address: 172.18.0.2    #设置容器使用固定IP地址，避免重启后IP变化
+    restart: unless-stopped         #设定重启策略
+    environment:                    #设置多个环境变量
+      TZ: Asia/Shanghai             #时区
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1                 #允许root账户空密码
+      MYSQL_INIT_MGR: 1                             #初始化MGR集群
+      MYSQL_MGR_LOCAL: '172.18.0.2:33061'           #当前MGR节点的local_address
+      MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'     #MGR集群seeds
+      MYSQL_MGR_START_AS_PRIMARY: 1                 #指定当前MGR节点为Primary角色
+      MYSQL_MGR_MULTI_PRIMARY: 1             #指定是否采用多主模式
+      MYSQL_MGR_ARBITRATOR: 0                       
+      #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
+  mgr3:
+    image: greatsql/greatsql
+    container_name: mgr3
+    hostname: mgr3
+    networks: 
+      mgr_net:
+        ipv4_address: 172.18.0.3
+    restart: unless-stopped
+    depends_on:
+      - "mgr2"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_INIT_MGR: 1
+      MYSQL_MGR_LOCAL: '172.18.0.3:33061'
+      MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'
+      MYSQL_MGR_START_AS_PRIMARY: 0
+      MYSQL_MGR_MULTI_PRIMARY: 1
+      MYSQL_MGR_ARBITRATOR: 0                       #既非Primary，也非Arbitrator，那么就是Secondary角色了                 
+      #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
+  mgr4:
+    image: greatsql/greatsql
+    container_name: mgr4
+    hostname: mgr4
+    networks: 
+      mgr_net:
+        ipv4_address: 172.18.0.4
+    restart: unless-stopped
+    depends_on:
+      - "mgr3"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_INIT_MGR: 1
+      MYSQL_MGR_LOCAL: '172.18.0.4:33061'
+      MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'
+      MYSQL_MGR_START_AS_PRIMARY: 0
+      MYSQL_MGR_MULTI_PRIMARY: 1
+      MYSQL_MGR_ARBITRATOR: 0                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
+      #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
+networks:
+  mgr_net:  #创建独立MGR专属网络
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+```
+
+启动所有容器:
+```
+$ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
+```
+
+容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
+
+进入第一个容器，确认实例启动并成为MGR的Primary节点：
+```
+$ docker exec -it mgr2 bash
+$ mysql
+...
+[root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
++---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
+| CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
++---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
+| group_replication_applier | 9831bac0-30d4-11ee-8b65-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | 9907b1ae-30d4-11ee-8c66-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | 9a1ee7ca-30d4-11ee-8b93-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
++---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
+```
+可以看到，一个三节点的MGR集群已自动构建完毕，运行模式为多主模式。
 
 ## Docker-Compose环境变量/参数介绍
 - **MYSQL_ROOT_PASSWORD**
@@ -235,6 +326,10 @@ $ mysql
 - **MYSQL_MGR_START_AS_PRIMARY**
 指定当前节点在MGR中以PRIMARY角色启动，每次都会进行MGR初始化引导操作。默认值：0。
 如果 MYSQL_INIT_MGR=1 则至少要有一个节点指定为PRIMARY角色。
+
+- **MYSQL_MGR_MULTI_PRIMARY**
+设置是否采用多主模式运行。默认值：0。
+如果 MYSQL_MGR_MULTI_PRIMARY=1，则【有且只能选择一个节点】设置 MYSQL_MGR_START_AS_PRIMARY=1，该节点会采用引导模式启动，其余节点不设置引导模式。
 
 - **MYSQL_MGR_ARBITRATOR**
 指定当前节点在MGR中以ARBITRATOR角色启动，该选项和**MYSQL_MGR_START_AS_PRIMARY**是互斥的，不能同时设置为1。默认值：0。

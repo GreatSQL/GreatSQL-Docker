@@ -149,6 +149,13 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			sed -i "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf
 		fi
 
+		file_env 'MYSQL_MGR_MULTI_PRIMARY'
+		if [ $MYSQL_MGR_MULTI_PRIMARY -eq 1 ]; then
+		  sed -i "s/SINGLE_PRIMARY/0/g" /etc/my.cnf
+    else
+		  sed -i "s/SINGLE_PRIMARY/1/g" /etc/my.cnf
+		fi
+
 		mkdir -p "$DATADIR"
 
 		echo 'Initializing database'
@@ -288,6 +295,8 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
   fi
 fi
 
+file_env 'MYSQL_INIT_MGR'
+file_env 'MYSQL_MGR_START_AS_PRIMARY'
 if [ ${MYSQL_INIT_MGR} -eq 1 ]; then
     if [ $MYSQL_MGR_START_AS_PRIMARY -eq 1 ]; then
 	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
