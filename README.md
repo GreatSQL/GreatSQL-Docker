@@ -19,8 +19,8 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 - 联系人: greatsql@greatdb.com
 
 ## 支持哪些tag
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-37a515999357c072e01fcbb4fcbb5b9e14a29d7438b2244a23ef801b97f23071?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-37a515999357c072e01fcbb4fcbb5b9e14a29d7438b2244a23ef801b97f23071?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-1afccea97b04ea0885dccf818ed1ff7d26f57c66041f31be7ee569c6cd74b4e0?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-1afccea97b04ea0885dccf818ed1ff7d26f57c66041f31be7ee569c6cd74b4e0?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
 
 
 ## 如何使用GreatSQL镜像
