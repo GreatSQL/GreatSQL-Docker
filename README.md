@@ -27,24 +27,27 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 例如:
 ```
 $ docker run -d \
---name mgr1 --hostname=mgr1 \
--e MYSQL_ALLOW_EMPTY_PASSWORD=1 \
+--name greatsql --hostname=greatsql \
 greatsql/greatsql
 ```
-*--name mgr1*，设定容器名称
-*--hostname=mgr1*，设定容器主机名
-*MYSQL_ALLOW_EMPTY_PASSWORD=1* 设定容器中的MySQL root用户是否采用空密码
+
+执行上述命令后，会创建一个GreatSQL运行环境容器，且采用空密码初始化。
+
+几个参数简介：
+*--name greatsql*，设定容器名称
+*--hostname=greatsql*，设定容器主机名
 *greatsql/greatsql*，指定容器使用的镜像名
+
 
 ## 连接（容器中的）MySQL
 运行下面的命令进入容器
 ```
-$ docker exec -it mgr1 bash
+$ docker exec -it greatsql bash
 ```
 
 可以使用mysql 客户端工具（在docker镜像中，只保留了mysql这个客户端工具）
 ```
-[root@mgr1 /]# mysql
+[root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
 Server version: 8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f27394
@@ -72,15 +75,14 @@ Server version:        8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f2739
 version: '2'
 
 services:
-  mgr1:
+  greatsql:
     image: greatsql/greatsql
-    container_name: mgr1
-    hostname: mgr1
+    container_name: greatsql
+    hostname: greatsql
     network_mode: bridge
     restart: unless-stopped
     environment:
       TZ: Asia/Shanghai
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
 ```
 
 运行 `docker-compose -f /data/docker/mysql.yml up -d` 即可创建一个新容器。
@@ -91,7 +93,7 @@ $ docker-compose -f /data/docker/mysql.yml ps
 
 运行下面的命令进入容器:
 ```
-$ docker exec -it mgr1 bash
+$ docker exec -it greatsql bash
 ```
 
 ## 如何通过docker-compose构建MGR集群（单主模式）
