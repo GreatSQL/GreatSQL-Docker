@@ -90,10 +90,14 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 
 	if [ ! -d "$DATADIR/mysql" ]; then
 		file_env 'MYSQL_ROOT_PASSWORD'
+		file_env 'MYSQL_ALLOW_EMPTY_PASSWORD'
+
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
-			echo >&2 'error: database is uninitialized and password option is not specified '
-			echo >&2 '  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
-			exit 1
+			echo >&2 '[Note] You specify none of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
+			echo >&2 'GreatSQL create root@localhost with **EMPTY PASSWORD**'
+			#echo >&2 'error: database is uninitialized and password option is not specified '
+			#echo >&2 '  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
+			#exit 1
 		fi
 
 		file_env 'MYSQL_SID'
@@ -150,7 +154,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		file_env 'MYSQL_MGR_MULTI_PRIMARY'
-		if [ $MYSQL_MGR_MULTI_PRIMARY -eq 1 ]; then
+		if [ "$MYSQL_MGR_MULTI_PRIMARY" ]; then
 		  sed -i "s/SINGLE_PRIMARY/0/g" /etc/my.cnf
     else
 		  sed -i "s/SINGLE_PRIMARY/1/g" /etc/my.cnf
@@ -297,7 +301,7 @@ fi
 
 file_env 'MYSQL_INIT_MGR'
 file_env 'MYSQL_MGR_START_AS_PRIMARY'
-if [ ${MYSQL_INIT_MGR} -eq 1 ]; then
+if [ "${MYSQL_INIT_MGR}" ]; then
     if [ $MYSQL_MGR_START_AS_PRIMARY -eq 1 ]; then
 	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
 	sed -i "s/BOOTSTRAP_MGR/ON/ig" /etc/my.cnf
