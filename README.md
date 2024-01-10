@@ -13,15 +13,16 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 
 如果您发现任何GreatSQL-Docker项目相关的问题、bug，都可以[戳此提交issue](https://gitee.com/GreatSQL/GreatSQL-Docker/issues)，我们将尽快处理。
 
-
 ## 快速使用
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系人: greatsql@greatdb.com
+- 最新版本：GreatSQL 8.0.32-25
+- 最后更新时间：2024-01-10
+- 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
-
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-a969dcf207ce889374891903e772f2d5bbd7f0f79f22ce3d13c7a3a3218eca4c?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-a969dcf207ce889374891903e772f2d5bbd7f0f79f22ce3d13c7a3a3218eca4c?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-a393ac64b4c2a1be57a8315e1cfad79d6e3d4f89e320a834a0ffc2cf4e2a5f05?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25-aarch64/images/sha256-a393ac64b4c2a1be57a8315e1cfad79d6e3d4f89e320a834a0ffc2cf4e2a5f05?context=explore), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
 
 ## 如何使用GreatSQL镜像
 例如:
@@ -50,22 +51,25 @@ $ docker exec -it greatsql bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
-Server version: 8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f27394
+Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 ...
 mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL (GPL), Release 24, Revision c2e83f27394)
 ...
 
-[root@GreatSQL][(none)]>\s
+[root@GreatSQL][(none)]> \s
 ...
-Server version:        8.0.32-24 GreatSQL (GPL), Release 24, Revision c2e83f27394
+Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 ...
-[root@GreatSQL][(none)]>select version();
+[root@GreatSQL][(none)]> SELECT version();
 +-----------+
 | version() |
 +-----------+
-| 8.0.32-24 |
+| 8.0.32-25 |
 +-----------+
 1 row in set (0.00 sec)
+
+-- 初始化完后，执行测试脚本，验证是否支持新的特性和Oracle兼容语法等
+[root@GreatSQL][(none)]> SOURCE /tmp/greatsql-test.sql;
 ```
 
 ## 如何通过 docker-compose 使用GreatSQL镜像
@@ -119,6 +123,7 @@ services:
       MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'     #MGR集群seeds
       MYSQL_MGR_START_AS_PRIMARY: 1                 #指定当前MGR节点为Primary角色
       MYSQL_MGR_ARBITRATOR: 0
+      LOWER_CASE_TABLE_NAMES: 0                     #设定lower_case_table_names值，默认为0
   mgr3:
     image: greatsql/greatsql
     container_name: mgr3
@@ -137,6 +142,7 @@ services:
       MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_ARBITRATOR: 0                       #既非Primary，也非Arbitrator，那么就是Secondary角色了
+      LOWER_CASE_TABLE_NAMES: 0
   mgr4:
     image: greatsql/greatsql
     container_name: mgr4
@@ -155,6 +161,7 @@ services:
       MYSQL_MGR_SEEDS: '172.18.0.2:33061,172.18.0.3:33061,172.18.0.4:33061'
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_ARBITRATOR: 1                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
+      LOWER_CASE_TABLE_NAMES: 0
 networks:
   mgr_net:  #创建独立MGR专属网络
     ipam:
@@ -174,7 +181,7 @@ $ docker-compse -f /data/docker/mgr.yml up -d
 $ docker exec -it mgr2 bash
 $ mysql
 ...
-[root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
@@ -210,6 +217,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 1                 #指定当前MGR节点为Primary角色
       MYSQL_MGR_MULTI_PRIMARY: 1             #指定是否采用多主模式
       MYSQL_MGR_ARBITRATOR: 0                       
+      LOWER_CASE_TABLE_NAMES: 0
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
   mgr3:
     image: greatsql/greatsql
@@ -230,6 +238,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_MULTI_PRIMARY: 1
       MYSQL_MGR_ARBITRATOR: 0                       #既非Primary，也非Arbitrator，那么就是Secondary角色了                 
+      LOWER_CASE_TABLE_NAMES: 0
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
   mgr4:
     image: greatsql/greatsql
@@ -250,6 +259,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_MULTI_PRIMARY: 1
       MYSQL_MGR_ARBITRATOR: 0                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
+      LOWER_CASE_TABLE_NAMES: 0
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
 networks:
   mgr_net:  #创建独立MGR专属网络
@@ -270,7 +280,7 @@ $ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 $ docker exec -it mgr2 bash
 $ mysql
 ...
-[root@GreatSQL][(none)]>select * from performance_schema.replication_group_members;
+[root@GreatSQL][(none)]> SELECT * FROM performance_schema.replication_group_members;
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
@@ -340,6 +350,11 @@ $ mysql
 - **MYSQL_MGR_VIEWID**
 MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免和正常的事务GTID混杂一起，产生问题。默认值：AUTOMATIC。
 非必选项。
+
+- **LOWER_CASE_TABLE_NAMES**
+设置表名大小写选项 lower_case_table_names，设置为0表示区分大小写，设置为1表示不区分带下写。默认值：0。
+非必选项。
+
 
 ## 联系我们
 扫码关注微信公众号
