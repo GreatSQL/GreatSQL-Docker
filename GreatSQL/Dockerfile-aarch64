@@ -1,6 +1,6 @@
 FROM docker.io/arm64v8/centos
 
-MAINTAINER greatsql@greatdb.com
+MAINTAINER greatsql.cn
 
 ENV LANG en_US.utf8
 
@@ -10,20 +10,28 @@ ENV MYSQL_UID_GID=3306
 ENV MYSQL_EXTRACT_DIR=/usr/local
 ENV TMP_DIR=/tmp
 ENV MYSQL_PORT=3306
-#for centos8
-ENV DEPS="numactl-libs libaio readline-devel ncurses-devel"
-#for centos8
-ENV GREATSQL_INIT="greatsql-init.sh"
+# For CentOS 8
 
-#Creating user mysql
+ENV DEPS="numactl-libs libaio readline-devel ncurses-devel"
+
+# GreatSQL tarball
+ENV GREATSQL_TARBALL="greatsql-803225.tar.xz"
+
+# For CentOS 8
+
+ENV GREATSQL_INIT="greatsql-init.sh"
+ENV GREATSQL_TEST="greatsql-test.sql"
+
+# Creating user mysql
 RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
     useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin \
         -c "MySQL User" ${MYSQL_USER}
 
-#Copying files
-COPY greatsql-803224.tar.xz ${TMP_DIR}
+# Copying files
+COPY ${GREATSQL_TARBALL} ${TMP_DIR}
+COPY ${GREATSQL_TEST} ${TMP_DIR}
 
-#Installing jemalloc & depend libs
+# Installing jemalloc & depend libs
 COPY CentOS-Base.repo /etc/yum.repos.d/
 RUN rm -f /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo ; \
 sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
@@ -32,14 +40,13 @@ yum makecache
 RUN yum install -y ${DEPS}
 RUN unlink /etc/localtime; ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-#extract tarball
-RUN tar xf ${TMP_DIR}/greatsql-803224.tar.xz -C /
+# extract tarball
+RUN tar xf ${TMP_DIR}/${GREATSQL_TARBALL} -C / && rm -f ${TMP_DIR}/${GREATSQL_TARBALL}
 COPY my.cnf /etc/my.cnf
 
-RUN echo "LD_PRELOAD=/usr/lib64/libjemalloc.so.2" >> /etc/sysconfig/mysql ; \
-    echo "THP_SETTING=never" >> /etc/sysconfig/mysql
+RUN echo "THP_SETTING=never" >> /etc/sysconfig/mysql
 
-#Creating datadir
+# Creating datadir
 RUN mkdir -p ${MYSQL_DATA_DIR} && chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR}; chmod -R ug+rwX /etc/my.cnf
 
 COPY ${GREATSQL_INIT} /docker-entrypoint.sh
