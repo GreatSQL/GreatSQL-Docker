@@ -78,6 +78,17 @@ _get_config() {
 	# match "datadir      /some/path with/spaces in/it here" but not "--xyz=abc\n     datadir (xyz)"
 }
 
+file_env 'LOWER_CASE_TABLE_NAMES'
+if [ ! -z "$LOWER_CASE_TABLE_NAMES" ] ; then
+  if [ $LOWER_CASE_TABLE_NAMES -eq 1 ]; then
+    sed -i "s/LOWER_CASE_TABLE_NAMES/1/g" /etc/my.cnf
+  else
+    sed -i "s/LOWER_CASE_TABLE_NAMES/0/g" /etc/my.cnf
+  fi
+else
+  sed -i "s/LOWER_CASE_TABLE_NAMES/0/g" /etc/my.cnf
+fi
+
 if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 	# still need to check config, container may have started with --user
 	_check_config "$@"
@@ -271,6 +282,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		echo
+		mkdir -p /docker-entrypoint-initdb.d
 		ls /docker-entrypoint-initdb.d/ > /dev/null
 		for f in /docker-entrypoint-initdb.d/*; do
 			process_init_file "$f" "${mysql[@]}"
