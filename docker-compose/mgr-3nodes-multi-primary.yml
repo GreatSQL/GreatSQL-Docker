@@ -18,6 +18,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 1                 #指定当前MGR节点为Primary角色
       MYSQL_MGR_MULTI_PRIMARY: 1             #指定是否采用多主模式
       MYSQL_MGR_ARBITRATOR: 0                       
+      LOWER_CASE_TABLE_NAMES: 0                     #设定lower_case_table_names值，默认为0
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
   mgr3:
     image: greatsql/greatsql
@@ -38,6 +39,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_MULTI_PRIMARY: 1
       MYSQL_MGR_ARBITRATOR: 0                       #既非Primary，也非Arbitrator，那么就是Secondary角色了                 
+      LOWER_CASE_TABLE_NAMES: 0                    
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
   mgr4:
     image: greatsql/greatsql
@@ -58,6 +60,7 @@ services:
       MYSQL_MGR_START_AS_PRIMARY: 0
       MYSQL_MGR_MULTI_PRIMARY: 1
       MYSQL_MGR_ARBITRATOR: 0                   #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
+      LOWER_CASE_TABLE_NAMES: 0                    
       #MYSQL_MGR_VIEWID: "aaaaaaaa-bbbb-bbbb-aaaa-aaaaaaaaaaa1"
 networks:
   mgr_net:  #创建独立MGR专属网络
