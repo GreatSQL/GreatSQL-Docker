@@ -81,12 +81,12 @@ _get_config() {
 file_env 'LOWER_CASE_TABLE_NAMES'
 if [ ! -z "$LOWER_CASE_TABLE_NAMES" ] ; then
   if [ $LOWER_CASE_TABLE_NAMES -eq 1 ]; then
-    sed -i "s/LOWER_CASE_TABLE_NAMES/1/g" /etc/my.cnf
+    echo "$(sed 's/LOWER_CASE_TABLE_NAMES/1/g' /etc/my.cnf)" > /etc/my.cnf
   else
-    sed -i "s/LOWER_CASE_TABLE_NAMES/0/g" /etc/my.cnf
+    echo "$(sed 's/LOWER_CASE_TABLE_NAMES/0/g' /etc/my.cnf)" > /etc/my.cnf
   fi
 else
-  sed -i "s/LOWER_CASE_TABLE_NAMES/0/g" /etc/my.cnf
+  echo "$(sed 's/LOWER_CASE_TABLE_NAMES/0/g' /etc/my.cnf)" > /etc/my.cnf
 fi
 
 if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
@@ -114,61 +114,69 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		file_env 'MYSQL_SID'
 		SID=3306$(date +%N%1000|cut -b 1-3)
 		if [ "$MYSQL_SID" ] ; then
-			sed -i "s/MYSQL_SID/${MYSQL_SID}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_SID/${MYSQL_SID}/ig" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_SID/${SID}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_SID/${SID}/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_IBP'
 		if [ "$MYSQL_IBP" ] ; then
-			sed -i "s/MYSQL_IBP/${MYSQL_IBP}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_IBP/${MYSQL_IBP}/ig" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_IBP/128M/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_IBP/128M/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_VIEWID'
 		if [ "$MYSQL_MGR_VIEWID" ] ; then
-			sed -i "s/MYSQL_MGR_VIEWID/${MYSQL_MGR_VIEWID}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_VIEWID/${MYSQL_MGR_VIEWID}/ig" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_MGR_VIEWID/'AUTOMATIC'/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_VIEWID/'AUTOMATIC'/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_NAME'
 		if [ "$MYSQL_MGR_NAME" ] ; then
-			sed -i "s/MYSQL_MGR_NAME/${MYSQL_MGR_NAME}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_NAME/${MYSQL_MGR_NAME}/ig" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_MGR_NAME/'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1'/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_NAME/'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa1'/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_LOCAL'
 		if [ "${MYSQL_MGR_LOCAL}" ] ; then
-			sed -i "s/MYSQL_MGR_LOCAL/${MYSQL_MGR_LOCAL}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_LOCAL/${MYSQL_MGR_LOCAL}/ig" /etc/my.cnf)" > /etc/my.cnf
 			REPORT_HOST=`echo $MYSQL_MGR_LOCAL|awk -F ':' '{print $1}'`
-			sed -i "s/REPORT_HOST/${REPORT_HOST}/g" /etc/my.cnf
+			echo "$(sed "s/REPORT_HOST/${REPORT_HOST}/g" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_MGR_LOCAL/'172.17.0.2:33061'/ig" /etc/my.cnf
-			sed -i "s/REPORT_HOST/'172.17.0.2'/g" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_LOCAL/'172.17.0.2:33061'/ig" /etc/my.cnf)" > /etc/my.cnf
+			echo "$(sed "s/REPORT_HOST/'172.17.0.2'/g" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_SEEDS'
 		if [ "${MYSQL_MGR_SEEDS}" ] ; then
-			sed -i "s/MYSQL_MGR_SEEDS/${MYSQL_MGR_SEEDS}/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_SEEDS/${MYSQL_MGR_SEEDS}/ig" /etc/my.cnf)" > /etc/my.cnf
 		else
-			sed -i "s/MYSQL_MGR_SEEDS/'172.17.0.2:33061,172.17.0.3:33061'/ig" /etc/my.cnf
+			echo "$(sed "s/MYSQL_MGR_SEEDS/'172.17.0.2:33061,172.17.0.3:33061'/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_ARBITRATOR'
 		if [ "${MYSQL_MGR_ARBITRATOR}" ] ; then
-			sed -i "s/MYSQL_MGR_ARBITRATOR/${MYSQL_MGR_ARBITRATOR}/ig" /etc/my.cnf
+		  if [ ${MYSQL_MGR_ARBITRATOR} -eq 1 ]; then
+		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/1/ig" /etc/my.cnf)" > /etc/my.cnf
+		  else
+		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf)" > /etc/my.cnf
+		  fi
 		else
-			sed -i "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf
+		  echo "$(sed "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_MULTI_PRIMARY'
 		if [ "$MYSQL_MGR_MULTI_PRIMARY" ]; then
-		  sed -i "s/SINGLE_PRIMARY/0/g" /etc/my.cnf
-    else
-		  sed -i "s/SINGLE_PRIMARY/1/g" /etc/my.cnf
+		  if [ ${MYSQL_MGR_MULTI_PRIMARY} -eq 1 ]; then
+		    echo "$(sed "s/SINGLE_PRIMARY/0/g" /etc/my.cnf)" > /etc/my.cnf
+		  else
+		    echo "$(sed "s/SINGLE_PRIMARY/1/g" /etc/my.cnf)" > /etc/my.cnf
+		  fi
+		else
+		  echo "$(sed "s/SINGLE_PRIMARY/1/g" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		mkdir -p "$DATADIR"
@@ -314,16 +322,16 @@ fi
 file_env 'MYSQL_INIT_MGR'
 file_env 'MYSQL_MGR_START_AS_PRIMARY'
 if [ "${MYSQL_INIT_MGR}" ]; then
-    if [ $MYSQL_MGR_START_AS_PRIMARY -eq 1 ]; then
-	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
-	sed -i "s/BOOTSTRAP_MGR/ON/ig" /etc/my.cnf
+    if [ ${MYSQL_MGR_START_AS_PRIMARY} -eq 1 ]; then
+	echo "$(sed "s/START_MGR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
+	echo "$(sed "s/BOOTSTRAP_MGR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
     else
-	sed -i "s/START_MGR/ON/ig" /etc/my.cnf
-	sed -i "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf
+	echo "$(sed "s/START_MGR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
+	echo "$(sed "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
     fi
 else
-    sed -i "s/START_MGR/OFF/ig" /etc/my.cnf
-    sed -i "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf
+    echo "$(sed "s/START_MGR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
 fi
 
 exec "$@"
