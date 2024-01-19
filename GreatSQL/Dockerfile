@@ -1,61 +1,65 @@
 FROM centos:8
 
-MAINTAINER greatsql.cn
+LABEL maintainer="greatsql.cn" \
+email="greatsql@greatdb.com" \
+forum="https://greatsql.cn/forum.php" \
+gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
 ENV LANG en_US.utf8
+ARG MYSQL_DATA_DIR=/data/GreatSQL \
+MYSQL_USER=mysql \
+MYSQL_UID_GID=3306 \
+MYSQL_EXTRACT_DIR=/usr/local \
+TMP_DIR=/tmp \
+MYSQL_PORT=3306 \
+DEPS="pkg-config perl libaio-devel numactl-devel numactl-libs \
+net-tools openssl openssl-devel perl-Data-Dumper perl-Digest-MD5 \
+python2 perl-JSON perl-Test-Simple" \
+JEMALLOC_RPM="jemalloc-5.2.1-2.el8.x86_64.rpm" \
+GREATSQL_INIT="greatsql-init.sh" \
+GREATSQL_SHRINK="greatsql-shrink.sh" \
+GREATSQL_TEST="greatsql-test.sql" \
+GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25" \
+GREATSQL_RPMS1="greatsql-client-8.0.32-25.1.el8.x86_64.rpm" \
+GREATSQL_RPMS2="greatsql-icu-data-files-8.0.32-25.1.el8.x86_64.rpm" \
+GREATSQL_RPMS3="greatsql-server-8.0.32-25.1.el8.x86_64.rpm" \
+GREATSQL_RPMS4="greatsql-shared-8.0.32-25.1.el8.x86_64.rpm"
 
-ENV MYSQL_DATA_DIR=/data/GreatSQL
-ENV MYSQL_USER=mysql
-ENV MYSQL_UID_GID=3306
-ENV MYSQL_EXTRACT_DIR=/usr/local
-ENV TMP_DIR=/tmp
-ENV MYSQL_PORT=3306
-# For CentOS 8
-# ENV DEPS="numactl-libs libaio readline-devel ncurses-devel openssl openssl-devel net-tools perl"
-ENV DEPS="numactl-libs libaio readline-devel ncurses-devel"
+CMD /bin/bash
 
-# GreatSQL tarball
-ENV GREATSQL_TARBALL="greatsql-803225.tar.xz"
-
-# For CentOS 8
-ENV JEMALLOC_RPM="jemalloc-5.2.1-2.el8.x86_64.rpm"
-ENV GREATSQL_INIT="greatsql-init.sh"
-ENV GREATSQL_TEST="greatsql-test.sql"
-
-# Creating user mysql
 RUN groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER}; \
     useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin \
         -c "MySQL User" ${MYSQL_USER}
 
-# Copying files
-COPY ${GREATSQL_TARBALL} ${TMP_DIR}
 COPY ${JEMALLOC_RPM} ${TMP_DIR}
 COPY ${GREATSQL_TEST} ${TMP_DIR}
-
-# Installing jemalloc & depend libs
-# curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo && \
-COPY CentOS-Base.repo /etc/yum.repos.d/
-RUN rm -f /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo ; \
-sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
-yum clean all && \
-yum makecache
-RUN yum install -y ${TMP_DIR}/${JEMALLOC_RPM}
-RUN yum install -y ${DEPS}
-RUN unlink /etc/localtime; ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-# extract tarball
-RUN tar xf ${TMP_DIR}/${GREATSQL_TARBALL} -C / && rm -f ${TMP_DIR}/${GREATSQL_TARBALL}
+COPY ${GREATSQL_INIT} /docker-entrypoint.sh
+COPY ${GREATSQL_SHRINK} /tmp/{GREATSQL_SHRINK}
 COPY my.cnf /etc/my.cnf
+
+RUN unlink /etc/localtime; ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime ; \
+rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo && \
+sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
+yum clean all > /dev/null 2>&1 && \
+rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
+yum -y update > /dev/null 2>&1 ; \
+yum clean all > /dev/null 2>&1 && \
+yum install -y ${TMP_DIR}/${JEMALLOC_RPM} ; \
+rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
+yum install -y ${DEPS} > /dev/null 2>&1 ; \
+rm -f ${TMP_DIR}/${JEMALLOC_RPM} ; \
+yum install -y ${GREATSQL_DOWNLOAD_URL}/${GREATSQL_RPMS1} \
+${GREATSQL_DOWNLOAD_URL}/${GREATSQL_RPMS2} \
+${GREATSQL_DOWNLOAD_URL}/${GREATSQL_RPMS3} \
+${GREATSQL_DOWNLOAD_URL}/${GREATSQL_RPMS4} && \
+/bin/bash /tmp/{GREATSQL_SHRINK}
 
 RUN echo "LD_PRELOAD=/usr/lib64/libjemalloc.so" >> /etc/sysconfig/mysql ; \
     echo "THP_SETTING=never" >> /etc/sysconfig/mysql
 
-# Creating datadir
 RUN mkdir -p ${MYSQL_DATA_DIR} && chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR}; chmod -R ug+rwX /etc/my.cnf
 
-RUN rm -f ${TMP_DIR}/${JEMALLOC_RPM}
-
-COPY ${GREATSQL_INIT} /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE ${MYSQL_PORT} ${MYSQL_PORT}0 ${MYSQL_PORT}1
