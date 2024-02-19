@@ -21,7 +21,7 @@ RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm" \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc jemalloc jemalloc-devel krb5-devel libaio-devel \
 libcurl-devel libtirpc-devel libudev-devel m4 make ncurses-devel numactl-devel openldap-devel \
-openssl openssl-devel pam-devel readline-devel zlib-devel"
+openssl openssl-devel pam-devel readline-devel zlib-devel wget"
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
@@ -52,7 +52,7 @@ curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 
 chmod +x ${OPT_DIR}/${GREATSQL_MAKESH} /${ENTRYPOINT} > /dev/null 2>&1 && \
 curl -o ${OPT_DIR}/${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz > /dev/null 2>&1 && \
 tar xf ${OPT_DIR}/${PATCHELF}.tar.gz -C ${OPT_DIR} > /dev/null 2>&1 && \
-curl -o ${OPT_DIR}/${BOOST} ${BOOST_SRC_DOWNLOAD_URL}/${BOOST} > /dev/null 2>&1 && \
+wget -c -O ${OPT_DIR}/${BOOST} ${BOOST_SRC_DOWNLOAD_URL}/${BOOST} > /dev/null 2>&1 && \
 tar xf ${OPT_DIR}/${BOOST} -C /opt > /dev/null 2>&1 && \
 curl -o ${OPT_DIR}/${GREATSQL} ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL} > /dev/null 2>&1 && \
 tar xf ${OPT_DIR}/${GREATSQL} -C /opt > /dev/null 2>&1 && \
