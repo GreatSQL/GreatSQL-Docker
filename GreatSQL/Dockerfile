@@ -1,4 +1,8 @@
+#for x86_64
 FROM centos:8
+
+#for aarch64
+#FROM docker.io/arm64v8/centos
 
 LABEL maintainer="greatsql.cn" \
 email="greatsql@greatdb.com" \
@@ -22,6 +26,9 @@ GREATSQL_TEST="greatsql-test.sql" \
 GREATSQL_CNF="my.cnf" \
 GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25-Rapid" \
 GREATSQL_PKG="greatsql-8.0.32-25.1.el8.x86_64.rpm-bundle.tar.xz"
+
+#for aarch64
+#GREATSQL_PKG="greatsql-8.0.32-25.1.el8.aarch64.rpm-bundle.tar.xz"
 
 CMD /bin/bash
 
