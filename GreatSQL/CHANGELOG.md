@@ -26,4 +26,4 @@
 * 修复一个不太友好的报错提醒。
 * 修改客户端prompt，最后加一个空格，更美观。
 
-[8.0.32-25]: https://gitee.com/GreatSQL/GreatSQL-Docker/tree/greatsql-8.0.32-25/
+[8.0.32-25]: https://gitee.com/GreatSQL/GreatSQL-Docker/tree/greatsql-8.0.32-25/GreatSQL
