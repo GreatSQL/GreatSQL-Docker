@@ -1,4 +1,5 @@
 FROM centos:8
+#FROM docker.io/arm64v8/centos
 ENV LANG en_US.utf8
 
 LABEL maintainer="greatsql.cn" \
@@ -17,11 +18,12 @@ ENTRYPOINT="docker-entrypoint.sh" \
 GREATSQL="greatsql-8.0.32-25.tar.xz" \
 PATCHELF="patchelf-0.14.5" \
 BOOST="boost_1_77_0.tar.gz" \
-RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm" \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc jemalloc jemalloc-devel krb5-devel libaio-devel \
 libcurl-devel libtirpc-devel libudev-devel m4 make ncurses-devel numactl-devel openldap-devel \
-openssl openssl-devel pam-devel readline-devel zlib-devel wget"
+openssl openssl-devel pam-devel readline-devel zlib-devel wget" \
+RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
+#RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \

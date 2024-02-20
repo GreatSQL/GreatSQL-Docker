@@ -3,7 +3,7 @@
 
 全自动编译GreatSQL源码，生成二进制包。
 
-适用于CentOS 8 x86_64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
+适用于CentOS 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
 ## 1. GreatSQL Build Docker镜像构建
 
