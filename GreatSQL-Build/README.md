@@ -1,4 +1,4 @@
-# GreatSQL Build Docker镜像
+# GreatSQL-Build Docker
 ---
 
 全自动编译GreatSQL源码，生成二进制包。
@@ -37,3 +37,17 @@ $ docker cp greatsql_build:/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64 /usr/
 ```
 
 如果宿主机环境也是CentOS 8 x86_64的话，这就可以在宿主机环境下直接使用该二进制文件包了。
+
+## 文件介绍
+- CHANGELOG.md，更新历史
+- docker-entrypoint.sh，镜像初始化脚本，该脚本中再调用greatsql-automake.sh实现自动编译。
+- Dockerfile，用于构建GreatSQL编译环境
+- greatsql-automake.sh，GreatSQL自动编译脚本
+- patchelf-0.14.5.tar.gz，patchelf源码包
+- rpcgen-1.3.1-4.el8.aarch64.rpm，rpcgen for aarch64 RPM包
+- rpcgen-1.3.1-4.el8.x86_64.rp，rpcgen for x86_64 RPM包
+
+## 联系我们
+扫码关注微信公众号
+
+![GreatSQL社区微信公众号二维码](https://images.gitee.com/uploads/images/2021/0802/143402_f9d6cb61_8779455.jpeg "greatsql社区-wx-qrcode-0.5m.jpg")
