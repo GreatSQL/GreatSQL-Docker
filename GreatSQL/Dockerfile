@@ -53,21 +53,21 @@ rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 dnf install -y ${DEPS} > /dev/null 2>&1 && \
 curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
 curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} > /dev/null 2>&1 && \
-curl -o /docker-entrypoint.sh ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} > /dev/null 2>&1 && \
+curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} > /dev/null 2>&1 && \
 curl -o /etc/my.cnf ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} > /dev/null 2>&1 && \
 /usr/sbin/groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin ${MYSQL_USER} && \
 curl -o ${TMP_DIR}/greatsql.tar.xz ${GREATSQL_DOWNLOAD_URL}/${GREATSQL_PKG} > /dev/null 2>&1 && \
-tar xf ${TMP_DIR}/greatsql.tar.xz -C /tmp/ > /dev/null 2>&1 && \
-dnf install -y /tmp/greatsql*rpm > /dev/null 2>&1 && \
+tar xf ${TMP_DIR}/greatsql.tar.xz -C ${TMP_DIR} > /dev/null 2>&1 && \
+dnf install -y ${TMP_DIR}/greatsql*rpm > /dev/null 2>&1 && \
 /bin/bash ${TMP_DIR}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
 mkdir -p ${MYSQL_DATA_DIR} > /dev/null 2>&1 && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR} && \
 chmod -R ug+rwX /etc/my.cnf > /dev/null 2>&1 && \
-chmod +x /docker-entrypoint.sh && \
-rm -f /tmp/greatsql*xz /tmp/greatsql*rpm
+chmod +x /${GREATSQL_INIT} && \
+rm -f ${TMP_DIR}/greatsql*xz ${TMP_DIR}/greatsql*rpm
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/greatsql-init.sh"]
 
 EXPOSE ${MYSQL_PORT} ${MYSQL_PORT}0 ${MYSQL_PORT}1
 CMD ["mysqld"]
