@@ -51,13 +51,15 @@ echo && \
 echo "5. compiling MySQL Shell for GreatSQL"
 su - ${MYSQL_USER} -s /bin/bash -c "cd ${OPT_DIR}; /bin/sh ${OPT_DIR}/${GREATSQLSH_MAKESH}" && \
 echo && \
-echo "6. MySQL Shell for GreatSQL 8.0.32-25 build completed! TARBALL file: "
+echo "6. MySQL Shell for GreatSQL 8.0.32-25 build completed!"
 pip3.8 install --user certifi pyclamd >> ${MAKELOG} 2>&1 && \
+echo " 6.1 MySQL Shell for GreatSQL 8.0.32-25 version:" && \
 ${BASE_DIR}/bin/mysqlsh --version && \
 cd ${OPT_DIR} && \
 tar cf ${GREATSQLSH}.tar ${GREATSQLSH} >> ${MAKELOG} 2>&1 && \
 xz -9 -f -T${MAKE_JOBS} ${GREATSQLSH}.tar >> ${MAKELOG} 2>&1 && \
-ls -la ${GREATSQLSH}.tar.xz && \
+echo " 6.2 TARBALL file:" && \
+ls -la ${OPT_DIR}/${GREATSQLSH}.tar.xz && \
 cd ${OPT_DIR} && \
 rm -fr ${ANTLR}* ${BOOST}* ${MYSQL}* ${MYSQLSH}* ${MYSQLSH_PATCH} ${PATCHELF}* ${PROTOBUF}* ${RPCGEN}
 /bin/bash
