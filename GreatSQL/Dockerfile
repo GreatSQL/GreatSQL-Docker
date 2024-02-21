@@ -19,7 +19,7 @@ MYSQL_PORT=3306 \
 DEPS="pkg-config perl libaio-devel numactl-devel numactl-libs \
 net-tools openssl openssl-devel perl-Data-Dumper perl-Digest-MD5 \
 python2 perl-JSON perl-Test-Simple" \
-GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/master/GreatSQL" \
+GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL" \
 GREATSQL_INIT="greatsql-init.sh" \
 GREATSQL_SHRINK="greatsql-shrink.sh" \
 GREATSQL_TEST="greatsql-test.sql" \
