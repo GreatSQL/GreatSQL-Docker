@@ -51,7 +51,6 @@ echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
 dnf install -y ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} > /dev/null 2>&1 && \
 curl -o ${OPT_DIR}/${GREATSQL_MAKESH} ${GREATSQL_BUILD_DOWNLOAD_URL}/${GREATSQL_MAKESH} > /dev/null 2>&1 && \
 curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 2>&1 && \
-chmod +x ${OPT_DIR}/${GREATSQL_MAKESH} /${ENTRYPOINT} > /dev/null 2>&1 && \
 curl -o ${OPT_DIR}/${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz > /dev/null 2>&1 && \
 tar xf ${OPT_DIR}/${PATCHELF}.tar.gz -C ${OPT_DIR} > /dev/null 2>&1 && \
 wget -c -O ${OPT_DIR}/${BOOST} ${BOOST_SRC_DOWNLOAD_URL}/${BOOST} > /dev/null 2>&1 && \
@@ -59,7 +58,7 @@ tar xf ${OPT_DIR}/${BOOST} -C /opt > /dev/null 2>&1 && \
 curl -o ${OPT_DIR}/${GREATSQL} ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL} > /dev/null 2>&1 && \
 tar xf ${OPT_DIR}/${GREATSQL} -C /opt > /dev/null 2>&1 && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${OPT_DIR} > /dev/null 2>&1 && \
-chmod +x /docker-entrypoint.sh
+chmod +x ${OPT_DIR}/${GREATSQL_MAKESH} /${ENTRYPOINT}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]
