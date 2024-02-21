@@ -1,7 +1,4 @@
-#for x86_64
 FROM centos:8
-
-#for aarch64
 #FROM docker.io/arm64v8/centos
 
 LABEL maintainer="greatsql.cn" \
@@ -11,16 +8,15 @@ gitee="https://gitee.com/GreatSQL/GreatSQL-Shell-Docker"
 
 ENV LANG en_US.utf8
 ARG OPT_DIR=/opt \
-INSTALL_PKG="automake bison boost-devel bzip2 bzip2-devel clang cmake cmake3 cyrus-sasl-devel cyrus-sasl-scram \
-diffutils expat-devel file flex gcc gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc git \
-libaio-devel libarchive libcurl-devel libevent-devel libffi-devel libicu-devel libssh libssh-config \
-libssh-devel libtirpc libtirpc-devel libtool libuuid libuuid-devel libxml2-devel libzstd libzstd-devel \
-lz4-devel make ncurses-devel ncurses-libs net-tools numactl numactl-devel numactl-libs openldap-clients \
-openldap-devel openssl openssl-devel pam pam-devel perl perl-Env perl-JSON perl-Memoize perl-Time-HiRes \
-pkg-config psmisc python38 python38-devel python38-libs python38-pyyaml readline-devel redhat-lsb-core \
-rpm rpm-build scl-utils-build tar time unzip uuid valgrind vim wget yum-utils zlib-devel" \
-BUILD_PKG="greatsql_shell_docker_build.tar" \
-MYSQLSH_MAKE="greatsql-shell-build.sh"
+MYSQL_UID=3306 \
+MYSQL_USER=mysql \
+DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
+gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libtirpc-devel libudev-devel \
+m4 make ncurses-devel openssl openssl-devel wget zlib-devel libuuid libuuid-devel uuid patch \
+python38 python38-devel python38-libs python38-pyyaml libssh libssh-config libssh-devel " \
+GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Shell-Build" \
+GREATSQLSH_ENV="greatsqlsh-setenv.sh" \
+ENTRYPOINT="docker-entrypoint.sh"
 
 CMD /bin/bash
 
@@ -41,10 +37,15 @@ dnf -y update > /dev/null 2>&1 ; \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 dnf clean all > /dev/null 2>&1 && \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
-dnf install -y ${INSTALL_PKG} > /dev/null 2>&1 ; \
-echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile
+dnf install -y ${DEPS} > /dev/null 2>&1 ; \
+echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
+/usr/sbin/groupadd -g ${MYSQL_UID} ${MYSQL_USER} && \
+/usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
+mkdir -p ${OPT_DIR} && \
+curl -o ${OPT_DIR}/${GREATSQLSH_ENV} ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${GREATSQLSH_ENV} > /dev/null 2>&1 && \
+curl -o ${OPT_DIR}/${ENTRYPOINT} ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 2>&1 && \
+chmod +x ${OPT_DIR}/*sh
 
-COPY ${BUILD_PKG} ${OPT_DIR}
-COPY ${MYSQLSH_MAKE} /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
+
 CMD ["bash"]
