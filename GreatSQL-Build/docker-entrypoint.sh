@@ -3,6 +3,7 @@ OPT_DIR=/opt
 GREATSQL_MAKESH="greatsql-automake.sh"
 PATCHELF="patchelf-0.14.5"
 MAKELOG=/tmp/patchelf-automake.log
+MYSQL_USER=mysql
 
 echo "1. compile patchelf"; \
 cd ${OPT_DIR}/${PATCHELF} && ./bootstrap.sh >> ${MAKELOG} > /dev/null 2>&1 && \
@@ -10,7 +11,7 @@ cd ${OPT_DIR}/${PATCHELF} && ./bootstrap.sh >> ${MAKELOG} > /dev/null 2>&1 && \
 make >> ${MAKELOG} > /dev/null 2>&1 && \
 make install >> ${MAKELOG} > /dev/null 2>&1 && \
 echo "2. entering greatsql automake" ; \
-su - mysql -s /bin/bash -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
+su - ${MYSQL_USER} -s /bin/bash -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
 echo "3. greatsql automake completed" ; \
 ls -la ${OPT_DIR} | grep GreatSQL.*glibc.* && ${OPT_DIR}/GreatSQL*glibc*/bin/mysqld --verbose --version && \
 echo "4. remove files and clean up" ;\

@@ -21,7 +21,7 @@ BOOST="boost_1_77_0.tar.gz" \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc jemalloc jemalloc-devel krb5-devel libaio-devel \
 libcurl-devel libtirpc-devel libudev-devel m4 make ncurses-devel numactl-devel openldap-devel \
-openssl openssl-devel pam-devel readline-devel zlib-devel wget" \
+openssl openssl-devel pam-devel readline-devel wget zlib-devel" \
 RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
 #RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
 
