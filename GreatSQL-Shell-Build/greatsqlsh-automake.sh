@@ -1,7 +1,7 @@
 #!/bin/bash
 . /opt/greatsqlsh-setenv.sh
 
-echo "5.1 compiling mysqlclient and mysqlxclient" && \
+echo " 5.1 compiling mysqlclient and mysqlxclient" && \
 cd ${OPT_DIR}/${MYSQL} && \
 rm -fr bld && \
 mkdir bld && \
@@ -11,8 +11,7 @@ cmake .. -DBOOST_INCLUDE_DIR=${OPT_DIR}/${BOOST} \
 -DWITH_SSL=system >> ${MAKELOG} 2>&1 && \
 cmake --build . --target mysqlclient -- -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 ; \
 cmake --build . --target mysqlxclient -- -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && \
-echo && \
-echo "5.2 compiling MySQL Shell for GreatSQL" && \
+echo " 5.2 compiling MySQL Shell for GreatSQL" && \
 cd ${OPT_DIR}/${MYSQLSH} && \
 patch -p1 -f < ${OPT_DIR}/${GREATSQLSH_PATCH} >> ${MAKELOG} 2>&1 && \
 rm -fr bld && \

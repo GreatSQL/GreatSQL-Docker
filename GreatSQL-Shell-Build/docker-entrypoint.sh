@@ -8,7 +8,7 @@ chmod 0777 ${MAKELOG} && \
 echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
-echo "downloading sourcecode tarballs ..." && \
+echo " 1.1 downloading sourcecode tarballs ..." && \
 wget -c -O ${GREATSQLSH_ENV} ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${GREATSQLSH_ENV} >> ${MAKELOG} 2>&1 && \
 wget -c -O ${GREATSQLSH_MAKESH} ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${GREATSQLSH_MAKESH} >> ${MAKELOG} 2>&1 && \
 wget -c -O ${GREATSQLSH_PATCH} ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${GREATSQLSH_PATCH} >> ${MAKELOG} 2>&1 && \
@@ -19,7 +19,7 @@ wget -c -O ${ANTLR}.tar.xz ${GREATSQL_BUILD_DOWNLOAD_URL}/${ANTLR}.tar.xz >> ${M
 wget -c -O ${BOOST}.tar.gz ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.gz >> ${MAKELOG} 2>&1 && \
 wget -c -O ${MYSQLSH}.tar.gz ${MYSQLSH_SRC_DOWNLOAD_URL}/${MYSQLSH}.tar.gz >> ${MAKELOG} 2>&1 && \
 wget -c -O ${MYSQL}.tar.gz ${MYSQL_SRC_DOWNLOAD_URL}/${MYSQL}.tar.gz >> ${MAKELOG} 2>&1 && \
-echo "extract tarballs ..." && \
+echo " 1.2 extract tarballs ..." && \
 tar xf ${OPT_DIR}/${PATCHELF}*z && \
 tar xf ${OPT_DIR}/${PROTOBUF}*z && \
 tar xf ${OPT_DIR}/${ANTLR}*z && \
