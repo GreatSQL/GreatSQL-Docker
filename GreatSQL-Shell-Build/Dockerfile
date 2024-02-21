@@ -11,9 +11,9 @@ ARG OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
-gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libtirpc-devel libudev-devel \
-m4 make ncurses-devel openssl openssl-devel wget zlib-devel libuuid libuuid-devel uuid patch \
-python38 python38-devel python38-libs python38-pyyaml libssh libssh-config libssh-devel " \
+gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
+libtirpc-devel libudev-devel libuuid libuuid-devel m4 make ncurses-devel openssl openssl-devel \
+patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel" \
 GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Shell-Build" \
 GREATSQLSH_ENV="greatsqlsh-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh"
