@@ -7,11 +7,10 @@ email="greatsql@greatdb.com" \
 forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
-#GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Build" \
 ARG OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
-GREATSQL_BUILD_DOWNLOAD_URL="http://192.168.5.160/greatsql-build" \
+GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Build" \
 GREATSQL_ENV="greatsql-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh" \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
