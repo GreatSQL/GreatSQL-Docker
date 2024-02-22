@@ -1,5 +1,11 @@
 # 8.0.32-25 更新日志
 
+## 2024.2.22
+* 继续简化Dockerfile，使其构建更快。
+* 把大部分实际工作放在自定义脚本里运行。
+* 构建Docker镜像时只做基础工作。
+* rpcgen安装改在 docker-entrypoint.sh 中，并判断x86/arm，不再在Dockerfile中处理
+
 ## 2024.2.20
 * 版本更新到GreatSQL 8.0.32-25。
 * 支持x86_64/aarch64。

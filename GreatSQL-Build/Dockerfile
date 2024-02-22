@@ -7,23 +7,17 @@ email="greatsql@greatdb.com" \
 forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
-ARG MYSQL_UID=3306 \
+#GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Build" \
+ARG OPT_DIR=/opt \
+MYSQL_UID=3306 \
 MYSQL_USER=mysql \
-OPT_DIR=/opt \
-BOOST_SRC_DOWNLOAD_URL="https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source" \
-GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/deppkgs" \
-GREATSQL_SRC_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25" \
-GREATSQL_MAKESH="greatsql-automake.sh" \
+GREATSQL_BUILD_DOWNLOAD_URL="http://192.168.5.160/greatsql-build" \
+GREATSQL_ENV="greatsql-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh" \
-GREATSQL="greatsql-8.0.32-25.tar.xz" \
-PATCHELF="patchelf-0.14.5" \
-BOOST="boost_1_77_0.tar.gz" \
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc jemalloc jemalloc-devel krb5-devel libaio-devel \
 libcurl-devel libtirpc-devel libudev-devel m4 make ncurses-devel numactl-devel openldap-devel \
-openssl openssl-devel pam-devel readline-devel wget zlib-devel" \
-RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
-#RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
+openssl openssl-devel pam-devel readline-devel wget zlib-devel"
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
@@ -48,17 +42,9 @@ source /opt/rh/gcc-toolset-11/enable > /dev/null 2>&1 && \
 echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
 /usr/sbin/groupadd -g ${MYSQL_UID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
-dnf install -y ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} > /dev/null 2>&1 && \
-curl -o ${OPT_DIR}/${GREATSQL_MAKESH} ${GREATSQL_BUILD_DOWNLOAD_URL}/${GREATSQL_MAKESH} > /dev/null 2>&1 && \
+curl -o ${OPT_DIR}/${GREATSQL_ENV} ${GREATSQL_BUILD_DOWNLOAD_URL}/${GREATSQL_ENV} > /dev/null 2>&1 && \
 curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 2>&1 && \
-curl -o ${OPT_DIR}/${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz > /dev/null 2>&1 && \
-tar xf ${OPT_DIR}/${PATCHELF}.tar.gz -C ${OPT_DIR} > /dev/null 2>&1 && \
-wget -c -O ${OPT_DIR}/${BOOST} ${BOOST_SRC_DOWNLOAD_URL}/${BOOST} > /dev/null 2>&1 && \
-tar xf ${OPT_DIR}/${BOOST} -C /opt > /dev/null 2>&1 && \
-curl -o ${OPT_DIR}/${GREATSQL} ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL} > /dev/null 2>&1 && \
-tar xf ${OPT_DIR}/${GREATSQL} -C /opt > /dev/null 2>&1 && \
-chown -R ${MYSQL_USER}:${MYSQL_USER} ${OPT_DIR} > /dev/null 2>&1 && \
-chmod +x ${OPT_DIR}/${GREATSQL_MAKESH} /${ENTRYPOINT}
+chmod +x /${ENTRYPOINT} ${OPT_DIR}/${GREATSQL_ENV}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]

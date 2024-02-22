@@ -1,35 +1,13 @@
 #!/bin/bash
-MAJOR_VERSION=8
-MINOR_VERSION=0
-PATCH_VERSION=32
-RELEASE=25
-REVISION=79f57097e3f
-GLIBC=`ldd --version | head -n 1 | awk '{print $NF}'`
-ARCH=`uname -p`
-OS=`grep '^ID=' /etc/os-release | sed 's/.*"\(.*\)".*/\1/ig'`
-#OS=Linux
-PKG_NAME=GreatSQL-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}-${OS}-glibc${GLIBC}-${ARCH}
-BASE_DIR=/opt/${PKG_NAME}
-BOOST_VERSION=1_77_0
-MAKELOG=/tmp/greatsql-automake.log
-SOURCE_DIR=greatsql-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-${RELEASE}
-CMAKE_EXE_LINKER_FLAGS=""
-JOBS=`lscpu | grep '^CPU(s)'|awk '{print $NF}'`
-if [ ${JOBS} -ge 16 ] ; then
-  JOBS=`expr ${JOBS} - 4`
-else
-  JOBS=`expr ${JOBS} - 2`
-fi
 
-if [ ${ARCH} = "x86_64" ] ; then
-  CMAKE_EXE_LINKER_FLAGS=" -ljemalloc "
-fi
+. /opt/greatsql-setenv.sh
+
+echo " 3.1 compiling GreatSQL"
 
 if [ ${ARCH} = "loongarch64" ] ; then
-  cd /opt/${SOURCE_DIR}
+  cd ${OPT_DIR}/${GREATSQL_SRC}
   sed -i 's/\(.*defined.*mips.*\) \\/\1 defined(__loongarch__) || \\/ig' extra/icu/source/i18n/double-conversion-utils.h
 fi
-
 
 LIBLIST="libcrypto.so libssl.so libreadline.so libtinfo.so libsasl2.so libbrotlidec.so libbrotlicommon.so libgssapi_krb5.so libkrb5.so libkrb5support.so libk5crypto.so librtmp.so libgssapi.so libssl3.so libsmime3.so libnss3.so libnssutil3.so libplc4.so libnspr4.so libssl3.so libplds4.so libncurses.so libjemalloc.so"
 DIRLIST="bin lib lib/private lib/plugin lib/mysqlrouter/plugin lib/mysqlrouter/private"
@@ -154,16 +132,21 @@ function link {
 
 rm -fr ${MAKELOG}
 
-cd /opt/${SOURCE_DIR} && \
+cd ${OPT_DIR}/${GREATSQL_SRC} && \
 rm -fr bld && \
 mkdir bld && \
 cd bld && \
-cmake .. -DBOOST_INCLUDE_DIR=/opt/boost_${BOOST_VERSION} \
--DLOCAL_BOOST_DIR=/opt/boost_${BOOST_VERSION} \
--DCMAKE_INSTALL_PREFIX=${BASE_DIR} -DWITH_ZLIB=bundled \
--DWITH_NUMA=ON -DCMAKE_EXE_LINKER_FLAGS="${CMAKE_EXE_LINKER_FLAGS}" \
--DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_CONFIG=mysql_release \
--DWITH_TOKUDB=OFF -DWITH_ROCKSDB=OFF \
+cmake .. \
+-DBOOST_INCLUDE_DIR=${OPT_DIR}/${BOOST} \
+-DLOCAL_BOOST_DIR=${OPT_DIR}/${BOOST} \
+-DCMAKE_INSTALL_PREFIX=${DEST_DIR} \
+-DWITH_ZLIB=bundled \
+-DWITH_NUMA=ON \
+-DCMAKE_EXE_LINKER_FLAGS="${CMAKE_EXE_LINKER_FLAGS}" \
+-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+-DBUILD_CONFIG=mysql_release \
+-DWITH_TOKUDB=OFF \
+-DWITH_ROCKSDB=OFF \
 -DROCKSDB_DISABLE_AVX2=1 \
 -DROCKSDB_DISABLE_MARCH_NATIVE=1 \
 -DGROUP_REPLICATION_WITH_ROCKSDB=OFF \
@@ -172,8 +155,12 @@ cmake .. -DBOOST_INCLUDE_DIR=/opt/boost_${BOOST_VERSION} \
 -DFORCE_INSOURCE_BUILD=1 \
 -DCOMPILATION_COMMENT="GreatSQL, Release ${RELEASE}, Revision ${REVISION}" \
 -DMAJOR_VERSION=${MAJOR_VERSION} -DMINOR_VERSION=${MINOR_VERSION} -DPATCH_VERSION=${PATCH_VERSION} \
--DWITH_NDB=OFF -DWITH_NDBCLUSTER_STORAGE_ENGINE=OFF -DWITH_NDBCLUSTER=OFF \
--DWITH_UNIT_TESTS=OFF -DWITH_SSL=system -DWITH_SYSTEMD=ON \
+-DWITH_NDB=OFF \
+-DWITH_NDBCLUSTER_STORAGE_ENGINE=OFF \
+-DWITH_NDBCLUSTER=OFF \
+-DWITH_UNIT_TESTS=OFF \
+-DWITH_SSL=system \
+-DWITH_SYSTEMD=ON \
 -DWITH_AUTHENTICATION_LDAP=OFF \
 -DWITH_PAM=1 \
 -DWITH_LIBEVENT=bundled \
@@ -187,30 +174,34 @@ cmake .. -DBOOST_INCLUDE_DIR=/opt/boost_${BOOST_VERSION} \
 -DWITH_ZSTD=bundled \
 -DWITH_FIDO=bundled \
 -DWITH_KEYRING_VAULT=ON \
->> ${MAKELOG} 2>&1 && make -j${JOBS} >> ${MAKELOG} 2>&1 && make -j${JOBS} install >> ${MAKELOG} 2>&1
+>> ${MAKELOG} 2>&1 && \
+make -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && \
+make -j${MAKE_JOBS} install >> ${MAKELOG} 2>&1
 
-rm -fr ${BASE_DIR}/mysql-test 2 > /dev/null
+echo " 3.2 remove mysql-test from GreatSQL"
+rm -fr ${DEST_DIR}/mysql-test 2 > /dev/null
 
+echo " 3.3 make dynamic link for GreatSQL"
 # strip binaries to get minimal package
 # 如果想生成minial包，就取消195-204行注释
 #minimal=true
 #echo "minimal = ${minimal}" >> ${MAKELOG} 2>&1
-#echo "link ${BASE_DIR}-minimal" >> ${MAKELOG} 2>&1
+#echo "link ${DEST_DIR}-minimal" >> ${MAKELOG} 2>&1
 #(
-#  cp -rp ${BASE_DIR} ${BASE_DIR}-minimal
-#  cd ${BASE_DIR}-minimal
+#  cp -rp ${DEST_DIR} ${DEST_DIR}-minimal
+#  cd ${DEST_DIR}-minimal
 #  find . -type f -exec file '{}' \; | grep ': ELF ' | cut -d':' -f1 | xargs strip --strip-unneeded
 #  link >> ${MAKELOG} 2>&1
 #)
 #如果要打包压缩，就把下面两行注释去掉
-#tar -cf ${BASE_DIR}-minimal.tar ${BASE_DIR}-minimal
-#xz -9 -f -T${JOBS} ${BASE_DIR}-minimal.tar ${BASE_DIR}-minimal
+#tar -cf ${DEST_DIR}-minimal.tar ${DEST_DIR}-minimal
+#xz -9 -f -T${MAKE_JOBS} ${DEST_DIR}-minimal.tar ${DEST_DIR}-minimal
 
 minimal=false
 (
-  cd ${BASE_DIR}
+  cd ${DEST_DIR}
   link >> ${MAKELOG} 2>&1
 )
 #如果要打包压缩，就把下面两行注释去掉
-#tar -cf ${BASE_DIR}.tar ${BASE_DIR}
-#xz -9 -f -T${JOBS} ${BASE_DIR}.tar.xz ${BASE_DIR}
+#tar -cf ${DEST_DIR}.tar ${DEST_DIR}
+#xz -9 -f -T${MAKE_JOBS} ${DEST_DIR}.tar.xz ${DEST_DIR}
