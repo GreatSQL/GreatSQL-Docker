@@ -1,5 +1,4 @@
 FROM centos:8
-#FROM docker.io/arm64v8/centos
 ENV LANG en_US.utf8
 
 LABEL maintainer="greatsql.cn" \
@@ -43,7 +42,7 @@ echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
 curl -o ${OPT_DIR}/${GREATSQL_ENV} ${GREATSQL_BUILD_DOWNLOAD_URL}/${GREATSQL_ENV} > /dev/null 2>&1 && \
 curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} > /dev/null 2>&1 && \
-chmod +x /${ENTRYPOINT} ${OPT_DIR}/${GREATSQL_ENV}
+chmod +x /*sh ${OPT_DIR}/*sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]
