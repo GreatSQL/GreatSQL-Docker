@@ -23,27 +23,24 @@ $ docker run -itd --hostname greatsql_build --name greatsql_build greatsql/great
 # 查看自动编译进展
 $ docker logs greatsql_build
 
-0. touch logfile /tmp/greatsqlsh-automake.log
+0. touch logfile /tmp/greatsql-automake.log
 
 1. downloading sourcecode tarballs and extract
  1.1 downloading sourcecode tarballs ...
  1.2 extract tarballs ...
 
-2. compiling antlr4
+2. compile patchelf
 
-3. compiling patchelf
+3. compile GreatSQL
+ 3.1 compiling GreatSQL
+ 3.2 remove mysql-test from GreatSQL
+ 3.3 make dynamic link for GreatSQL
 
-4. compiling protobuf
+4. greatsql build completed!
+drwxrwxr-x 13 mysql mysql       293 Feb 22 01:33 GreatSQL-8.0.32-25-centos-glibc2.28-x86_64
+/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 79f57097e3f)
 
-5. compiling MySQL Shell for GreatSQL
- 5.1 compiling mysqlclient and mysqlxclient
- 5.2 compiling MySQL Shell for GreatSQL
-
-6. MySQL Shell for GreatSQL 8.0.32-25 build completed!
- 6.1 MySQL Shell for GreatSQL 8.0.32-25 version:
-/opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqlsh   Ver 8.0.32 for Linux on x86_64 - for MySQL 8.0.32 (Source distribution)
- 6.2 TARBALL file:
--rw-r--r-- 1 root root 19956168 Feb 21 02:56 /opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar.xz
+5. remove files and clean up
 ```
 
 可以看到已经完成编译，如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
