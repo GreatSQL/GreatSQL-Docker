@@ -10,7 +10,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们: greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-02-20
+- 最后更新时间：2024-03-12
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
@@ -33,7 +33,11 @@ $ docker logs greatsqlsh | tail
 如果看到类似下面的结果，就表明二进制包已编译完成
 ```shell
 $ docker logs greatsqlsh | tail
-0. touch logfile /tmp/greatsqlsh-automake.log
+0. init GreatSQL-Shell-Build env
+0.1 touch logfile /tmp/greatsqlsh-automake.log
+0.2 install all DEPS(autoconf, gcc ...)
+0.3 download yum-repos.tar.xz and v8-libs-aarch64.tar.xz
+0.4 install yum-repos and v8-libs-aarch64
 
 1. downloading sourcecode tarballs and extract
  1.1 downloading sourcecode tarballs ...
@@ -53,7 +57,7 @@ $ docker logs greatsqlsh | tail
  6.1 MySQL Shell for GreatSQL 8.0.32-25 version:
 /opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqlsh   Ver 8.0.32 for Linux on x86_64 - for MySQL 8.0.32 (Source distribution)
  6.2 TARBALL file:
--rw-r--r-- 1 root root 19956168 Feb 21 02:56 /opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar.xz
+-rw-r--r-- 1 root root 20378992 Mar 12 10:33 /opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar.xz
 ```
 
 接下来回退到宿主机，将容器中的二进制包拷贝出来
@@ -73,18 +77,9 @@ $ /usr/local/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqlsh
 MySQL Shell 8.0.32
 ...
 Type '\help' or '\?' for help; '\quit' to exit.
- MySQL  Py > \q
+ MySQL  JS > \q
 Bye!
 ```
-
-如果是在aarch64环境中，则修改Dockerfile的前几行，改成适用于aarch64的镜像，例如
-
-```shell
-#FROM centos:8
-FROM docker.io/arm64v8/centos
-```
-
-然后执行上面创建容器的命令即可。
 
 ## 文件介绍
 - CHANGELOG.md，更新历史
