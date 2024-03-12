@@ -24,6 +24,14 @@ GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/gr
 BOOST_SRC_DOWNLOAD_URL="https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source"
 MYSQL_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/23/file"
 MYSQLSH_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/43/file"
+
+DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
+gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
+libtirpc-devel libudev-devel libuuid libuuid-devel m4 make ncurses-devel openssl openssl-devel \
+patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel" \
+
+V8_DEPS="deps-v8"
+YUM_REPOS="yum-repos"
 ANTLR="antlr4-4.10"
 BOOST="boost_1_77_0"
 MYSQL="mysql-8.0.32"
@@ -35,6 +43,8 @@ GREATSQLSH_MAKESH="greatsqlsh-automake.sh"
 GREATSQLSH_ENV="greatsqlsh-setenv.sh"
 if [ "`uname -p`" = "aarch64" ] ; then
  RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
+ V8_LIBS_PKG="v8-libs-aarch64"
 else
  RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
+ V8_LIBS_PKG="v8-libs-x86_64"
 fi
