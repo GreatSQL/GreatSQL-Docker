@@ -8,7 +8,7 @@ mkdir bld && \
 cd bld && \
 cmake .. -DBOOST_INCLUDE_DIR=${OPT_DIR}/${BOOST} \
 -DLOCAL_BOOST_DIR=${OPT_DIR}/${BOOST} \
--DWITH_SSL=system >> ${MAKELOG} 2>&1 && \
+-DWITH_SSL=system -DWITH_MYSQLX_USE_PROTOBUF_FULL=OFF >> ${MAKELOG} 2>&1 && \
 cmake --build . --target mysqlclient -- -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 ; \
 cmake --build . --target mysqlxclient -- -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && \
 echo " 5.2 compiling MySQL Shell for GreatSQL" && \
@@ -21,9 +21,12 @@ cmake .. \
 -DCMAKE_INSTALL_PREFIX=${BASE_DIR} \
 -DMYSQL_SOURCE_DIR=${OPT_DIR}/${MYSQL} \
 -DMYSQL_BUILD_DIR=${OPT_DIR}/${MYSQL}/bld/ \
--DHAVE_PYTHON=1 \
--DWITH_PROTOBUF=bundled \
 -DBUILD_SOURCE_PACKAGE=0 \
+-DWITH_PROTOBUF=system \
+-DHAVE_V8=1 \
+-DV8_INCLUDE_DIR=/usr/include \
+-DV8_LIB_DIR=/usr/lib64 \
+-DHAVE_PYTHON=1 \
 -DBUNDLED_ANTLR_DIR=/usr/local/antlr4/ \
 -DPYTHON_LIBRARIES=/usr/lib64/python3.8 -DPYTHON_INCLUDE_DIRS=/usr/include/python3.8/ >> ${MAKELOG} 2>&1 \
 && make -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && make -j${MAKE_JOBS} install >> ${MAKELOG} 2>&1 && \
