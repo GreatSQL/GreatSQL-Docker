@@ -1,10 +1,29 @@
 #!/bin/bash
 . /opt/greatsqlsh-setenv.sh
 
-echo "0. touch logfile ${MAKELOG}"
+echo "0. init GreatSQL-Shell-Build env" && \
+echo "0.1 touch logfile ${MAKELOG}"
 touch ${MAKELOG} && \
 chown ${MYSQL_USER}:${MYSQL_USER} ${MAKELOG} && \
 chmod 0777 ${MAKELOG} && \
+echo "0.2 install all DEPS(autoconf, gcc ...)" && \
+dnf install -y ${DEPS} > /dev/null 2>&1 && \
+echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile && \
+rm -f /etc/yum.repos.d/CentOS-Linux-* && \
+echo "0.3 download ${YUM_REPOS}.tar.xz and ${V8_LIBS_PKG}.tar.xz" && \
+mkdir -p ${OPT_DIR}/${V8_DEPS} && \
+wget -c -O ${OPT_DIR}/${V8_DEPS}/${YUM_REPOS}.tar.xz ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${V8_DEPS}/${YUM_REPOS}.tar.xz >> ${MAKELOG} 2>&1 && \
+wget -c -O ${OPT_DIR}/${V8_DEPS}/${V8_LIBS_PKG}.tar.xz ${GREATSQLSH_BUILD_DOWNLOAD_URL}/${V8_DEPS}/${V8_LIBS_PKG}.tar.xz >> ${MAKELOG} 2>&1 && \
+echo "0.4 install ${YUM_REPOS} and ${V8_LIBS_PKG}" && \
+cd ${OPT_DIR}/${V8_DEPS} && \
+tar xf ${YUM_REPOS}*z -C ${OPT_DIR}/${V8_DEPS} && \
+tar xf ${V8_LIBS_PKG}*z -C ${OPT_DIR}/${V8_DEPS} && \
+rpm -ivhU --nodeps ${YUM_REPOS}/centos*noarch.rpm && \
+dnf install -y epel-release && \
+dnf install -y 'dnf-command(config-manager)' && \
+dnf config-manager --enable epel-testing epel-modular epel-testing-modular && \
+rpm -Uvh ${YUM_REPOS}/epel-release*noarch.rpm && \
+dnf install -y ${V8_LIBS_PKG}/*rpm
 echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
