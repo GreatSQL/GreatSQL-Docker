@@ -18,12 +18,12 @@ echo "0.4 install ${YUM_REPOS} and ${V8_LIBS_PKG}" && \
 cd ${OPT_DIR}/${V8_DEPS} && \
 tar xf ${YUM_REPOS}*z -C ${OPT_DIR}/${V8_DEPS} && \
 tar xf ${V8_LIBS_PKG}*z -C ${OPT_DIR}/${V8_DEPS} && \
-rpm -ivhU --nodeps ${YUM_REPOS}/centos*noarch.rpm && \
-dnf install -y epel-release && \
-dnf install -y 'dnf-command(config-manager)' && \
-dnf config-manager --enable epel-testing epel-modular epel-testing-modular && \
-rpm -Uvh ${YUM_REPOS}/epel-release*noarch.rpm && \
-dnf install -y ${V8_LIBS_PKG}/*rpm
+rpm -ivhU --nodeps ${YUM_REPOS}/centos*noarch.rpm >> ${MAKELOG} 2>&1 && \
+dnf install -y epel-release >> ${MAKELOG} 2>&1 && \
+dnf install -y 'dnf-command(config-manager)' >> ${MAKELOG} 2>&1 && \
+dnf config-manager --enable epel-testing epel-modular epel-testing-modular >> ${MAKELOG} 2>&1 && \
+rpm -Uvh ${YUM_REPOS}/epel-release*noarch.rpm >> ${MAKELOG} 2>&1 && \
+dnf install -y ${V8_LIBS_PKG}/*rpm >> ${MAKELOG} 2>&1 && \
 echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
