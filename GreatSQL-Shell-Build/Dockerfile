@@ -1,5 +1,4 @@
 FROM centos:8
-#FROM docker.io/arm64v8/centos
 
 LABEL maintainer="greatsql.cn" \
 email="greatsql@greatdb.com" \
