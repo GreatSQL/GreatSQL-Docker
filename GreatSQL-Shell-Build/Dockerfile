@@ -10,15 +10,9 @@ ENV LANG en_US.utf8
 ARG OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
-DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
-gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
-libtirpc-devel libudev-devel libuuid libuuid-devel m4 make ncurses-devel openssl openssl-devel \
-patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel" \
 GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Shell-Build" \
 GREATSQLSH_ENV="greatsqlsh-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh"
-
-CMD /bin/bash
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
@@ -32,13 +26,10 @@ rm -f /lib/systemd/system/anaconda.target.wants/*; \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo > /dev/null 2>&1 && \
 sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo > /dev/null 2>&1 && \
-dnf clean all > /dev/null 2>&1 && \
 dnf -y update > /dev/null 2>&1 ; \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 dnf clean all > /dev/null 2>&1 && \
-rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
-dnf install -y ${DEPS} > /dev/null 2>&1 ; \
-echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
+dnf makecache > /dev/null 2>&1 && \
 /usr/sbin/groupadd -g ${MYSQL_UID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
 mkdir -p ${OPT_DIR} && \
