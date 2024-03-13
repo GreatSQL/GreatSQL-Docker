@@ -80,5 +80,5 @@ xz -9 -f -T${MAKE_JOBS} ${GREATSQLSH}.tar >> ${MAKELOG} 2>&1 && \
 echo " 6.2 TARBALL file:" && \
 ls -la ${OPT_DIR}/${GREATSQLSH}.tar.xz && \
 cd ${OPT_DIR} && \
-rm -fr ${ANTLR}* ${BOOST}* ${MYSQL}* ${MYSQLSH}* ${MYSQLSH_PATCH} ${PATCHELF}* ${PROTOBUF}* ${RPCGEN}
+rm -fr ${ANTLR}* ${BOOST}* ${MYSQL}* ${MYSQLSH}* ${MYSQLSH_PATCH} ${PATCHELF}* ${PROTOBUF}* ${RPCGEN} ${V8_DEPS}
 /bin/bash
