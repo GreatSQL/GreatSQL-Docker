@@ -28,6 +28,12 @@ cmake .. \
 -DV8_LIB_DIR=/usr/lib64 \
 -DHAVE_PYTHON=1 \
 -DBUNDLED_ANTLR_DIR=/usr/local/antlr4/ \
--DPYTHON_LIBRARIES=/usr/lib64/python3.8 -DPYTHON_INCLUDE_DIRS=/usr/include/python3.8/ >> ${MAKELOG} 2>&1 \
-&& make -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && make -j${MAKE_JOBS} install >> ${MAKELOG} 2>&1 && \
-cp /usr/local/lib/libprotobuf.so.30 ${BASE_DIR}/lib/mysqlsh/
+-DPYTHON_LIBRARIES=/usr/lib64/python3.8 -DPYTHON_INCLUDE_DIRS=/usr/include/python3.8/ >> ${MAKELOG} 2>&1 && \
+make -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && \
+make -j${MAKE_JOBS} install >> ${MAKELOG} 2>&1 && \
+cp /usr/local/lib/libprotobuf.so.30 ${BASE_DIR}/lib/mysqlsh/ &&
+cp /lib64/libnode.so.93 ${BASE_DIR}/lib/mysqlsh/libnode.so.93 && \
+cp /lib64/libbrotlienc.so.1.0.6 ${BASE_DIR}/lib/mysqlsh/libbrotlienc.so.1 && \
+cp /lib64/libbrotlidec.so.1.0.6 ${BASE_DIR}/lib/mysqlsh/libbrotlidec.so.1 && \
+cp /lib64/libuv.so.1.0.0 ${BASE_DIR}/lib/mysqlsh/libuv.so.1 && \
+cp /lib64/libbrotlicommon.so.1.0.6 ${BASE_DIR}/lib/mysqlsh/libbrotlicommon.so.1
