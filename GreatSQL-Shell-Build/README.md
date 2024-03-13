@@ -69,7 +69,7 @@ $ docker cp greatsqlsh:/opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar
 然后解压缩，就可以在宿主机环境下使用了，例如：
 ```shell
 # 先安装几个必要的依赖包
-$ dnf install -y ibssh python38 python38-libs python38-pyyaml
+$ dnf install -y libssh python38 python38-libs python38-pyyaml
 $ pip3.8 install --user certifi pyclamd
 
 # 测试使用
@@ -88,6 +88,12 @@ Bye!
 - greatsqlsh-automake.sh，用于实现在Docker容器中自动化编译的脚本
 - greatsqlsh-setenv.sh，通用环境变量设置脚本
 - mysqlsh-for-greatsql-8.0.32.patch，需要对MySQL Shell打补丁，才能支持GreatSQL中特有的仲裁节点特性
+
+## 其他分支
+- 如果您想尝试支持Python 3.10版本的GreatSQL Shell，可参 [earl86](https://gitee.com/earl86) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+- 如果您想尝试在Rocky Linux中编译GreatSQL Shell，可参 [xiongyu](https://gitee.com/xiongyu-net) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/xiongyu-net/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+
+感谢以上二位commiter的贡献，由于无法适配ARM环境，因此主分支未合并，大家可根据个人喜好自行选择。
 
 ## 联系我们
 扫码关注微信公众号
