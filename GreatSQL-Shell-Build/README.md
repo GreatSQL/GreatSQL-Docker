@@ -14,8 +14,8 @@
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
-- [latest](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest/images/sha256-4a658457738231651010bdf9026164e38b4b455496f3d13a32dcac8f1b8e2b93?context=repo), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25/images/sha256-4a658457738231651010bdf9026164e38b4b455496f3d13a32dcac8f1b8e2b93?context=repo)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest-aarch64/images/sha256-46826329b1f0a6f201ddc30a47bfb9724afd724b116d7a4323d3db21d9ea46e0?context=repo), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25-aarch64/images/sha256-46826329b1f0a6f201ddc30a47bfb9724afd724b116d7a4323d3db21d9ea46e0?context=repo)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest/images/sha256-61b492155a71138bbcfd775ac22842f8b7030870c7c933e813d85aee243818a9?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25/images/sha256-61b492155a71138bbcfd775ac22842f8b7030870c7c933e813d85aee243818a9?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest-aarch64/images/sha256-d99532a7237dda41f1760e4e8cc0a96538a6a835041566fde545461d6f1ac513?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25-aarch64/images/sha256-d99532a7237dda41f1760e4e8cc0a96538a6a835041566fde545461d6f1ac513?context=explore)
 
 ## 如何使用GreatSQL-Shell-Build
 
