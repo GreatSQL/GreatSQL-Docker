@@ -8,7 +8,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-02-20
+- 最后更新时间：2024-03-13
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
@@ -36,8 +36,8 @@ Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 No default schema selected; type \use <schema> to set one.
 
 # 获取当前MGR状态信息
- MySQL  172.17.140.123:33060+ ssl  Py > c=dba.get_cluster()
- MySQL  172.17.140.123:33060+ ssl  Py > c.status()
+ MySQL  172.17.140.123:33060+ ssl  JS > c=dba.getCluster()
+ MySQL  172.17.140.123:33060+ ssl  JS > c.status()
 {
     "clusterName": "mgr803225",
     "defaultReplicaSet": {
@@ -72,10 +72,10 @@ No default schema selected; type \use <schema> to set one.
     },
     "groupInformationSourceMember": "172.17.136.59:3306"
 }
- MySQL  172.17.140.123:33060+ ssl  Py >
+ MySQL  172.17.140.123:33060+ ssl  JS >
 
 # 切换到SQL命令行模式下，并查看连接列表
- MySQL  172.17.140.123:33060+ ssl  Py > \sql
+ MySQL  172.17.140.123:33060+ ssl  JS > \sql
 Switching to SQL mode... Commands end with ;
 Fetching global names for auto-completion... Press ^C to stop.
  MySQL  172.17.140.123:33060+ ssl  SQL > show processlist;

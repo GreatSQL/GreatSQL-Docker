@@ -12,10 +12,10 @@ gitee="https://gitee.com/GreatSQL/GreatSQL-Shell-Docker"
 ENV LANG en_US.utf8
 ARG DEPS="libssh python38 python38-pyyaml python38-dateutil" \
 GREATSQLSH_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25" \
-GREATSQLSH="greatsql-shell-8.0.32-25-Linux-glibc2.28-x86_64" \
+GREATSQLSH="greatsql-shell-8.0.32-25-glibc2.28-x86_64" \
 BASE_DIR=/usr/local
 #for aarch64
-#GREATSQLSH="greatsql-shell-8.0.32-25-Linux-glibc2.28-aarch64" \
+#GREATSQLSH="greatsql-shell-8.0.32-25-glibc2.28-aarch64" \
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
