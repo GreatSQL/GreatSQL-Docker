@@ -90,8 +90,8 @@ Bye!
 - mysqlsh-for-greatsql-8.0.32.patch，需要对MySQL Shell打补丁，才能支持GreatSQL中特有的仲裁节点特性
 
 ## 其他分支
-- 如果您想尝试支持Python 3.10版本的GreatSQL Shell，可参 [earl86](https://gitee.com/earl86) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
-- 如果您想尝试在Rocky Linux中编译GreatSQL Shell，可参 [xiongyu](https://gitee.com/xiongyu-net) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/xiongyu-net/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+- 如果您想尝试支持Python 3.10版本的GreatSQL Shell，可参考 [earl86](https://gitee.com/earl86) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
+- 如果您想尝试在Rocky Linux中编译GreatSQL Shell，可参考 [xiongyu](https://gitee.com/xiongyu-net) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/xiongyu-net/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。
 
 感谢以上二位commiter的贡献，由于无法适配ARM环境，因此主分支未合并，大家可根据个人喜好自行选择。
 
