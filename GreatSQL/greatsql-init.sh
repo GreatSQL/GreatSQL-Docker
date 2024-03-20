@@ -340,7 +340,9 @@ cpu=`lscpu |grep '^CPU(s)'|awk '{print $2}'`
 ibp_maxperf=`expr ${mem} / 4 \* 3`
 rapid_mem_maxperf=`expr ${ibp_maxperf} / 2`
 rapid_thd_maxperf=`expr ${cpu} - 2`
-if [ "${MAXPERF}" ]; then
+if [ "${MAXPERF}" -eq "0" ]; then
+    echo "MAXPERF=0";
+elif [ "${MAXPERF}" -eq "1" ]; then
     echo "$(sed "s/\(^max_connections\).*/\1 = 4096/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(^open_files_limit\).*/\1 = 65535/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(^table_open_cache\).*/\1 = 10240/ig" /etc/my.cnf)" > /etc/my.cnf
@@ -366,6 +368,8 @@ if [ "${MAXPERF}" ]; then
     echo "$(sed "s/\(.*rapid_worker_threads\).*/\1 = ${rapid_thd_maxperf}/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*rapid_hash_table_memory_limit\).*/\1 = 30/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*secondary_engine_parallel_load_workers\).*/\1 = 32/ig" /etc/my.cnf)" > /etc/my.cnf
+else
+    echo "MAXPERF invalid";
 fi
 
 exec "$@"
