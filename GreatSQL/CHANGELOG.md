@@ -1,5 +1,9 @@
 # 8.0.32-25 更新日志
 
+## 2024.3.20
+### 新功能
+* 增加参数MAXPERF，用于设置为最大性能模式（默认）；在最大性能模式下，会调大innodb_buffer_pool_size/rapid_memory_limit等多个选项，详见脚本`greatsql-init.sh`中对MAXPERF模式的处理逻辑。
+
 ## 2024.2.20
 ### 新功能
 * 改造GreatSQL Docker镜像构造方法，全部从服务器上下载文件，无需从本地拷贝文件。

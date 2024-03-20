@@ -54,7 +54,7 @@ dnf install -y ${DEPS} > /dev/null 2>&1 && \
 curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
 curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} > /dev/null 2>&1 && \
 curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} > /dev/null 2>&1 && \
-curl -o /etc/my.cnf ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} > /dev/null 2>&1 && \
+curl -o /etc/${GREATSQL_CNF} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} > /dev/null 2>&1 && \
 /usr/sbin/groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin ${MYSQL_USER} && \
 curl -o ${TMP_DIR}/greatsql.tar.xz ${GREATSQL_DOWNLOAD_URL}/${GREATSQL_PKG} > /dev/null 2>&1 && \

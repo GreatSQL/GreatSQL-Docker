@@ -334,4 +334,38 @@ else
     echo "$(sed "s/BOOTSTRAP_MGR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
 fi
 
+file_env 'MAXPERF'
+mem=`free -m|grep Mem|awk '{print $2}'`
+cpu=`lscpu |grep '^CPU(s)'|awk '{print $2}'`
+ibp_maxperf=`expr ${mem} / 4 \* 3`
+rapid_mem_maxperf=`expr ${ibp_maxperf} / 2`
+rapid_thd_maxperf=`expr ${cpu} - 2`
+if [ "${MAXPERF}" ]; then
+    echo "$(sed "s/\(^max_connections\).*/\1 = 4096/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^open_files_limit\).*/\1 = 65535/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^table_open_cache\).*/\1 = 10240/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^table_definition_cache\).*/\1 = 10240/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^sort_buffer_size\).*/\1 = 16M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^join_buffer_size\).*/\1 = 16M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^read_buffer_size\).*/\1 = 16M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^read_rnd_buffer_size\).*/\1 = 16M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^thread_cache_size\).*/\1 = 8192/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^tmp_table_size\).*/\1 = 512M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^max_heap_table_size\).*/\1 = 512M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^temptable_max_ram\).*/\1 = 2G/ig" /etc/my.cnf)" > /etc/my.cnf
+
+    echo "$(sed "s/\(^innodb_buffer_pool_size\).*/\1 = ${ibp_maxperf}M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_redo_log_capacity\).*/\1 = 8G/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_io_capacity\).*/\1 = 40000/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_io_capacity_max\).*/\1 = 80000/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_open_files\).*/\1 = 65535/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_max_undo_log_size\).*/\1 = 16G/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(^innodb_online_alter_log_max_size\).*/\1 = 16G/ig" /etc/my.cnf)" > /etc/my.cnf
+
+    echo "$(sed "s/\(.*rapid_memory_limit\).*/\1 = ${rapid_mem_maxperf}M/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(.*rapid_worker_threads\).*/\1 = ${rapid_thd_maxperf}/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(.*rapid_hash_table_memory_limit\).*/\1 = 30/ig" /etc/my.cnf)" > /etc/my.cnf
+    echo "$(sed "s/\(.*secondary_engine_parallel_load_workers\).*/\1 = 32/ig" /etc/my.cnf)" > /etc/my.cnf
+fi
+
 exec "$@"
