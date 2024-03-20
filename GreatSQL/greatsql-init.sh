@@ -340,6 +340,10 @@ cpu=`lscpu |grep '^CPU(s)'|awk '{print $2}'`
 ibp_maxperf=`expr ${mem} / 4 \* 3`
 rapid_mem_maxperf=`expr ${ibp_maxperf} / 2`
 rapid_thd_maxperf=`expr ${cpu} - 2`
+if [ -z "${MAXPERF}" ]; then
+    MAXPERF=1
+fi
+
 if [ "${MAXPERF}" -eq "0" ]; then
     echo "MAXPERF=0";
 elif [ "${MAXPERF}" -eq "1" ]; then
