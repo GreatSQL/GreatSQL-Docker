@@ -344,9 +344,9 @@ if [ -z "${MAXPERF}" ]; then
     MAXPERF=1
 fi
 
-if [ "${MAXPERF}" -eq "0" ]; then
+if [ "${MAXPERF}" == "0" ]; then
     echo "MAXPERF=0";
-elif [ "${MAXPERF}" -eq "1" ]; then
+elif [ "${MAXPERF}" == "1" ]; then
     echo "$(sed "s/\(^max_connections\).*/\1 = 4096/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(^open_files_limit\).*/\1 = 65535/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(^table_open_cache\).*/\1 = 10240/ig" /etc/my.cnf)" > /etc/my.cnf
