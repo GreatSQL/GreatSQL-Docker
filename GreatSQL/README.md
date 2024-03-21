@@ -11,13 +11,13 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-02-20
+- 最后更新时间：2024-03-20
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-a969dcf207ce889374891903e772f2d5bbd7f0f79f22ce3d13c7a3a3218eca4c?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-a969dcf207ce889374891903e772f2d5bbd7f0f79f22ce3d13c7a3a3218eca4c?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-a393ac64b4c2a1be57a8315e1cfad79d6e3d4f89e320a834a0ffc2cf4e2a5f05?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25-aarch64/images/sha256-a393ac64b4c2a1be57a8315e1cfad79d6e3d4f89e320a834a0ffc2cf4e2a5f05?context=explore), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-16edef1b078bac2762fe69fe2d66b93c852373ad06a291dcdb29446a21e7fa16?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-16edef1b078bac2762fe69fe2d66b93c852373ad06a291dcdb29446a21e7fa16?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-e349f31c92fc7969b46d572e373723b41e09495dcd08f95bab5420a2c0439e5e?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25-aarch64/images/sha256-e349f31c92fc7969b46d572e373723b41e09495dcd08f95bab5420a2c0439e5e?context=explore), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
 
 
 ## GreatSQL Docker镜像使用
@@ -300,6 +300,15 @@ $ mysql
 
 - **MYSQL_RANDOM_ROOT_PASSWORD**
 设置MySQL root账号的密码采用随机生成方式。
+
+- **MAXPERF**
+设置是否采用最大性能模式运行容器，默认值：1，即默认启用该模式。如果您不需要运行该模式，请在创建容器时加上 `-e MAXPERF=0` 参数。在MAXPERF模式下，会进行如下几个调整：
+
+	- 调整 innodb_buffer_pool_size 为物理内存的75%。 
+	- 调整 rapid_memory_limit 为 innodb_buffer_pool_size 的50%。 
+	- 调整 rapid_worker_threads 为逻辑CPU核数-2 。
+	- 调整 max_connections = 4096。
+	- 其他更多调整内容请参考 [脚本greatsql-init.sh](./greatsql-init.sh) 中的MAXPERF处理逻辑。
 
 - **MYSQL_IBP**
 设置innodb_buffer_pool_size，默认值：128M。
