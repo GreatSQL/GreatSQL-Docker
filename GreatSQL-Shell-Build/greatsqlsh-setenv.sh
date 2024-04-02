@@ -17,7 +17,7 @@ ARCH=`uname -p`
 OS=`grep '^ID=' /etc/os-release | sed 's/.*"\(.*\)".*/\1/ig'`
 MAKELOG=/tmp/greatsqlsh-automake.log
 MYSQL_USER=mysql
-GREATSQLSH=greatsql-shell-${MYSQL_VERSTION}-${RELEASE}-${OS}-glibc${GLIBC}-${ARCH}
+GREATSQLSH=greatsql-shell-${MYSQL_VERSTION}-${RELEASE}-glibc${GLIBC}-${ARCH}
 BASE_DIR=${OPT_DIR}/${GREATSQLSH}
 GREATSQL_BUILD_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-Docker/deppkgs"
 GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Shell-Build"
