@@ -1,5 +1,8 @@
 # 8.0.32-25 更新日志
 
+## 2024.4.16
+* 利用Docker buildx支持多平台构建，不再需要用tag标识区分不同平台。
+
 ## 2024.3.20
 ### 新功能
 * 增加参数MAXPERF，用于设置为最大性能模式（默认）；在最大性能模式下，会调大innodb_buffer_pool_size/rapid_memory_limit等多个选项，详见脚本`greatsql-init.sh`中对MAXPERF模式的处理逻辑。

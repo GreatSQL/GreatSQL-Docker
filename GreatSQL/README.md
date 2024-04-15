@@ -16,9 +16,8 @@
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-16edef1b078bac2762fe69fe2d66b93c852373ad06a291dcdb29446a21e7fa16?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-16edef1b078bac2762fe69fe2d66b93c852373ad06a291dcdb29446a21e7fa16?context=explore), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql/latest-aarch64/images/sha256-e349f31c92fc7969b46d572e373723b41e09495dcd08f95bab5420a2c0439e5e?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25-aarch64/images/sha256-e349f31c92fc7969b46d572e373723b41e09495dcd08f95bab5420a2c0439e5e?context=explore), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
-
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
 
 ## GreatSQL Docker镜像使用
 
@@ -360,19 +359,6 @@ MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免�
 - **LOWER_CASE_TABLE_NAMES**
 设置表名大小写选项 lower_case_table_names，设置为0表示区分大小写，设置为1表示不区分带下写。默认值：0。
 非必选项。
-
-## GreatSQL Docker镜像构建
-
-```shell
-$ docker build -t greatsql/greatsql .
-```
-上述命令会查找当前目录下的 `Dockerfile` 文件，并构建名为 `greatsql/greatsql` 的Docker镜像。
-
-如果想要自定义Dockerfile文件路径，例如想要在aarch64平台下构建Docker镜像，可以采用类似下面的方法：
-```shell
-$ docker build -t greatsql/greatsql:aarch -f ./Dockerfile-aarch64 .
-```
-在构建镜像时，会自动从服务器上下载相应的GreatSQL RPM包文件、初始化脚本完成初始化工作，并全自动化方式完成镜像构建工作。
 
 ## 文件介绍
 - CHANGELOG.md，更新历史

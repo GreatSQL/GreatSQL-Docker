@@ -1,8 +1,4 @@
-#for x86_64
-FROM centos:8
-
-#for aarch64
-#FROM docker.io/arm64v8/centos
+FROM centos
 
 LABEL maintainer="greatsql.cn" \
 email="greatsql@greatdb.com" \
@@ -10,7 +6,8 @@ forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
 ENV LANG en_US.utf8
-ARG MYSQL_DATA_DIR=/data/GreatSQL \
+ARG TARGETARCH \
+MYSQL_DATA_DIR=/data/GreatSQL \
 MYSQL_USER=mysql \
 MYSQL_UID_GID=3306 \
 MYSQL_EXTRACT_DIR=/usr/local \
@@ -24,11 +21,9 @@ GREATSQL_INIT="greatsql-init.sh" \
 GREATSQL_SHRINK="greatsql-shrink.sh" \
 GREATSQL_TEST="greatsql-test.sql" \
 GREATSQL_CNF="my.cnf" \
-GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25-Rapid" \
-GREATSQL_PKG="greatsql-8.0.32-25.1.el8.x86_64.rpm-bundle.tar.xz"
+GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25-Rapid"
 
-#for aarch64
-#GREATSQL_PKG="greatsql-8.0.32-25.1.el8.aarch64.rpm-bundle.tar.xz"
+ENV GREATSQL_PKG="greatsql-8.0.32-25.1.el8.${TARGETARCH}.rpm-bundle.tar.xz"
 
 CMD /bin/bash
 
@@ -48,7 +43,6 @@ dnf clean all > /dev/null 2>&1 && \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 dnf -y update > /dev/null 2>&1 && \
 dnf clean all > /dev/null 2>&1 && \
-rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
 dnf install -y ${DEPS} > /dev/null 2>&1 && \
 curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
