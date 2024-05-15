@@ -22,7 +22,8 @@
 ## GreatSQL Docker镜像使用
 
 例如:
-```
+
+```shell
 $ docker run -d \
 --name greatsql --hostname=greatsql \
 greatsql/greatsql
@@ -35,15 +36,34 @@ greatsql/greatsql
 *--hostname=greatsql*，设定容器主机名
 *greatsql/greatsql*，指定容器使用的镜像名
 
+如果想要映射外部 my.cnf 配置文件或自行指定 datadir，还可以类似下面这么用：
+
+```shell
+$ docker run -d \
+-v /data/greatsql/my.cnf:/etc/my.cnf \
+-v  /data/greatsql/data:/data \
+--name greatsql --hostname=greatsql \
+greatsql/greatsql
+```
+
+注意，需要先保证本地目录 `/data/greatsql/data` 是空的才行，否则 GreatSQL 在初始化检测时会报告失败，无法启动，日志中将有类似下面的内容：
+
+```shell
+[ERROR] [MY-010457] [Server] --initialize specified but the data directory has files in it. Aborting.
+[ERROR] [MY-013236] [Server] The designated data directory /data/GreatSQL/ is unusable. You can remove all files that the server added to it.
+[ERROR] [MY-010119] [Server] Aborting
+```
 
 ## 连接（容器中的）MySQL
 运行下面的命令进入容器
-```
+
+```shell
 $ docker exec -it greatsql bash
 ```
 
 可以使用mysql 客户端工具（在docker镜像中，只保留了mysql这个客户端工具）
-```
+
+```shell
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
@@ -71,7 +91,8 @@ Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
 ## 如何通过 docker-compose 使用GreatSQL镜像
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mysql.yml`:
-```
+
+```shell
 version: '2'
 
 services:
@@ -86,19 +107,23 @@ services:
 ```
 
 运行 `docker-compose -f /data/docker/mysql.yml up -d` 即可创建一个新容器。
+
 运行下面的命令查看容器运行状态:
-```
+
+```shell
 $ docker-compose -f /data/docker/mysql.yml ps
 ```
 
 运行下面的命令进入容器:
-```
+
+```shell
 $ docker exec -it greatsql bash
 ```
 
 ## 如何通过docker-compose构建MGR集群（单主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr.yml`:
+
 ```
 version: '2'
 
@@ -166,14 +191,16 @@ networks:
 ```
 
 启动所有容器:
-```
+
+```shell
 $ docker-compse -f /data/docker/mgr.yml up -d
 ```
 
 容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
 
 进入第一个容器，确认实例启动并成为MGR的Primary节点：
-```
+
+```shell
 $ docker exec -it mgr2 bash
 $ mysql
 ...
@@ -192,6 +219,7 @@ $ mysql
 ## 如何通过docker-compose构建MGR集群（多主模式）
 
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
+
 ```
 version: '2'
 
@@ -265,14 +293,16 @@ networks:
 ```
 
 启动所有容器:
-```
+
+```shell
 $ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
 ```
 
 容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
 
 进入第一个容器，确认实例启动并成为MGR的Primary节点：
-```
+
+```shell
 $ docker exec -it mgr2 bash
 $ mysql
 ...
