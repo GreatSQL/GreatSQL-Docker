@@ -2,7 +2,7 @@
 
 . ~/.bash_profile
 
-MAKE_JOBS=`lscpu | grep '^CPU(s)'|awk '{print $NF}'`
+MAKE_JOBS=`lscpu | grep '^CPU(s):'|awk '{print $NF}'`
 if [ ${MAKE_JOBS} -ge 16 ] ; then
   MAKE_JOBS=`expr ${MAKE_JOBS} - 4`
 else
