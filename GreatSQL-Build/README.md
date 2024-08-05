@@ -1,11 +1,24 @@
 # GreatSQL-Build Docker
 ---
 
+## 简介
+
 全自动编译GreatSQL源码，生成二进制包。
 
 适用于CentOS 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
-## 1. GreatSQL Build Docker镜像构建
+## 基本信息
+- 维护者: GreatSQL(greatsql@greatdb.com)
+- 联系我们：greatsql@greatdb.com
+- 最新版本：GreatSQL 8.0.32-26
+- 最后更新时间：2024-08-05
+- 支持CPU架构：x86_64、aarch64
+
+## 支持哪些tag
+
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-26](), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo)
+
+## GreatSQL Build Docker镜像构建
 
 ```shell
 $ docker build -t greatsql/greatsql_build .
@@ -14,7 +27,7 @@ $ docker build -t greatsql/greatsql_build .
 
 在构建镜像时，会自动从服务器上下载相应的源码包文件、初始化脚本等文件，并全自动化方式完成镜像构建工作。
 
-## 2. GreatSQL Build Docker镜像使用
+## GreatSQL Build Docker镜像使用
 
 ```shell
 # 创建新容器
@@ -37,15 +50,15 @@ $ docker logs greatsql_build
  3.3 make dynamic link for GreatSQL
 
 4. greatsql build completed!
-drwxrwxr-x 13 mysql mysql       293 Feb 22 01:33 GreatSQL-8.0.32-25-centos-glibc2.28-x86_64
-/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-25 for Linux on x86_64 (GreatSQL, Release 25, Revision 79f57097e3f)
+drwxrwxr-x 13 mysql mysql       293 Feb 22 01:33 GreatSQL-8.0.32-26-centos-glibc2.28-x86_64
+/opt/GreatSQL-8.0.32-26-centos-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL, Release 26, Revision a68b3034c3d)
 
 5. remove files and clean up
 ```
 
 可以看到已经完成编译，如果需要的话，可以将Docker容器中的二进制包文件拷贝到宿主机上，例如：
 ```shell
-$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-25-centos-glibc2.28-x86_64 /usr/local/
+$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-26-centos-glibc2.28-x86_64 /usr/local/
 ```
 
 如果宿主机环境也是CentOS 8 x86_64的话，这就可以在宿主机环境下直接使用该二进制文件包了。

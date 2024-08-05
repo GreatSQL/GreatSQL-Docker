@@ -4,11 +4,6 @@
 
 echo " 3.1 compiling GreatSQL"
 
-if [ ${ARCH} = "loongarch64" ] ; then
-  cd ${OPT_DIR}/${GREATSQL_SRC}
-  sed -i 's/\(.*defined.*mips.*\) \\/\1 defined(__loongarch__) || \\/ig' extra/icu/source/i18n/double-conversion-utils.h
-fi
-
 LIBLIST="libcrypto.so libssl.so libreadline.so libtinfo.so libsasl2.so libbrotlidec.so libbrotlicommon.so libgssapi_krb5.so libkrb5.so libkrb5support.so libk5crypto.so librtmp.so libgssapi.so libssl3.so libsmime3.so libnss3.so libnssutil3.so libplc4.so libnspr4.so libssl3.so libplds4.so libncurses.so libjemalloc.so"
 DIRLIST="bin lib lib/private lib/plugin lib/mysqlrouter/plugin lib/mysqlrouter/private"
 
