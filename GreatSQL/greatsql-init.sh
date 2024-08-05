@@ -160,23 +160,29 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		file_env 'MYSQL_MGR_ARBITRATOR'
 		if [ "${MYSQL_MGR_ARBITRATOR}" ] ; then
 		  if [ ${MYSQL_MGR_ARBITRATOR} -eq 1 ]; then
-		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/1/ig" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
 		  else
-		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/MYSQL_MGR_ARBITRATOR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
 		  fi
 		else
-		  echo "$(sed "s/MYSQL_MGR_ARBITRATOR/0/ig" /etc/my.cnf)" > /etc/my.cnf
+		  echo "$(sed "s/MYSQL_MGR_ARBITRATOR/OFF/ig" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		file_env 'MYSQL_MGR_MULTI_PRIMARY'
 		if [ "$MYSQL_MGR_MULTI_PRIMARY" ]; then
 		  if [ ${MYSQL_MGR_MULTI_PRIMARY} -eq 1 ]; then
-		    echo "$(sed "s/SINGLE_PRIMARY/0/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/SINGLE_PRIMARY/OFF/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/EVERYWHERE_CHECKS/ON/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/FAST_MODE/0/g" /etc/my.cnf)" > /etc/my.cnf
 		  else
-		    echo "$(sed "s/SINGLE_PRIMARY/1/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/SINGLE_PRIMARY/ON/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/EVERYWHERE_CHECKS/OFF/g" /etc/my.cnf)" > /etc/my.cnf
+		    echo "$(sed "s/FAST_MODE/1/g" /etc/my.cnf)" > /etc/my.cnf
 		  fi
 		else
-		  echo "$(sed "s/SINGLE_PRIMARY/1/g" /etc/my.cnf)" > /etc/my.cnf
+		  echo "$(sed "s/SINGLE_PRIMARY/ON/g" /etc/my.cnf)" > /etc/my.cnf
+		  echo "$(sed "s/EVERYWHERE_CHECKS/OFF/g" /etc/my.cnf)" > /etc/my.cnf
+		  echo "$(sed "s/FAST_MODE/1/g" /etc/my.cnf)" > /etc/my.cnf
 		fi
 
 		mkdir -p "$DATADIR"
@@ -250,7 +256,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			fi
 
 			read -r -d '' mgrInit <<-EOSQL || true
-				CREATE USER IF NOT EXISTS ${MYSQL_MGR_USER} IDENTIFIED WITH mysql_native_password BY '${MYSQL_MGR_USER_PWD}';
+				CREATE USER IF NOT EXISTS ${MYSQL_MGR_USER} IDENTIFIED BY '${MYSQL_MGR_USER_PWD}';
 				GRANT REPLICATION SLAVE, BACKUP_ADMIN ON *.* TO ${MYSQL_MGR_USER};
 				CHANGE MASTER TO MASTER_USER='${MYSQL_MGR_USER}', MASTER_PASSWORD='${MYSQL_MGR_USER_PWD}' FOR CHANNEL 'group_replication_recovery';
 			EOSQL

@@ -1,4 +1,5 @@
 FROM centos
+#FROM registry.cn-beijing.aliyuncs.com/greatsql/centos
 
 LABEL maintainer="greatsql.cn" \
 email="greatsql@greatdb.com" \
@@ -16,14 +17,14 @@ MYSQL_PORT=3306 \
 DEPS="pkg-config perl libaio-devel numactl-devel numactl-libs \
 net-tools openssl openssl-devel perl-Data-Dumper perl-Digest-MD5 \
 python2 perl-JSON perl-Test-Simple" \
-GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL" \
+GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-26/GreatSQL" \
 GREATSQL_INIT="greatsql-init.sh" \
 GREATSQL_SHRINK="greatsql-shrink.sh" \
 GREATSQL_TEST="greatsql-test.sql" \
 GREATSQL_CNF="my.cnf" \
-GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-25-Rapid"
+GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-26"
 
-ENV GREATSQL_PKG="greatsql-8.0.32-25.1.el8.${TARGETARCH}.rpm-bundle.tar.xz"
+ENV GREATSQL_PKG="greatsql-8.0.32-26.1.el8.${TARGETARCH}.rpm-bundle.tar.xz"
 
 CMD /bin/bash
 

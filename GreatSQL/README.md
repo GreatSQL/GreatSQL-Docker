@@ -10,14 +10,28 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-03-20
-- 支持CPU架构：x86_64、aarch64
+- 最新版本：GreatSQL 8.0.32-26
+- 最后更新时间：2024-08-05
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e?context=repo), [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1?context=explore)
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523?context=repo), [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52?context=repo)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-08b3addca1dd3f87e54b476822d67ecefc0128f7f294d8969f6fff5b47d1938c)
+- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-08b3addca1dd3f87e54b476822d67ecefc0128f7f294d8969f6fff5b47d1938c)
+- [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
+- [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e)
+- [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1)
+- [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523)
+- [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52)
+
+如果无法从 hub.docker.com 拉取，可以尝试从阿里云ACR拉取，例如：
+
+```shell
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-26
+```
+
+> 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
 ## GreatSQL Docker镜像使用
 
@@ -67,20 +81,20 @@ $ docker exec -it greatsql bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version: 8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 ...
-mysql  Ver 8.0.32-24 for Linux on x86_64 (GreatSQL (GPL), Release 24, Revision c2e83f27394)
+mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL (GPL), Release 26, Revision a68b3034c3d)
 ...
 
 [root@GreatSQL][(none)]> \s
 ...
-Server version:         8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
+Server version:         8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
 ...
 [root@GreatSQL][(none)]> SELECT version();
 +-----------+
 | version() |
 +-----------+
-| 8.0.32-25 |
+| 8.0.32-26 |
 +-----------+
 1 row in set (0.00 sec)
 
