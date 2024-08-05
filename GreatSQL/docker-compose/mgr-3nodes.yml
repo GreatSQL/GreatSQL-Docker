@@ -3,6 +3,7 @@ version: '2'
 services:
   mgr2:
     image: greatsql/greatsql        #指定镜像
+    #image: registry.cn-beijing.aliyuncs.com/greatsql/greatsql        #指定镜像（阿里云ACR）
     container_name: mgr2            #设定容器名字
     hostname: mgr2                  #设定容器中的主机名
     networks:                       #指定容器使用哪个专用网络
@@ -21,7 +22,7 @@ services:
       MYSQL_MGR_ARBITRATOR: 0                       #指定当前MGR节点为Arbitrator角色，此时不能同时指定其为Primary/Secondary角色
       LOWER_CASE_TABLE_NAMES: 0                     #设定lower_case_table_names值，默认为0
   mgr3:
-    image: greatsql/greatsql
+    image: greatsql/greatsql        #指定镜像
     container_name: mgr3
     hostname: mgr3
     networks: 

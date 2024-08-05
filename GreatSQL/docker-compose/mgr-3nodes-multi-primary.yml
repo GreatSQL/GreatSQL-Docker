@@ -3,6 +3,7 @@ version: '2'
 services:
   mgr2:
     image: greatsql/greatsql
+    #image: registry.cn-beijing.aliyuncs.com/greatsql/greatsql #指定镜像（阿里云ACR）
     container_name: mgr2    #设定容器名字
     hostname: mgr2          #设定容器中的主机名
     networks:               #指定容器使用哪个专用网络
