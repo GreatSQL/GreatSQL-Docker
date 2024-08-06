@@ -11,12 +11,24 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-08-05
+- 最后更新时间：2024-08-06
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo), [8.0.32-26](), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef?context=repo)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql_build/latest/images/sha256-a8bea01ea86b77866f8e4739859537b6f4b5060178ae06552e6fad4607c4e0cf)
+- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-26/images/sha256-a8bea01ea86b77866f8e4739859537b6f4b5060178ae06552e6fad4607c4e0cf)
+- [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
+
+如果无法从 hub.docker.com 拉取，可以尝试从阿里云ACR拉取，例如：
+
+```shell
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql_build
+
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql_build:8.0.32-26
+```
+
+> 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
 ## GreatSQL Build Docker镜像构建
 
