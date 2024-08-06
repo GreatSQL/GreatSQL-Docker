@@ -1,0 +1,84 @@
+# alpine:latest
+FROM centos:8 AS builder
+
+LABEL maintainer="greatsql.cn" \
+      email="greatsql@greatdb.com" \
+      forum="https://greatsql.cn/forum.php" \
+      gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
+
+# language
+ENV LANG en_US.utf8
+ENV VERSION 8.0.32-26
+
+# args
+ARG MYSQL_DATA_DIR=/data/GreatSQL
+ARG MYSQL_USER=mysql
+ARG MYSQL_UID_GID=3306
+ARG MYSQL_EXTRACT_DIR=/usr/local
+ARG TMP_DIR=/tmp
+ARG MYSQL_PORT=3306
+
+# dependencies
+ARG DEPS="pkg-config perl libaio-devel numactl-devel numactl-libs \
+          net-tools openssl openssl-devel perl-Data-Dumper perl-Digest-MD5 \
+          python2 perl-JSON perl-Test-Simple"
+
+#  GreatSQL related URLs and files
+ARG GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-${VERSION}/GreatSQL" \
+ARG GREATSQL_INIT="greatsql-init.sh" \
+ARG GREATSQL_SHRINK="greatsql-shrink.sh" \
+ARG GREATSQL_TEST="greatsql-test.sql" \
+ARG GREATSQL_CNF="my.cnf" \
+ARG GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-${VERSION}"
+
+# build greatsql binary
+RUN dnf install -y ${DEPS} && \
+    curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} && \
+    curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} && \
+    curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} && \
+    curl -o /etc/${GREATSQL_CNF} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} && \
+    /usr/sbin/groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER} && \
+    /usr/sbin/useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin ${MYSQL_USER} && \
+    curl -o ${TMP_DIR}/greatsql.tar.xz ${GREATSQL_DOWNLOAD_URL}/GreatSQL-${VERSION}.tar.xz && \
+    tar xf ${TMP_DIR}/greatsql.tar.xz -C ${TMP_DIR} && \
+    dnf install -y ${TMP_DIR}/greatsql*.rpm && \
+    /bin/bash ${TMP_DIR}/${GREATSQL_SHRINK} && \
+    mkdir -p ${MYSQL_DATA_DIR} && \
+    chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR} && \
+    chmod -R ug+rwX /etc/my.cnf && \
+    chmod +x /${GREATSQL_INIT} && \
+    rm -f ${TMP_DIR}/greatsql*.xz ${TMP_DIR}/greatsql*.rpm
+
+FROM alpine:3.18
+
+# Arguments for user and data directory
+ARG MYSQL_DATA_DIR=/data/GreatSQL
+ARG MYSQL_USER=mysql
+ARG MYSQL_UID_GID=3306
+ARG MYSQL_PORT=3306
+
+# Install necessary runtime dependencies
+RUN apk add --no-cache bash libaio jemalloc numactl ncurses openssl readline zlib
+
+# Copy GreatSQL binaries and configuration from builder stage
+COPY --from=builder /usr/local/ /usr/local/
+COPY --from=builder /etc/my.cnf /etc/my.cnf
+COPY --from=builder /greatsql-init.sh /greatsql-init.sh
+
+# Create necessary directories and set permissions
+RUN mkdir -p ${MYSQL_DATA_DIR} && \
+    addgroup -g ${MYSQL_UID_GID} ${MYSQL_USER} && \
+    adduser -u ${MYSQL_UID_GID} -G ${MYSQL_USER} -h ${MYSQL_DATA_DIR} -s /sbin/nologin -D ${MYSQL_USER} && \
+    chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR} && \
+    chmod -R ug+rwX /etc/my.cnf && \
+    chmod +x /greatsql-init.sh
+
+# Set environment variables
+ENV MYSQL_DATA_DIR=${MYSQL_DATA_DIR}
+
+# Expose ports
+EXPOSE ${MYSQL_PORT} ${MYSQL_PORT}0 ${MYSQL_PORT}1
+
+# Set entrypoint and command
+ENTRYPOINT ["/greatsql-init.sh"]
+CMD ["mysqld"]

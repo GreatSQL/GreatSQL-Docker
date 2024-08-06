@@ -1,0 +1,32 @@
+name: GreatSQL CI
+
+on:
+  push:
+    branches:
+      - feature/*
+  pull_request:
+    branches:
+      - feature/*
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Docker Build
+          run: docker build -t greatsql .
+
+        - name: 'Login to GitHub Container Registry'
+          uses: docker/login-action@v1
+          with:
+            registry: registry.cn-chengdu.aliyuncs.com
+            username: ${{secrets.user}}
+            password: ${{secrets.password}}
+
+        - name: Build the Docker image
+          run: |
+            IMAGE_TAG=registry.cn-chengdu.aliyuncs.com/greatsql-sigs/greatsql-images:8.0.32-26
+            docker build . -f ./build/Dockerfile --tag $IMAGE_TAG
+            docker push $IMAGE_TAG
