@@ -17,7 +17,7 @@ Dockerfiles可用于自定义和构建docker映像。[戳此阅读更多关于Do
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系人: greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-08-05。
+- 最后更新时间：2024-08-06。
 
 ## 镜像仓库列表
 - GreatSQL，构建GreatSQL运行环境的Docker镜像
