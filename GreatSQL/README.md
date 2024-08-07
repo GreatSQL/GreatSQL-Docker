@@ -11,7 +11,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-08-06
+- 最后更新时间：2024-08-07
 
 ## 支持哪些tag
 
