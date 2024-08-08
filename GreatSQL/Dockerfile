@@ -26,20 +26,20 @@ ENV GREATSQL_PKG="greatsql-8.0.32-26.1.el8.${TARGETARCH}.rpm-bundle.tar.xz"
 
 CMD /bin/bash
 
-RUN microdnf install -y ${DEPS} > /dev/null 2>&1 && \
-microdnf update -y > /dev/null 2>&1 && \
-microdnf clean all > /dev/null 2>&1 && \
-curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
-curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} > /dev/null 2>&1 && \
-curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} > /dev/null 2>&1 && \
-curl -o /etc/${GREATSQL_CNF} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} > /dev/null 2>&1 && \
-/usr/sbin/groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER} > /dev/null 2>&1 && \
-/usr/sbin/useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin ${MYSQL_USER} > /dev/null 2>&1 && \
-curl -o ${TMP_DIR}/greatsql.tar.xz ${GREATSQL_DOWNLOAD_URL}/${GREATSQL_PKG} > /dev/null 2>&1 && \
-tar xf ${TMP_DIR}/greatsql.tar.xz -C ${TMP_DIR} > /dev/null 2>&1 && \
+RUN microdnf install -y ${DEPS} && \
+microdnf update -y && \
+microdnf clean all && \
+curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} && \
+curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} && \
+curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} && \
+curl -o /etc/${GREATSQL_CNF} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_CNF} && \
+/usr/sbin/groupadd -g ${MYSQL_UID_GID} ${MYSQL_USER} && \
+/usr/sbin/useradd -u ${MYSQL_UID_GID} -r -g ${MYSQL_UID_GID} -s /sbin/nologin ${MYSQL_USER} && \
+curl -o ${TMP_DIR}/greatsql.tar.xz ${GREATSQL_DOWNLOAD_URL}/${GREATSQL_PKG} && \
+tar xf ${TMP_DIR}/greatsql.tar.xz -C ${TMP_DIR} && \
 cd ${TMP_DIR} && \
-rpm -ivh --nodeps greatsql-client*rpm greatsql-shared*rpm greatsql-server*rpm greatsql-icu-data-files*rpm > /dev/null 2>&1 && \
-/bin/bash ${TMP_DIR}/${GREATSQL_SHRINK} > /dev/null 2>&1 && \
+rpm -ivh --nodeps greatsql-client*rpm greatsql-shared*rpm greatsql-server*rpm greatsql-icu-data-files*rpm && \
+/bin/bash ${TMP_DIR}/${GREATSQL_SHRINK} && \
 mkdir -p ${MYSQL_DATA_DIR} && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR} && \
 chmod -R ug+rwX /etc/my.cnf && \
