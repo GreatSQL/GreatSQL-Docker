@@ -17,6 +17,7 @@
 
 - [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-0c2f0117aa16d6330bf4f597bdf456491c517375a10badc6d9bc8d8e08d1fa2b)
 - [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-0c2f0117aa16d6330bf4f597bdf456491c517375a10badc6d9bc8d8e08d1fa2b)
+- [oraclelinux](https://hub.docker.com/layers/greatsql/greatsql/oraclelinux/images/sha256-f5b0c6420e6e9e82db460114f081c7a6a05b503e375ac9e75c25204868192673)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 - [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e)
 - [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1)
@@ -29,6 +30,8 @@
 $ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 
 $ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-26
+
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:oraclelinux
 ```
 
 > 如果提示 timeout 连接超时错误，多重试几次应该就好了。
