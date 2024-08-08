@@ -1,4 +1,5 @@
 #FROM oraclelinux:8-slim
+#FROM ccr.ccs.tencentyun.com/greatsql/oraclelinux:8-slim
 FROM registry.cn-beijing.aliyuncs.com/greatsql/oraclelinux:8-slim
 
 LABEL maintainer="greatsql.cn" \
@@ -7,7 +8,7 @@ forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
 ENV LANG en_US.utf8
-ARG TARGETARCH=amd64 \
+ARG TARGETARCH \
 MYSQL_DATA_DIR=/data/GreatSQL \
 MYSQL_USER=mysql \
 MYSQL_UID_GID=3306 \
