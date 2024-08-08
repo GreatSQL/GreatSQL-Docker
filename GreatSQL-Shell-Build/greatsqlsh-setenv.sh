@@ -1,6 +1,8 @@
 #/bin/bash
 
-. ~/.bash_profile
+if [ -f  ~/.bash_profile ] ; then
+  . ~/.bash_profile
+fi
 
 MAKE_JOBS=`lscpu | grep '^CPU(s)'|awk '{print $NF}'`
 if [ ${MAKE_JOBS} -ge 16 ] ; then
