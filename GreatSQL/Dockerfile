@@ -27,9 +27,8 @@ ENV GREATSQL_PKG="greatsql-8.0.32-26.1.el8.${TARGETARCH}.rpm-bundle.tar.xz"
 
 CMD /bin/bash
 
-RUN microdnf install -y ${DEPS} && \
+RUN microdnf install --nodocs -y ${DEPS} && \
 microdnf update -y && \
-microdnf clean all && \
 curl -o ${TMP_DIR}/${GREATSQL_SHRINK} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_SHRINK} && \
 curl -o ${TMP_DIR}/${GREATSQL_TEST} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_TEST} && \
 curl -o /${GREATSQL_INIT} ${GREATSQL_DOCKER_DOWNLOAD_URL}/${GREATSQL_INIT} && \
@@ -45,6 +44,7 @@ mkdir -p ${MYSQL_DATA_DIR} && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${MYSQL_DATA_DIR} && \
 chmod -R ug+rwX /etc/my.cnf && \
 chmod +x /${GREATSQL_INIT} && \
+microdnf clean all && \
 rm -f ${TMP_DIR}/greatsql*xz ${TMP_DIR}/greatsql*rpm ; \
 rm -fr /usr/share/doc /usr/share/man /usr/share/misc
 
