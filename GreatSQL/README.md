@@ -11,7 +11,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-08-12
+- 最后更新时间：2024-08-13
 
 ## 支持哪些tag
 
@@ -49,6 +49,7 @@ $ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql:8.0.32-26
 ```shell
 $ docker run -d \
 --name greatsql --hostname=greatsql \
+-e TZ="Asia/Shanghai" \
 greatsql/greatsql
 ```
 
@@ -66,6 +67,7 @@ $ docker run -d \
 -v /data/greatsql/my.cnf:/etc/my.cnf \
 -v  /data/greatsql/data:/data \
 --name greatsql --hostname=greatsql \
+-e TZ="Asia/Shanghai" \
 greatsql/greatsql
 ```
 
@@ -412,6 +414,9 @@ MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免�
 - **LOWER_CASE_TABLE_NAMES**
 设置表名大小写选项 lower_case_table_names，设置为0表示区分大小写，设置为1表示不区分带下写。默认值：0。
 非必选项。
+
+- **TZ**
+设置容器时区，例如设置为 "Asia/Shanghai" 表示采用东八区（+8:00小时）。
 
 ## 文件介绍
 - CHANGELOG.md，更新历史
