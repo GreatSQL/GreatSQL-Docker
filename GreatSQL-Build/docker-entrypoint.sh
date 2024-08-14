@@ -10,12 +10,12 @@ echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
 echo " 1.1 downloading sourcecode tarballs ..." && \
-wget -c -O ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
-wget -c -O ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
-wget -c -O ${RPCGEN} ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} && \
-wget -c -O ${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz && \
-wget -c -O ${BOOST}.tar.gz ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.gz && \
-wget -c -O ${GREATSQL_SRC}.tar.xz ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL_SRC}.tar.xz && \
+curl -OL -o ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
+curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
+curl -OL -o ${RPCGEN} ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} && \
+curl -OL -o ${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz && \
+curl -OL -o ${BOOST}.tar.gz ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.gz && \
+curl -OL -o ${GREATSQL_SRC}.tar.xz ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL_SRC}.tar.xz && \
 echo " 1.2 extract tarballs ..." && \
 tar xf ${OPT_DIR}/${PATCHELF}*z && \
 tar xf ${OPT_DIR}/${BOOST}*z && \
@@ -29,8 +29,8 @@ echo && \
 echo "2. compile patchelf"; \
 cd ${OPT_DIR}/${PATCHELF} && ./bootstrap.sh >> ${MAKELOG} && \
 ./configure >> ${MAKELOG} > /dev/null 2>&1 && \
-make >> ${MAKELOG} > /dev/null 2>&1 && \
-make install >> ${MAKELOG} > /dev/null 2>&1 && \
+make -j${MAKE_JOBS} >> ${MAKELOG} > /dev/null 2>&1 && \
+make -j${MAKE_JOBS} install >> ${MAKELOG} > /dev/null 2>&1 && \
 echo && \
 echo "3. compile GreatSQL"; \
 su - ${MYSQL_USER} -s /bin/bash -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
