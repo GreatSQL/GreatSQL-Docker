@@ -20,8 +20,10 @@ echo " 1.2 extract tarballs ..." && \
 tar xf ${OPT_DIR}/${PATCHELF}*z && \
 tar xf ${OPT_DIR}/${BOOST}*z && \
 tar xf ${OPT_DIR}/${GREATSQL_SRC}*z && \
+echo " 1.3 chown to ${MYSQL_USER}:${MYSQL_USER} for ${OPT_DIR} ..." && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${OPT_DIR} && \
-dnf install -y ${RPCGEN} && \
+echo " 1.4 install ${RPCGEN} ..." && \
+rpm -ivh --nodeps ${RPCGEN} && \
 chmod +x ${OPT_DIR}/*sh && \
 echo && \
 echo "2. compile patchelf"; \
