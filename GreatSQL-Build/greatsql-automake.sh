@@ -174,7 +174,7 @@ make -j${MAKE_JOBS} >> ${MAKELOG} 2>&1 && \
 make -j${MAKE_JOBS} install >> ${MAKELOG} 2>&1
 
 echo " 3.2 remove mysql-test from GreatSQL"
-rm -fr ${DEST_DIR}/mysql-test 2 > /dev/null
+rm -fr ${DEST_DIR}/mysql-test
 
 echo " 3.3 make dynamic link for GreatSQL"
 # strip binaries to get minimal package
