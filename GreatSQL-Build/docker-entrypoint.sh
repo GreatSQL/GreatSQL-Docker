@@ -36,7 +36,8 @@ echo "3. compile GreatSQL"; \
 su - ${MYSQL_USER} -s /bin/bash -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
 echo && \
 echo "4. greatsql build completed!" ; \
-ls -la ${OPT_DIR} | grep GreatSQL.*glibc.* && ${OPT_DIR}/GreatSQL*glibc*/bin/mysqld --verbose --version && \
+ls -la ${OPT_DIR} | grep ${GREATSQL} && ${OPT_DIR}/${GREATSQL}/bin/mysqld --verbose --version && \
+cd ${OPT_DIR} && tar cf ${GREATSQL}.tar ${GREATSQL} && xz -9 -f -T ${MAKE_JOBS} ${GREATSQL}.tar && \
 echo && \
 echo "5. remove files and clean up" ;\
 cd ${OPT_DIR} && rm -rf ${BOOST} ${GREATSQL_SRC} ${PATCHELF}
