@@ -31,7 +31,7 @@ echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
 curl -o ${OPT_DIR}/${GREATSQL_ENV} ${GREATSQL_BUILD_DOWNLOAD_URL}/${GREATSQL_ENV} && \
 curl -o /${ENTRYPOINT} ${GREATSQL_BUILD_DOWNLOAD_URL}/${ENTRYPOINT} && \
-chmod +x /*sh ${OPT_DIR}/*sh
+chmod +x /*sh ${OPT_DIR}/*sh && \
 sh /docker-entrypoint.sh
 
 
@@ -46,8 +46,7 @@ gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 ARG TARGETARCH \
 OPT_DIR=/opt
 
+# copy GreatSQL tarball to /opt
 COPY --from=builder ${OPT_DIR}/GreatSQL*.tar.xz ${OPT_DIR}
-
-RUN echo 'GreatSQL 8.0.32-26 tarball:' && ls -lha ${OPT_DIR} 
 
 CMD ["sh"]
