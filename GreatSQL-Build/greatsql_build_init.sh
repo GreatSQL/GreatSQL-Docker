@@ -1,8 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 
 . /opt/greatsql-setenv.sh
 
-echo "0. touch logfile ${MAKELOG}"
+echo "0. GreatSQL-Build INIT" && \
+microdnf install -y oracle-epel-release-el8 && \
+microdnf makecache && \
+microdnf install -y ${DEPS} && \
+microdnf update -y && \
+microdnf clean all && \
+source /opt/rh/gcc-toolset-11/enable && \
+echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile; \
+chmod +x /*sh ${OPT_DIR}/*sh && \
 touch ${MAKELOG} && \
 chown ${MYSQL_USER}:${MYSQL_USER} ${MAKELOG} && \
 chmod 0777 ${MAKELOG} && \
@@ -33,7 +41,7 @@ make -j${MAKE_JOBS} >> ${MAKELOG} > /dev/null 2>&1 && \
 make -j${MAKE_JOBS} install >> ${MAKELOG} > /dev/null 2>&1 && \
 echo && \
 echo "3. compile GreatSQL"; \
-su - ${MYSQL_USER} -s /bin/bash -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
+su - ${MYSQL_USER} -s /bin/sh -c "cd /opt; /bin/sh /opt/greatsql-automake.sh" && \
 echo && \
 echo "4. greatsql build completed!" ; \
 ls -la ${OPT_DIR} | grep ${GREATSQL} && ${OPT_DIR}/${GREATSQL}/bin/mysqld --verbose --version && \
@@ -41,4 +49,3 @@ cd ${OPT_DIR} && tar cf ${GREATSQL}.tar ${GREATSQL} && xz -9 -f -T ${MAKE_JOBS} 
 echo && \
 echo "5. remove files and clean up" ;\
 cd ${OPT_DIR} && rm -rf ${BOOST} ${GREATSQL_SRC} ${PATCHELF}
-/bin/bash

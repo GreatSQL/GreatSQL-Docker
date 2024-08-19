@@ -1,4 +1,4 @@
-#/bin/bash
+#/bin/sh
 
 if [ -f  ~/.bash_profile ] ; then
   . ~/.bash_profile
@@ -43,3 +43,8 @@ CMAKE_EXE_LINKER_FLAGS=""
 if [ ${ARCH} = "x86_64" ] ; then
   CMAKE_EXE_LINKER_FLAGS=" -ljemalloc "
 fi
+
+DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
+gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc jemalloc jemalloc-devel krb5-devel libaio-devel \
+libcurl-devel libtirpc-devel libudev-devel m4 make ncurses-devel numactl-devel openldap-devel \
+openssl openssl-devel pam-devel readline-devel zlib-devel findutils procps-ng"
