@@ -88,6 +88,8 @@ $ docker cp greatsql_build:/opt/GreatSQL-8.0.32-26-ol-glibc2.28-x86_64 /usr/loca
 
 如果宿主机环境也是 OracleLinux/CentOS x86_64 的话，这就可以在宿主机环境下直接使用该二进制文件包了。
 
+> 编译过程中，可能会遇到网络问题（DNS解析失败、网络连接超时等）导致失败的话，多重试几次即可。
+
 ## 文件介绍
 - CHANGELOG.md，更新历史
 - Dockerfile，用于构建初始化 GreatSQL 编译环境。
