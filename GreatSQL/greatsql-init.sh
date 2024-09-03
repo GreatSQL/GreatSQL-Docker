@@ -376,8 +376,6 @@ if [ "${MAXPERF}" == "1" ]; then
     echo "$(sed "s/\(.*rapid_worker_threads\).*/\1 = ${rapid_thd_maxperf}/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*rapid_hash_table_memory_limit\).*/\1 = 30/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*secondary_engine_parallel_load_workers\).*/\1 = 32/ig" /etc/my.cnf)" > /etc/my.cnf
-else
-    echo "MAXPERF invalid";
 fi
 
 exec "$@"
