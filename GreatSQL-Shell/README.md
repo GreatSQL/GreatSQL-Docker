@@ -15,6 +15,11 @@
 - [latest](https://hub.docker.com/layers/greatsql/greatsql_shell/latest/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore)
 - [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell/latest-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
 
+备选阿里云 ACR 资源地址：[registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell)，支持tag
+- [latest](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:latest)
+- [8.0.32-25](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:8.0.32-25)
+
+
 ## 怎么使用这个Docker镜像
 
 ### 通过tcp/ip方式连接GreatSQL
