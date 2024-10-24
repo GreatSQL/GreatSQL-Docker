@@ -8,7 +8,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-03-13
+- 最后更新时间：2024-10-24
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
