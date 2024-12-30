@@ -11,12 +11,12 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-08-13
+- 最后更新时间：2024-12-30
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-126b1fd7a1305273b8fcbe7cf7d73fb525217c7fd42bd3da9debe6afe4aecedb)
-- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-126b1fd7a1305273b8fcbe7cf7d73fb525217c7fd42bd3da9debe6afe4aecedb)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
+- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 - [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e)
 - [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1)

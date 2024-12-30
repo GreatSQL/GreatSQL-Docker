@@ -1,5 +1,11 @@
 # 8.0.32-26 更新日志
 
+## 2024.12
+* 基础镜像改为Oracle Linux 9-sim，以适配更多硬件平台（如海光3000型号）
+* GreatSQL安装包调整为minimal二进制包，不再采用RPM包以适配Oracle Linux 9-sim系统
+* 保留mysqldump、mysqlbinlog、mysqldecompress等客户端工具
+* 修复MAXPERF逻辑判断问题，修复CPU核数判断逻辑
+
 ## 2024.8
 * 当MAXPERF值不为1时不额外输出，避免造成误解/困惑
 * 增加时区参数（`TZ`）说明建议。

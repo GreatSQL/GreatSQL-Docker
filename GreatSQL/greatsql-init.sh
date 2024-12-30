@@ -341,7 +341,7 @@ fi
 
 file_env 'MAXPERF'
 mem=`free -m|grep Mem|awk '{print $2}'`
-cpu=`lscpu |grep '^CPU(s)'|awk '{print $2}'`
+cpu=`lscpu |grep '^CPU(s)'|grep -v scaling|awk '{print $2}'`
 ibp_maxperf=`expr ${mem} / 4 \* 3`
 rapid_mem_maxperf=`expr ${ibp_maxperf} / 2`
 rapid_thd_maxperf=`expr ${cpu} - 2`
