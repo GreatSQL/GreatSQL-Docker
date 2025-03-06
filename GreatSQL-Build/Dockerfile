@@ -11,7 +11,7 @@ ARG TARGETARCH \
 OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
-GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-26/GreatSQL-Build" \
+GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-27/GreatSQL-Build" \
 GREATSQL_ENV="greatsql-setenv.sh" \
 GREATSQL_BUILD_INIT="greatsql_build_init.sh"
 
