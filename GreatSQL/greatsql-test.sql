@@ -236,7 +236,7 @@ SELECT '                 ' FROM DUAL;
 -- 8. 安全特性检查
 -- 支持审计日志写表 & 用户的登录信息记录
 -- basedir=/usr, REPLACE IF NEEDED
-SOURCE /usr/share/mysql/install_audit_log.sql;
+SOURCE /usr/local/GreatSQL/share/install_audit_log.sql;
 SELECT IF(VARIABLE_NAME = "audit_log_to_table", "OK, SUPPORT audit_log_to_table", "NG, NOT SUPPORT audit_log_to_table") AS '8.1 check: audit_log_to_table' FROM performance_schema.global_variables where variable_name = 'audit_log_to_table';
 SELECT '                 ' FROM DUAL;
 
@@ -245,7 +245,7 @@ SELECT '                 ' FROM DUAL;
 
 -- 支持基于策略的数据脱敏
 -- basedir=/usr, REPLACE IF NEEDED
-SOURCE /usr/share/mysql/sys_masking.sql;
+SOURCE /usr/local/GreatSQL/share/sys_masking.sql;
 SELECT IF(COUNT(*)=4, "OK, SUPPORT data masking", "NG, NOT SUPPORT data masking") AS '8.3 check: data masking' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='sys_masking';
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
