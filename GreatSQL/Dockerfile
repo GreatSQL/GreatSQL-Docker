@@ -14,13 +14,13 @@ GREATSQL_EXTRACT_DIR=/usr/local \
 TMP_DIR=/tmp \
 GREATSQL_PORT=3306 \
 DEPS="libaio-devel numactl-devel xz openssl-devel openssl procps-ng util-linux" \
-GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-26/GreatSQL" \
+GREATSQL_DOCKER_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-27/GreatSQL" \
 GREATSQL_INIT="greatsql-init.sh" \
 GREATSQL_SHRINK="greatsql-shrink.sh" \
 GREATSQL_TEST="greatsql-test.sql" \
 GREATSQL_CNF="my.cnf" \
-GREATSQL_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-26/GreatSQL" \
-GREATSQL_PKG="GreatSQL-8.0.32-26-Linux-glibc2.17-${TARGETARCH}-minimal"
+GREATSQL_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-27/GreatSQL" \
+GREATSQL_PKG="GreatSQL-8.0.32-27-Linux-glibc2.17-${TARGETARCH}-minimal"
 
 RUN microdnf install --nodocs -y ${DEPS} && \
 microdnf update -y && \

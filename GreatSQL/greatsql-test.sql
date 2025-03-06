@@ -1,6 +1,6 @@
 -- 
 -- greatsql-test.sql
--- GreatSQL 主要功能特性自测脚本，适配版本：8.0.32-26
+-- GreatSQL 主要功能特性自测脚本，适配版本：8.0.32-27
 -- 
 -- 
 -- 主要测试项
@@ -11,38 +11,29 @@
 -- 5. 测试Clone加密
 -- 6. 测试MGR特性
 -- 7. 测试greatdb_ha特性
+-- 8. 测试turbo引擎
 --
 -- 关于检查结果：
 -- 当检查结果输出内容包含 OK 时，表示检查结果正确
 -- 当检查结果输出内容包含 NG（NOT GOOD缩写） 时，表示检查结果异常，需要人为再确认
 -- 
 -- CHANGELOG
--- # 2024.7.29
--- 1. 升级到 GreatSQL 8.0.32-26
+-- # 2025.03.31
+-- 1. 升级到 GreatSQL 8.0.32-27
 -- 2. 针对以下几个新特性做校验
---   - 支持Clone复制时设置Donor GTID延迟阈值
---   - 支持Clone压缩、增量备份
---   - 支持Binlog读取限速
---   - 支持非阻塞式DDL
---   - 支持NUMA亲和性优化
---   - 支持无主键并发LOAD DATA优化
---   - 支持用户的登录信息记录
---   - 支持基于策略的数据脱敏
---
--- CHANGELOG
--- # 2024.6.5
--- 1. 增加对 GreatSQL 新增的几个主要特性检查
--- 2. 对每项检查，对其结果都增加 OK/NG 标识
--- 3. 不再详细输出每个测试命令，但仍在脚本中保留（仅注释掉）
+--  * 新增高性能并行查询引擎Turbo
+--  * 升级Rapid引擎内核版本
+--  * InnoDB Page支持zstd压缩
+--  * 新增Binlog限速状态查看
 -- 
 
-
+SET NAMES utf8mb4;
 
 -- 1. 版本号
 SELECT '--- 1. checking VERSION() ---' AS STAGE_1;
-SELECT IF(@@version = '8.0.32-26', "OK: VERSION IS 8.0.32-26", "NG, VERSION IS NOT 8.0.32-26") AS '1.1 check: VERSION' FROM DUAL;
+SELECT IF(@@version = '8.0.32-27', "OK: VERSION IS 8.0.32-27", "NG, VERSION IS NOT 8.0.32-27") AS '1.1 check: VERSION' FROM DUAL;
 SELECT '                 ' FROM DUAL;
-SELECT IF(@@version_comment LIKE '%GreatSQL%26%a68b3034c3d', "OK, Revision IS a68b3034c3d", "NG, Revision IS NOT a68b3034c3d") AS '1.2 check: VERSION_COMMENT' FROM DUAL;
+SELECT IF(@@version_comment LIKE '%GreatSQL%27%aa66a385910', "OK, Revision IS aa66a385910", "NG, Revision IS NOT aa66a385910") AS '1.2 check: VERSION_COMMENT' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
@@ -51,10 +42,11 @@ SELECT '                 ' FROM DUAL;
 SELECT '--- 2. checking CREATE NEW DB & TABLE, INSERT & SELECT ROWS & Oracle compatibility ---' AS STAGE_2;
 
 -- CREATE DB & TABLE
-CREATE DATABASE IF NOT EXISTS greatsql_803226 CHARACTER SET utf8mb4;
-USE greatsql_803226;
+CREATE DATABASE IF NOT EXISTS greatsql_803227 CHARACTER SET utf8mb4;
+USE greatsql_803227;
 
-CREATE TABLE t_803226(
+DROP TABLE IF EXISTS t_803227;
+CREATE TABLE t_803227(
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 c1 CLOB NOT NULL, 
 c2 VARCHAR2(30) NOT NULL DEFAULT '',
@@ -63,7 +55,7 @@ c4 PLS_INTEGER UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- INSERT ROWS
-INSERT INTO t_803226 VALUES 
+INSERT INTO t_803227 VALUES 
 (1, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
 (2, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
 (4, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
@@ -76,19 +68,16 @@ SELECT '                 ' FROM DUAL;
 
 
 -- 3. Oracle语法
-SELECT '--- 3. checking SELECT ANY/ALL FROM t_803226 ---' AS STAGE_3;
+SELECT '--- 3. checking SELECT ANY/ALL FROM t_803227 ---' AS STAGE_3;
 -- ALL Syntax
-SELECT COUNT(*) INTO @ROWS FROM t_803226 WHERE id < ALL(4,8,16);
+SELECT COUNT(*) INTO @ROWS FROM t_803227 WHERE id < ALL(4,8,16);
 SELECT IF(@ROWS = 2, 'OK, FOUND 2 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '3.1 check: FOUND_ROWS(ALL)' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
 -- ANY Syntax
-SELECT COUNT(*) INTO @ROWS FROM t_803226 WHERE id < ANY(4,8,16);
+SELECT COUNT(*) INTO @ROWS FROM t_803227 WHERE id < ANY(4,8,16);
 SELECT IF(@ROWS = 4, 'OK, FOUND 4 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '3.2 check: FOUND_ROWS(ANY)' FROM DUAL;
 SELECT '                 ' FROM DUAL;
-
--- DROP TABLE
-DROP TABLE IF EXISTS t_803226;
 
 -- SET SQL_MODE = ORACLE
 SET sql_mode = ORACLE;
@@ -120,7 +109,27 @@ SET sql_mode = DEFAULT;
 SELECT IF(@ret = 'Hi GreatSQL', "OK, SUPPORT DECLARE...BEGIN Syntax", "NG, NOT SUPPORT DECLARE...BEGIN Syntax") AS '3.6 check: DECLARE...BEGIN Syntax' FROM DUAL;
 
 
--- 4. Rapid引擎
+-- 4. Turbo引擎
+SELECT '--- 4. checking Turbo ENGINE ---' AS STAGE_4;
+
+-- INSTALL & CHECK Turbo ENGINE
+INSTALL PLUGIN Turbo SONAME 'turbo.so';
+SELECT IF(ENGINE = "turbo", "OK, SUPPORT Turbo ENGINE", "NG, NOT SUPPORT Turbo ENGINE") AS '4.1 check: Turbo ENGINE' FROM information_schema.ENGINES WHERE ENGINE = 'turbo' AND SUPPORT = 'YES';
+SELECT '                 ' FROM DUAL;
+
+
+SELECT '4. check: EXPLAIN SELECT USING Turbo' FROM DUAL;
+
+EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t_803227;
+SELECT '                 ' FROM DUAL;
+
+SELECT '4. UNINSTALL Turbo ENGINE' FROM DUAL;
+UNINSTALL PLUGIN turbo;
+
+-- DROP TABLE
+DROP TABLE IF EXISTS t_803227;
+
+-- 5. Rapid引擎
 SELECT '--- 4. checking RAPID ENGINE ---' AS STAGE_4;
 
 -- INSTALL & CHECK Rapid ENGINE
@@ -128,7 +137,7 @@ INSTALL PLUGIN Rapid SONAME 'ha_rapid.so';
 SELECT IF(ENGINE = "Rapid", "OK, SUPPORT Rapid ENGINE", "NG, NOT SUPPORT Rapid ENGINE") AS '4.1 check: Rapid ENGINE' FROM information_schema.ENGINES WHERE ENGINE = 'Rapid' AND SUPPORT = 'YES';
 SELECT '                 ' FROM DUAL;
 
-CREATE TABLE `t_803226_rapid` (
+CREATE TABLE `t_803227_rapid` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `c1` int unsigned NOT NULL DEFAULT '0',
   `c2` varchar(30) NOT NULL DEFAULT '',
@@ -136,10 +145,10 @@ CREATE TABLE `t_803226_rapid` (
 ) ENGINE=InnoDB;
 
 -- SECONDARY_ENGINE
-ALTER TABLE t_803226_rapid SECONDARY_ENGINE = rapid;
+ALTER TABLE t_803227_rapid SECONDARY_ENGINE = rapid;
 
 -- INSERT ROWS
-INSERT INTO t_803226_rapid VALUES 
+INSERT INTO t_803227_rapid VALUES 
 (1,  RAND()*1024000, RAND()*1024000),
 (2,  RAND()*1024000, RAND()*1024000),
 (4,  RAND()*1024000, RAND()*1024000),
@@ -150,18 +159,18 @@ SELECT IF(ROW_COUNT() = 6, 'OK, INSERT 6 ROWS', CONCAT('NG, INSERT ', ROW_COUNT(
 SELECT '                 ' FROM DUAL;
 
 -- SECONDARY_LOAD
-ALTER TABLE t_803226_rapid SECONDARY_LOAD;
+ALTER TABLE t_803227_rapid SECONDARY_LOAD;
 
-SELECT IF(CREATE_OPTIONS = 'SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1"', "OK, t_803226_rapid IS A Rapid TABLE", "NG, t_803226_rapid IS NOT A Rapid TABLE") AS '4.3 check: t_803226_rapid' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql_803226' AND TABLE_NAME = 't_803226_rapid';
+SELECT IF(CREATE_OPTIONS = 'SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1"', "OK, t_803227_rapid IS A Rapid TABLE", "NG, t_803227_rapid IS NOT A Rapid TABLE") AS '4.3 check: t_803227_rapid' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql_803227' AND TABLE_NAME = 't_803227_rapid';
 SELECT '                 ' FROM DUAL;
 
 -- EXPLAIN
 SELECT '4.4 check: EXPLAIN SELECT FROM Rapid TABLE' FROM DUAL;
-EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine=2) SET_VAR(secondary_engine_cost_threshold=0) */ * FROM t_803226_rapid;
+EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine=2) SET_VAR(secondary_engine_cost_threshold=0) */ * FROM t_803227_rapid;
 SELECT '                 ' FROM DUAL;
 
 -- FORCE USING Rapid ENGINE
-SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=0) */ COUNT(*) INTO @ROWS FROM t_803226_rapid;
+SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=0) */ COUNT(*) INTO @ROWS FROM t_803227_rapid;
 SELECT IF(@ROWS = 6, 'OK, FOUND 6 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '4.4 check: FOUND ROWS FROM Rapid TABLE' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
@@ -254,9 +263,27 @@ SELECT '                 ' FROM DUAL;
 -- 支持Binlog读取限速
 SELECT IF(VARIABLE_NAME = "rpl_read_binlog_speed_limit", "OK, Binlog speed limit", "NG, NOT SUPPORT Binlog speed limit") AS 'check: Binlog speed limit' FROM performance_schema.global_variables where variable_name = 'rpl_read_binlog_speed_limit';
 SELECT '                 ' FROM DUAL;
+
+SELECT IF(VARIABLE_NAME = "Rpl_data_speed", "OK, Binlog speed limit status", "NG, NOT SUPPORT Binlog speed limit status") AS 'check: Binlog speed limit status' FROM performance_schema.global_status where variable_name = 'Rpl_data_speed';
+SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
+-- 10. InnoDB Page压缩支持zstd
+SELECT '--- 11. checking InnoDB Page COMPRSSION USING Zstd ---' AS STAGE_11;
+USE greatsql_803227;
 
--- 10. 清理
+DROP TABLE IF EXISTS t_803227;
+CREATE TABLE t_803227(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+c1 CLOB NOT NULL, 
+c2 VARCHAR2(30) NOT NULL DEFAULT '',
+c3 NUMBER UNSIGNED NOT NULL DEFAULT 0,
+c4 PLS_INTEGER UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMPRESSION="zstd";
+SELECT IF(CREATE_OPTIONS = 'COMPRESSION="zstd"', "OK, InnoDB Page COMPONENT USING Zstd", "NG, NOT SUPPORT InnoDB Page COMPONENT USING Zstd") AS 'check: InnoDB Page COMPONENT USING Zstd' FROM information_schema.TABLES WHERE TABLE_SCHEMA='greatsql_803227' AND TABLE_NAME='t_803227';
+SELECT '                 ' FROM DUAL;
+SELECT '                 ' FROM DUAL;
+
+-- 11. 清理
 SELECT '--- 8. clean up ---' AS STAGE_8;
-DROP DATABASE IF EXISTS greatsql_803226;
+DROP DATABASE IF EXISTS greatsql_803227;

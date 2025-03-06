@@ -10,12 +10,13 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-26
-- 最后更新时间：2024-12-30
+- 最新版本：GreatSQL 8.0.32-27
+- 最后更新时间：2025-03-31
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-)
+- [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-27/images/sha256-)
 - [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 - [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e)
@@ -28,7 +29,7 @@
 ```shell
 $ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-26
+$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-27
 ```
 
 还可以从腾讯云TCR拉取，例如：
@@ -36,7 +37,7 @@ $ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-26
 ```shell
 $ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql:8.0.32-26
+$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql:8.0.32-27
 ```
 
 
@@ -92,20 +93,20 @@ $ docker exec -it greatsql bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
-Server version: 8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
+Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
-mysql  Ver 8.0.32-26 for Linux on x86_64 (GreatSQL (GPL), Release 26, Revision a68b3034c3d)
+mysql  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL (GPL), Release 27, Revision aa66a385910)
 ...
 
 [root@GreatSQL][(none)]> \s
 ...
-Server version:         8.0.32-26 GreatSQL, Release 26, Revision a68b3034c3d
+Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
 [root@GreatSQL][(none)]> SELECT version();
 +-----------+
 | version() |
 +-----------+
-| 8.0.32-26 |
+| 8.0.32-27 |
 +-----------+
 1 row in set (0.00 sec)
 
