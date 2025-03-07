@@ -22,11 +22,11 @@ curl -OL -o ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
 curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
 curl -OL -o ${RPCGEN} ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} && \
 curl -OL -o ${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz && \
-curl -OL -o ${BOOST}.tar.gz ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.gz && \
+curl -OL -o ${BOOST}.tar.bz2 ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.bz2 && \
 curl -OL -o ${GREATSQL_SRC}.tar.xz ${GREATSQL_SRC_DOWNLOAD_URL}/${GREATSQL_SRC}.tar.xz && \
 echo " 1.2 extract tarballs ..." && \
 tar xf ${OPT_DIR}/${PATCHELF}*z && \
-tar xf ${OPT_DIR}/${BOOST}*z && \
+tar xf ${OPT_DIR}/${BOOST}*z* && \
 tar xf ${OPT_DIR}/${GREATSQL_SRC}*z && \
 echo " 1.3 chown to ${MYSQL_USER}:${MYSQL_USER} for ${OPT_DIR} ..." && \
 chown -R ${MYSQL_USER}:${MYSQL_USER} ${OPT_DIR} && \
