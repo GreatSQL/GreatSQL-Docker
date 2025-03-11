@@ -19,7 +19,7 @@ GREATSQL_INIT="greatsql-init.sh" \
 GREATSQL_SHRINK="greatsql-shrink.sh" \
 GREATSQL_TEST="greatsql-test.sql" \
 GREATSQL_CNF="my.cnf" \
-GREATSQL_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-27/GreatSQL" \
+GREATSQL_DOWNLOAD_URL="https://product.greatdb.com/GreatSQL-8.0.32-27" \
 GREATSQL_PKG="GreatSQL-8.0.32-27-Linux-glibc2.17-${TARGETARCH}-minimal"
 
 RUN microdnf install --nodocs -y ${DEPS} && \
