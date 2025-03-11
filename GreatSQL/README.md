@@ -24,22 +24,27 @@
 - [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523)
 - [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52)
 
-如果无法从 hub.docker.com 拉取，可以尝试从阿里云ACR拉取，例如：
+拉取GreatSQL镜像
 
 ```shell
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
-
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql:8.0.32-27
+docker pull greatsql/greatsql
 ```
 
-还可以从腾讯云TCR拉取，例如：
+还可以指定具体版本号
 
 ```shell
+docker pull greatsql/greatsql:8.0.32-27
+```
+
+如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
+
+```shell
+# 阿里云ACR
+docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
+
+# 腾讯云TCR
 $ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
-
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql:8.0.32-27
 ```
-
 
 > 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
