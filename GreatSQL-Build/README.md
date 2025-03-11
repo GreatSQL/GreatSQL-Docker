@@ -15,8 +15,8 @@
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql_build/latest/images/sha256-)
-- [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-27/images/sha256-)
+- [latest](https://hub.docker.com/layers/greatsql/greatsql_build/latest/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
+- [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-27/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
 - [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-26/images/sha256-a8bea01ea86b77866f8e4739859537b6f4b5060178ae06552e6fad4607c4e0cf)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 
