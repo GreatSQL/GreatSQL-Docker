@@ -11,7 +11,7 @@
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
 - 最新版本：GreatSQL 8.0.32-27
-- 最后更新时间：2025-03-31
+- 最后更新时间：2025-03-11
 
 ## 支持哪些tag
 
@@ -20,28 +20,64 @@
 - [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-26/images/sha256-a8bea01ea86b77866f8e4739859537b6f4b5060178ae06552e6fad4607c4e0cf)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 
-如果无法从 hub.docker.com 拉取，可以尝试从阿里云 ACR 或腾讯云 TCR 拉取，例如：
+拉取GreatSQL-Build镜像
 
 ```shell
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql_build
-$ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql_build:8.0.32-27
+docker pull greatsql/greatsql_build
+```
 
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql_build
-$ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql_build:8.0.32-27
+还可以指定具体版本号
+
+```shell
+docker pull greatsql/greatsql_build:8.0.32-27
+```
+
+如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
+
+```shell
+# 阿里云ACR
+docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql_build
+
+# 腾讯云TCR
+docker pull ccr.ccs.tencentyun.com/greatsql/greatsql_build
 ```
 
 > 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
 ## GreatSQL Build Docker镜像构建
 
-```shell
-$ docker build -t greatsql/greatsql_build .
+在开始前，需要先准备好一个Docker builx环境，这是为了支持多平台构建。
+
+如果不需要支持多平台，则可以自行修改Dockerfile中的第10-11行，将原来的内容
+
+```ini
+ 10 ARG TARGETARCH \
+ 11 OPT_DIR=/opt \
 ```
-上述命令会查找当前目录下的 `Dockerfile` 文件，并构建名为 `greatsql/greatsql_build` 的Docker镜像。
+
+修改成下面这样
+
+```ini
+ 10 ARG OPT_DIR=/opt \
+```
+
+也就是去掉`TARGETARCH`参数即可。
+
+关于Docker buildx环境的配置，可以参考这篇文章：[使用 buildx 构建跨平台镜像](https://zhuanlan.zhihu.com/p/622399482) 或 [Multi-platform builds](https://docs.docker.com/build/building/multi-platform/)，这里不赘述。
+
+```shell
+docker buildx build --platform linux/arm64,linux/amd64 -t greatsql/greatsql_build . --push
+```
+
+上述命令会查找当前目录下的 `Dockerfile` 文件，并构建名为 `greatsql/greatsql_build` 的Docker镜像，并最终会push到`greatsql/greatsql_build`镜像仓库。这里需要修改成您自己的仓库名，例如改成我自己个人的：
+
+```shell
+docker buildx build --platform linux/arm64,linux/amd64 -t yejr/greatsql_build . --push
+```
 
 在构建镜像时，会自动从服务器上下载相应的源码包文件、初始化脚本等文件，并全自动化方式完成镜像构建工作。
 
-如果无法从 hub.docker.com 拉取 oraclelinux 镜像，则修改 `Dockerfile` 文件的前几行，将镜像资源修改为阿里云或腾讯云：
+如果无法从hub.docker.com拉取OracleLinux镜像，则修改`Dockerfile`文件的前几行，将镜像资源修改为阿里云或腾讯云：
 
 ```ini
   1 #FROM oraclelinux:8-slim as builder
@@ -53,10 +89,10 @@ $ docker build -t greatsql/greatsql_build .
 
 ```shell
 # 创建新容器
-$ docker run -itd --hostname greatsql_build --name greatsql_build greatsql/greatsql_build
+docker run -itd --hostname greatsql_build --name greatsql_build greatsql/greatsql_build
 
 # 进入容器，手动启动编译工作
-$ docker exec -it greatsql_build sh
+docker exec -it greatsql_build sh
 sh-4.4# pwd
 /
 sh-4.4#
@@ -83,8 +119,9 @@ drwxrwxr-x 13 mysql mysql       293 Mar 26 13:27 GreatSQL-8.0.32-27-ol-glibc2.28
 ```
 
 可以看到已经完成编译，可以将容器中编译好的二进制包文件拷贝到宿主机上，例如：
+
 ```shell
-$ docker cp greatsql_build:/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64 /usr/local/
+docker cp greatsql_build:/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64 /usr/local/
 ```
 
 如果宿主机环境也是 OracleLinux/CentOS x86_64 的话，这就可以在宿主机环境下直接使用该二进制文件包了。
