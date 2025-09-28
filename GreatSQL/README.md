@@ -66,16 +66,23 @@ greatsql/greatsql
 *--hostname=greatsql*，设定容器主机名
 *greatsql/greatsql*，指定容器使用的镜像名
 
-如果想要映射外部 my.cnf 配置文件或自行指定 datadir，还可以类似下面这么用：
+如果想要映射外部 my.cnf 配置文件或自行指定 datadir，并且增加端口映射，可以执行下面的命令：
 
 ```shell
 $ docker run -d \
+-P 4406:3306 \
 -v /data/greatsql/my.cnf:/etc/my.cnf \
 -v  /data/greatsql/data:/data \
 --name greatsql --hostname=greatsql \
 -e TZ="Asia/Shanghai" \
 greatsql/greatsql
 ```
+
+其中：
+
+- 参数 `-P 4406:3306` 的作用是将宿主环境中的 *4406* 端口（宿主中的端口号可自行定义，不与其他服务冲突即可）映射到容器中的 *3306* 端口，这样远程主机就可以通过 *4406* 端口连接容器中的 GreatSQL 数据库实例；
+- 参数 `-v /data/greatsql/my.cnf:/etc/my.cnf` 的作用是将宿主环境中的 */data/greatsql/my.cnf* 映射到容器中的 */etc/my.cnf*；
+- 参数 `-v  /data/greatsql/data:/data` 的作用是将本地 */data/greatsql/data* 目录映射到容器中的 */data* 目录。
 
 注意，需要先保证本地目录 `/data/greatsql/data` 是空的才行，否则 GreatSQL 在初始化检测时会报告失败，无法启动，日志中将有类似下面的内容：
 
@@ -117,6 +124,12 @@ Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 
 -- 初始化完后，执行测试脚本，验证是否支持新的特性和Oracle兼容语法等
 [root@GreatSQL][(none)]> SOURCE /tmp/greatsql-test.sql;
+```
+
+如果在创建容器时已经指定了 `-P 4406:3306` 端口映射参数，那么远程主机就可以通过 *4406* 端口连接容器中的 GreatSQL 数据库实例：
+
+```bash
+mysql -h172.16.16.10 -uXX -pXX -P4406
 ```
 
 ## 如何通过 docker-compose 使用GreatSQL镜像

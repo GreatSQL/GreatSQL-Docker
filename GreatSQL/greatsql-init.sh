@@ -313,7 +313,8 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		echo
-		echo 'MySQL init process done. Ready for start up.'
+		echo 'MySQL init process done.'
+	       	echo 'Ready for start up.'
 		echo
 	fi
 
