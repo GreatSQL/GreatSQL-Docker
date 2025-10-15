@@ -15,15 +15,9 @@
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
-- [8.4.4-4](https://hub.docker.com/layers/greatsql/greatsql/8.4.4-4/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
-- [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-27/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
-- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
-- [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
-- [8.0.32-24](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24/images/sha256-0d1ee8a01e4dec5d3698053319978c1817ca455eb6a11de9fa7e13b747fa9f3e)
-- [8.0.25-16](https://hub.docker.com/layers/greatsql/greatsql/greatsql/8.0.25-16/images/sha256-03969daaaaaeb0f51dde0c9e92ef327302607cdde3afbe5c2b071098000c52c1)
-- [8.0.32-24-arch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-24-aarch64/images/sha256-97dfa7074a1c5b2e0355fcf5fc829e8074edca6db7c2e528059786fb0c48a523)
-- [8.0.25-16-aarch64](https://hub.docker.com/layers/greatsql/greatsql/8.0.25-16-aarch64/images/sha256-c4664d2b84025ed2487d0aecb6090ab9bb0f7ee2033afd9a079ea4f1f9f82b52)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256:e90496c2c83c02e8f8f6c27327bd9a0e620556961dff3f906058aad7e8c5564e)
+- [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.4.4-4/sha256:e90496c2c83c02e8f8f6c27327bd9a0e620556961dff3f906058aad7e8c5564e)
+- [8.0.32-27](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.0.32-27/sha256:6169b1a98eaa4a2579315e30681714c102ac1d6e9881bac5606ebec67c5b7b3b)
 
 拉取GreatSQL镜像
 
@@ -433,7 +427,7 @@ MySQL 8.0.26开始，可以为view change单独指定一个GTID前缀，避免�
 ## 文件介绍
 - CHANGELOG.md，更新历史
 - docker-compose，利用docker-compose拉起的示例文件
-- Dockerfile，用于构建GreatSQL Shell Docker环境
+- Dockerfile，用于构建GreatSQL Docker环境
 - greatsql-init.sh，构建镜像初始化脚本
 - greatsql-shrink.sh，在镜像中裁剪非必要文件脚本
 - greatsql-test.sql，可执行GreatSQL自测试的脚本
