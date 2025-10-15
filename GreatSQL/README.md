@@ -10,12 +10,13 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-27
-- 最后更新时间：2025-03-11
+- 最新版本：GreatSQL 8.4.4-4
+- 最后更新时间：2025-10-15
 
 ## 支持哪些tag
 
 - [latest](https://hub.docker.com/layers/greatsql/greatsql/latest/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
+- [8.4.4-4](https://hub.docker.com/layers/greatsql/greatsql/8.4.4-4/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
 - [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-27/images/sha256-0b524a865bef665444c778976a88e25cf7d448a18aeeac332f94a59ef27e8fdb)
 - [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-26/images/sha256-1f735f42aecdf4ee5c65699b228ce520a79f4d2e6b4fbaaddb607babcf604f0d)
 - [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
@@ -33,7 +34,7 @@ docker pull greatsql/greatsql
 还可以指定具体版本号
 
 ```shell
-docker pull greatsql/greatsql:8.0.32-27
+docker pull greatsql/greatsql:8.4.4-4
 ```
 
 如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
@@ -105,20 +106,12 @@ $ docker exec -it greatsql bash
 [root@greatsql /]# mysql
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 34
-Server version: 8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
-...
-mysql  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL (GPL), Release 27, Revision aa66a385910)
-...
-
-[root@GreatSQL][(none)]> \s
-...
-Server version:         8.0.32-27 GreatSQL, Release 27, Revision aa66a385910
 ...
 [root@GreatSQL][(none)]> SELECT version();
 +-----------+
 | version() |
 +-----------+
-| 8.0.32-27 |
+| 8.4.4     |
 +-----------+
 1 row in set (0.00 sec)
 
@@ -252,9 +245,9 @@ $ mysql
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
-| group_replication_applier | d17d165a-ab7a-11ec-a8c0-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
-| group_replication_applier | d28c3916-ab7a-11ec-ab60-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.0.32         | XCom                       |
-| group_replication_applier | d3dc6855-ab7a-11ec-98a0-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.0.32         | XCom                       |
+| group_replication_applier | d17d165a-ab7a-11ec-a8c0-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
+| group_replication_applier | d28c3916-ab7a-11ec-ab60-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | SECONDARY   | 8.4.4          | XCom                       |
+| group_replication_applier | d3dc6855-ab7a-11ec-98a0-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | ARBITRATOR  | 8.4.4          | XCom                       |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，并且其中还包含一个ARBITRATOR节点（仲裁节点/投票节点）。
@@ -354,9 +347,9 @@ $ mysql
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 | CHANNEL_NAME              | MEMBER_ID                            | MEMBER_HOST | MEMBER_PORT | MEMBER_STATE | MEMBER_ROLE | MEMBER_VERSION | MEMBER_COMMUNICATION_STACK |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
-| group_replication_applier | 9831bac0-30d4-11ee-8b65-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
-| group_replication_applier | 9907b1ae-30d4-11ee-8c66-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
-| group_replication_applier | 9a1ee7ca-30d4-11ee-8b93-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | PRIMARY     | 8.0.32         | XCom                       |
+| group_replication_applier | 9831bac0-30d4-11ee-8b65-0242ac120002 | 172.18.0.2  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
+| group_replication_applier | 9907b1ae-30d4-11ee-8c66-0242ac120003 | 172.18.0.3  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
+| group_replication_applier | 9a1ee7ca-30d4-11ee-8b93-0242ac120004 | 172.18.0.4  |        3306 | ONLINE       | PRIMARY     | 8.4.4          | XCom                       |
 +---------------------------+--------------------------------------+-------------+-------------+--------------+-------------+----------------+----------------------------+
 ```
 可以看到，一个三节点的MGR集群已自动构建完毕，运行模式为多主模式。

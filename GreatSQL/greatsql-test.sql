@@ -1,6 +1,6 @@
 -- 
 -- greatsql-test.sql
--- GreatSQL 主要功能特性自测脚本，适配版本：8.0.32-27
+-- GreatSQL 主要功能特性自测脚本，适配版本：8.4.4-4
 -- 
 -- 
 -- 主要测试项
@@ -18,22 +18,20 @@
 -- 当检查结果输出内容包含 NG（NOT GOOD缩写） 时，表示检查结果异常，需要人为再确认
 -- 
 -- CHANGELOG
--- # 2025.03.31
--- 1. 升级到 GreatSQL 8.0.32-27
--- 2. 针对以下几个新特性做校验
---  * 新增高性能并行查询引擎Turbo
---  * 升级Rapid引擎内核版本
---  * InnoDB Page支持zstd压缩
---  * 新增Binlog限速状态查看
+-- # 2025.10.15
+-- 1. 升级到 GreatSQL 8.4.4-4
+-- 2. 调整audit log filter测试方案
+-- 3. 修改相应的库名、表名
 -- 
+
 
 SET NAMES utf8mb4;
 
 -- 1. 版本号
 SELECT '--- 1. checking VERSION() ---' AS STAGE_1;
-SELECT IF(@@version = '8.0.32-27', "OK: VERSION IS 8.0.32-27", "NG, VERSION IS NOT 8.0.32-27") AS '1.1 check: VERSION' FROM DUAL;
+SELECT IF(@@version = '8.4.4-4', "OK: VERSION IS 8.4.4-4", "NG, VERSION IS NOT 8.4.4-4") AS '1.1 check: VERSION' FROM DUAL;
 SELECT '                 ' FROM DUAL;
-SELECT IF(@@version_comment LIKE '%GreatSQL%27%aa66a385910', "OK, Revision IS aa66a385910", "NG, Revision IS NOT aa66a385910") AS '1.2 check: VERSION_COMMENT' FROM DUAL;
+SELECT IF(@@version_comment LIKE '%GreatSQL%4%d73de75905d', "OK, Revision IS d73de75905d", "NG, Revision IS NOT d73de75905d") AS '1.2 check: VERSION_COMMENT' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
@@ -42,11 +40,11 @@ SELECT '                 ' FROM DUAL;
 SELECT '--- 2. checking CREATE NEW DB & TABLE, INSERT & SELECT ROWS & Oracle compatibility ---' AS STAGE_2;
 
 -- CREATE DB & TABLE
-CREATE DATABASE IF NOT EXISTS greatsql_803227 CHARACTER SET utf8mb4;
-USE greatsql_803227;
+CREATE DATABASE IF NOT EXISTS greatsql_8444 CHARACTER SET utf8mb4;
+USE greatsql_8444;
 
-DROP TABLE IF EXISTS t_803227;
-CREATE TABLE t_803227(
+DROP TABLE IF EXISTS t_8444;
+CREATE TABLE t_8444(
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 c1 CLOB NOT NULL, 
 c2 VARCHAR2(30) NOT NULL DEFAULT '',
@@ -55,7 +53,7 @@ c4 PLS_INTEGER UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- INSERT ROWS
-INSERT INTO t_803227 VALUES 
+INSERT INTO t_8444 VALUES 
 (1, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
 (2, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
 (4, rand(), rand(), ROUND(RAND()*1024000), ROUND(RAND()*1024000)),
@@ -68,14 +66,14 @@ SELECT '                 ' FROM DUAL;
 
 
 -- 3. Oracle语法
-SELECT '--- 3. checking SELECT ANY/ALL FROM t_803227 ---' AS STAGE_3;
+SELECT '--- 3. checking SELECT ANY/ALL FROM t_8444 ---' AS STAGE_3;
 -- ALL Syntax
-SELECT COUNT(*) INTO @ROWS FROM t_803227 WHERE id < ALL(4,8,16);
+SELECT COUNT(*) INTO @ROWS FROM t_8444 WHERE id < ALL(4,8,16);
 SELECT IF(@ROWS = 2, 'OK, FOUND 2 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '3.1 check: FOUND_ROWS(ALL)' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
 -- ANY Syntax
-SELECT COUNT(*) INTO @ROWS FROM t_803227 WHERE id < ANY(4,8,16);
+SELECT COUNT(*) INTO @ROWS FROM t_8444 WHERE id < ANY(4,8,16);
 SELECT IF(@ROWS = 4, 'OK, FOUND 4 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '3.2 check: FOUND_ROWS(ANY)' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
@@ -120,15 +118,15 @@ SELECT '                 ' FROM DUAL;
 
 SELECT '4. check: EXPLAIN SELECT USING Turbo' FROM DUAL;
 
-DROP TABLE IF EXISTS t_803227;
-CREATE TABLE t_803227(
+DROP TABLE IF EXISTS t_8444;
+CREATE TABLE t_8444(
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 c1 VARCHAR2(30) NOT NULL DEFAULT '',
 c2 PLS_INTEGER UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- INSERT ROWS
-INSERT INTO t_803227 VALUES 
+INSERT INTO t_8444 VALUES 
 (1, rand(), ROUND(RAND()*1024000)),
 (2, rand(), ROUND(RAND()*1024000)),
 (4, rand(), ROUND(RAND()*1024000)),
@@ -136,14 +134,14 @@ INSERT INTO t_803227 VALUES
 (16, rand(), ROUND(RAND()*1024000)),
 (32, rand(), ROUND(RAND()*1024000));
 
-EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t_803227;
+EXPLAIN FORMAT=TREE SELECT /*+ SET_VAR(turbo_enable=ON) SET_VAR(turbo_cost_threshold=0) */ * FROM t_8444;
 SELECT '                 ' FROM DUAL;
 
 SELECT '4. UNINSTALL Turbo ENGINE' FROM DUAL;
 UNINSTALL PLUGIN turbo;
 
 -- DROP TABLE
-DROP TABLE IF EXISTS t_803227;
+DROP TABLE IF EXISTS t_8444;
 
 -- 5. Rapid引擎
 SELECT '--- 4. checking RAPID ENGINE ---' AS STAGE_4;
@@ -153,7 +151,8 @@ INSTALL PLUGIN Rapid SONAME 'ha_rapid.so';
 SELECT IF(ENGINE = "Rapid", "OK, SUPPORT Rapid ENGINE", "NG, NOT SUPPORT Rapid ENGINE") AS '4.1 check: Rapid ENGINE' FROM information_schema.ENGINES WHERE ENGINE = 'Rapid' AND SUPPORT = 'YES';
 SELECT '                 ' FROM DUAL;
 
-CREATE TABLE `t_803227_rapid` (
+DROP TABLE IF EXISTS `t_8444_rapid`;
+CREATE TABLE IF NOT EXISTS `t_8444_rapid` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `c1` int unsigned NOT NULL DEFAULT '0',
   `c2` varchar(30) NOT NULL DEFAULT '',
@@ -161,10 +160,10 @@ CREATE TABLE `t_803227_rapid` (
 ) ENGINE=InnoDB;
 
 -- SECONDARY_ENGINE
-ALTER TABLE t_803227_rapid SECONDARY_ENGINE = rapid;
+ALTER TABLE t_8444_rapid SECONDARY_ENGINE = rapid;
 
 -- INSERT ROWS
-INSERT INTO t_803227_rapid VALUES 
+INSERT INTO t_8444_rapid VALUES 
 (1,  RAND()*1024000, RAND()*1024000),
 (2,  RAND()*1024000, RAND()*1024000),
 (4,  RAND()*1024000, RAND()*1024000),
@@ -175,20 +174,21 @@ SELECT IF(ROW_COUNT() = 6, 'OK, INSERT 6 ROWS', CONCAT('NG, INSERT ', ROW_COUNT(
 SELECT '                 ' FROM DUAL;
 
 -- SECONDARY_LOAD
-ALTER TABLE t_803227_rapid SECONDARY_LOAD;
+ALTER TABLE t_8444_rapid SECONDARY_LOAD;
 
-SELECT IF(CREATE_OPTIONS = 'SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1"', "OK, t_803227_rapid IS A Rapid TABLE", "NG, t_803227_rapid IS NOT A Rapid TABLE") AS '4.3 check: t_803227_rapid' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql_803227' AND TABLE_NAME = 't_803227_rapid';
+SELECT IF(CREATE_OPTIONS = 'SECONDARY_ENGINE="rapid" SECONDARY_LOAD="1"', "OK, t_8444_rapid IS A Rapid TABLE", "NG, t_8444_rapid IS NOT A Rapid TABLE") AS '4.3 check: t_8444_rapid' FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'greatsql_8444' AND TABLE_NAME = 't_8444_rapid';
 SELECT '                 ' FROM DUAL;
 
 -- EXPLAIN
 SELECT '4.4 check: EXPLAIN SELECT FROM Rapid TABLE' FROM DUAL;
-EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine=2) SET_VAR(secondary_engine_cost_threshold=0) */ * FROM t_803227_rapid;
+EXPLAIN SELECT /*+ SET_VAR(use_secondary_engine=2) SET_VAR(secondary_engine_cost_threshold=0) */ * FROM t_8444_rapid;
 SELECT '                 ' FROM DUAL;
 
 -- FORCE USING Rapid ENGINE
-SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=0) */ COUNT(*) INTO @ROWS FROM t_803227_rapid;
+SELECT /*+ SET_VAR(use_secondary_engine=1) SET_VAR(secondary_engine_cost_threshold=0) */ COUNT(*) INTO @ROWS FROM t_8444_rapid;
 SELECT IF(@ROWS = 6, 'OK, FOUND 6 ROWS', CONCAT('NG, FOUND ', @ROWS, ' ROWS')) AS '4.4 check: FOUND ROWS FROM Rapid TABLE' FROM DUAL;
 SELECT '                 ' FROM DUAL;
+UNINSTALL PLUGIN rapid;
 
 
 -- 5. 并行LOAD DATA
@@ -218,6 +218,8 @@ SELECT '                 ' FROM DUAL;
 SELECT IF(VARIABLE_NAME = "clone_file_compress", "OK, SUPPORT Clone compressed", "NG, NOT SUPPORT Clone compressed") AS 'check: Clone compressed' FROM performance_schema.global_variables where variable_name = 'clone_file_compress';
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
+UNINSTALL COMPONENT "file://component_mysqlbackup";
+UNINSTALL PLUGIN clone;
 
 -- 7. MGR特性
 SELECT '--- 7. checking MGR ---' AS STAGE_7;
@@ -247,12 +249,15 @@ SELECT '                 ' FROM DUAL;
 SELECT IF(VARIABLE_NAME = "greatdb_ha_mgr_read_vip_floating_type", "OK, SUPPORT greatdb_ha vip_floating", "NG, NOT SUPPORT greatdb_ha vip_floating") AS '7.5 check: greatdb_ha vip_floating' FROM performance_schema.global_variables where variable_name = 'greatdb_ha_mgr_read_vip_floating_type';
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
+UNINSTALL PLUGIN greatdb_ha;
+UNINSTALL PLUGIN group_replication;
 
 
 -- 8. 安全特性检查
 -- 支持审计日志写表 & 用户的登录信息记录
 -- basedir=/usr, REPLACE IF NEEDED
-SOURCE /usr/local/GreatSQL/share/install_audit_log.sql;
+USE mysql;
+SOURCE /usr/local/GreatSQL/share/audit_log_filter_linux_install.sql
 SELECT IF(VARIABLE_NAME = "audit_log_to_table", "OK, SUPPORT audit_log_to_table", "NG, NOT SUPPORT audit_log_to_table") AS '8.1 check: audit_log_to_table' FROM performance_schema.global_variables where variable_name = 'audit_log_to_table';
 SELECT '                 ' FROM DUAL;
 
@@ -265,6 +270,7 @@ SOURCE /usr/local/GreatSQL/share/sys_masking.sql;
 SELECT IF(COUNT(*)=4, "OK, SUPPORT data masking", "NG, NOT SUPPORT data masking") AS '8.3 check: data masking' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='sys_masking';
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
+UNINSTALL COMPONENT "file://component_audit_log_filter";
 
 
 -- 9. 优化功能检查
@@ -286,20 +292,20 @@ SELECT '                 ' FROM DUAL;
 
 -- 10. InnoDB Page压缩支持zstd
 SELECT '--- 11. checking InnoDB Page COMPRSSION USING Zstd ---' AS STAGE_11;
-USE greatsql_803227;
+USE greatsql_8444;
 
-DROP TABLE IF EXISTS t_803227;
-CREATE TABLE t_803227(
+DROP TABLE IF EXISTS t_8444;
+CREATE TABLE t_8444(
 id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 c1 CLOB NOT NULL, 
 c2 VARCHAR2(30) NOT NULL DEFAULT '',
 c3 NUMBER UNSIGNED NOT NULL DEFAULT 0,
 c4 PLS_INTEGER UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMPRESSION="zstd";
-SELECT IF(CREATE_OPTIONS = 'COMPRESSION="zstd"', "OK, InnoDB Page COMPONENT USING Zstd", "NG, NOT SUPPORT InnoDB Page COMPONENT USING Zstd") AS 'check: InnoDB Page COMPONENT USING Zstd' FROM information_schema.TABLES WHERE TABLE_SCHEMA='greatsql_803227' AND TABLE_NAME='t_803227';
+SELECT IF(CREATE_OPTIONS = 'COMPRESSION="zstd"', "OK, InnoDB Page COMPONENT USING Zstd", "NG, NOT SUPPORT InnoDB Page COMPONENT USING Zstd") AS 'check: InnoDB Page COMPONENT USING Zstd' FROM information_schema.TABLES WHERE TABLE_SCHEMA='greatsql_8444' AND TABLE_NAME='t_8444';
 SELECT '                 ' FROM DUAL;
 SELECT '                 ' FROM DUAL;
 
 -- 11. 清理
 SELECT '--- 8. clean up ---' AS STAGE_8;
-DROP DATABASE IF EXISTS greatsql_803227;
+DROP DATABASE IF EXISTS greatsql_8444;
