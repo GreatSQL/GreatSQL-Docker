@@ -10,15 +10,13 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-27
-- 最后更新时间：2025-03-11
+- 最新版本：GreatSQL 8.4.4-4
+- 最后更新时间：2025-10-16
 
 ## 支持哪些tag
 
 - [latest](https://hub.docker.com/layers/greatsql/greatsql_build/latest/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
 - [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-27/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
-- [8.0.32-26](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-26/images/sha256-a8bea01ea86b77866f8e4739859537b6f4b5060178ae06552e6fad4607c4e0cf)
-- [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql/8.0.32-25/images/sha256-6a01d0b1b9107b286601249202803da5b08e9f729b8727f691ce423928994eef)
 
 拉取GreatSQL-Build镜像
 
@@ -29,7 +27,7 @@ docker pull greatsql/greatsql_build
 还可以指定具体版本号
 
 ```shell
-docker pull greatsql/greatsql_build:8.0.32-27
+docker pull greatsql/greatsql_build:8.4.4-4
 ```
 
 如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
@@ -112,8 +110,8 @@ sh-4.4# sh ./greatsql_build_init.sh
  3.3 make dynamic link for GreatSQL
 
 4. greatsql build completed!
-drwxrwxr-x 13 mysql mysql       293 Mar 26 13:27 GreatSQL-8.0.32-27-ol-glibc2.28-x86_64
-/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.0.32-27 for Linux on x86_64 (GreatSQL, Release 27, Revision aa66a385910)
+drwxrwxr-x 13 mysql mysql       293 Oct 11 11:54 GreatSQL-8.4.4-4-ol-glibc2.28-x86_64
+/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
 
 5. remove files and clean up 
 ```
@@ -121,7 +119,7 @@ drwxrwxr-x 13 mysql mysql       293 Mar 26 13:27 GreatSQL-8.0.32-27-ol-glibc2.28
 可以看到已经完成编译，可以将容器中编译好的二进制包文件拷贝到宿主机上，例如：
 
 ```shell
-docker cp greatsql_build:/opt/GreatSQL-8.0.32-27-ol-glibc2.28-x86_64 /usr/local/
+docker cp greatsql_build:/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64 /usr/local/
 ```
 
 如果宿主机环境也是 OracleLinux/CentOS x86_64 的话，这就可以在宿主机环境下直接使用该二进制文件包了。
