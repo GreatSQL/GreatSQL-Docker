@@ -22,7 +22,7 @@ chmod +x /*sh ${OPT_DIR}/*sh && \
 /usr/sbin/groupadd -g ${MYSQL_UID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
 echo '[main]' > /etc/dnf/dnf.conf && \
-microdnf install -y util-linux && \
+microdnf install -y util-linux oracle-epel-release-el8 && \
 microdnf clean all
 
 ENTRYPOINT ["sh"]

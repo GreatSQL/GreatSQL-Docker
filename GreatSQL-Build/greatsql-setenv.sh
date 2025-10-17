@@ -47,6 +47,6 @@ fi
 
 DEPS="autoconf automake binutils bison bzip2 cmake cyrus-sasl-devel cyrus-sasl-scram \
 gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc gcc-toolset-11-libatomic-devel \
-jemalloc jemalloc-devel krb5-devel libaio-devel libatomic libcurl-devel libtirpc-devel \
+jemalloc jemalloc-devel krb5-devel libaio-devel libatomic libcurl-devel libicu libicu-devel libtirpc-devel \
 libudev-devel m4 make ncurses-devel numactl-devel openldap-devel openssl openssl-devel \
-pam-devel patchelf readline-devel zlib-devel findutils procps-ng xz"
+pam-devel patchelf perl protobuf-lite readline-devel zlib-devel findutils procps-ng xz"
