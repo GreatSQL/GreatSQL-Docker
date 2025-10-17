@@ -7,6 +7,8 @@
 
 适用于 OracleLinux/CentOS x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
+**提示**：本项目将不再更新，如果有需要编译 GreatSQL 源码，请参考文档 [编译源码安装](https://greatsql.cn/docs/4-install-guide/6-install-with-source-code.html)。
+
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
