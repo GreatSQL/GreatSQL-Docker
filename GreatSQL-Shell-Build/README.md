@@ -9,8 +9,7 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们: greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-03-12
+- 最新版本：GreatSQL 8.4.4-4
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
@@ -21,7 +20,7 @@
 
 例如：
 ```shell
-$ docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell_build:8.0.32-25 bash
+$ docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shell_build:8.4.4-4 bash
 ```
 执行上述命令后，会创建一个GreatSQL-Shell编译环境容器，并在容器中自动完成GreatSQL-Shell编译工作。
 
@@ -53,31 +52,31 @@ $ docker logs greatsqlsh | tail
  5.1 compiling mysqlclient and mysqlxclient
  5.2 compiling MySQL Shell for GreatSQL
 
-6. MySQL Shell for GreatSQL 8.0.32-25 build completed!
- 6.1 MySQL Shell for GreatSQL 8.0.32-25 version:
-/opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqlsh   Ver 8.0.32 for Linux on x86_64 - for MySQL 8.0.32 (Source distribution)
+6. MySQL Shell for GreatSQL 8.4.4-4 build completed!
+ 6.1 MySQL Shell for GreatSQL 8.4.4-4 version:
+/opt/greatsql-shell-8.4.4-4-centos-glibc2.28-x86_64/bin/mysqlsh   Ver 8.4.4 for Linux on x86_64 - for MySQL 8.4.4 (Source distribution)
  6.2 TARBALL file:
--rw-r--r-- 1 root root 20378992 Mar 12 10:33 /opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar.xz
+-rw-r--r-- 1 root root 40284300 Oct 21 09:38 /opt/greatsql-shell-8.4.4-4-glibc2.28-x86_64.tar.xz
 ```
 
 接下来回退到宿主机，将容器中的二进制包拷贝出来
 
 ```shell
-$ docker cp greatsqlsh:/opt/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64.tar.xz /usr/local/
+$ docker cp greatsqlsh:/opt/greatsql-shell-8.4.4-4-glibc2.28-x86_64.tar.xz /usr/local/
 ```
 
 然后解压缩，就可以在宿主机环境下使用了，例如：
 ```shell
 # 先安装几个必要的依赖包
 $ dnf install -y libssh python38 python38-libs python38-pyyaml
-$ pip3.8 install --user certifi pyclamd
+$ pip3.8 install -i https://pypi.tuna.tsinghua.edu.cn/simple --user certifi pyclamd numpy
 
 # 测试使用
-$ /usr/local/greatsql-shell-8.0.32-25-centos-glibc2.28-x86_64/bin/mysqlsh
-MySQL Shell 8.0.32
+$ /usr/local/greatsql-shell-8.4.4-4-glibc2.28-x86_64/bin/mysqlsh
 ...
-Type '\help' or '\?' for help; '\quit' to exit.
- MySQL  JS > \q
+ MySQL  127.0.0.1:3306 ssl  SQL > \py
+Switching to Python mode...
+ MySQL  127.0.0.1:3306 ssl  Py > \q
 Bye!
 ```
 
@@ -87,7 +86,8 @@ Bye!
 - Dockerfile，用于构建Docker编译环境
 - greatsqlsh-automake.sh，用于实现在Docker容器中自动化编译的脚本
 - greatsqlsh-setenv.sh，通用环境变量设置脚本
-- mysqlsh-for-greatsql-8.0.32.patch，需要对MySQL Shell打补丁，才能支持GreatSQL中特有的仲裁节点特性
+- mysqlsh-for-greatsql-8.4.4.patch，需要对MySQL Shell打补丁，才能支持GreatSQL中特有的仲裁节点特性
+- mysql-8.4.4.patch，需要对MySQL源码包打补丁，修改gcc依赖版本
 
 ## 其他分支
 - 如果您想尝试支持Python 3.10版本的GreatSQL Shell，可参考 [earl86](https://gitee.com/earl86) 维护的[GreatSQL-Shell-Build分支](https://gitee.com/earl86/GreatSQL-Docker/tree/master/GreatSQL-Shell-Build)。

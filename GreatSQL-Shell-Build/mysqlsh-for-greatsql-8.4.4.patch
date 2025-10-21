@@ -1,0 +1,61 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7a669d268..4f5ddd49c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -239,7 +239,7 @@ IF(CMAKE_HOST_UNIX AND NOT FORCE_UNSUPPORTED_COMPILER
+           SET(ALTERNATIVE_PATHS "/opt/rh/devtoolset-11")
+         ENDIF()
+       ELSEIF(LINUX_RHEL8 OR LINUX_RHEL9)
+-        SET(ALTERNATIVE_PATHS "/opt/rh/gcc-toolset-12")
++        SET(ALTERNATIVE_PATHS "/opt/rh/gcc-toolset-11")
+       ENDIF()
+ 
+       FOREACH(OPT_PATH ${ALTERNATIVE_PATHS})
+@@ -298,9 +298,9 @@ IF(CMAKE_HOST_UNIX AND NOT FORCE_UNSUPPORTED_COMPILER
+           ENDIF()
+         ELSEIF(LINUX_RHEL8 OR LINUX_RHEL9)
+           SET(DEV_PACKAGES
+-            "gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-binutils")
+-          STRING_APPEND(DEV_PACKAGES " gcc-toolset-12-annobin-annocheck")
+-          STRING_APPEND(DEV_PACKAGES " gcc-toolset-12-annobin-plugin-gcc")
++            "gcc-toolset-11-gcc gcc-toolset-11-gcc-c++ gcc-toolset-11-binutils")
++          STRING_APPEND(DEV_PACKAGES " gcc-toolset-11-annobin-annocheck")
++          STRING_APPEND(DEV_PACKAGES " gcc-toolset-11-annobin-plugin-gcc")
+         ENDIF()
+         MESSAGE(WARNING
+           "Could not find devtoolset compiler/linker in ${ALTERNATIVE_PATHS}")
+diff --git a/mysqlshdk/libs/mysql/group_replication.cc b/mysqlshdk/libs/mysql/group_replication.cc
+index b6c840cbb..574d60ec7 100644
+--- a/mysqlshdk/libs/mysql/group_replication.cc
++++ b/mysqlshdk/libs/mysql/group_replication.cc
+@@ -105,6 +105,8 @@ std::string to_string(const Member_role role) {
+       return "PRIMARY";
+     case Member_role::SECONDARY:
+       return "SECONDARY";
++    case Member_role::ARBITRATOR:
++      return "ARBITRATOR";
+     case Member_role::NONE:
+       return "NONE";
+   }
+@@ -116,6 +118,8 @@ Member_role to_member_role(const std::string &role) {
+     return Member_role::PRIMARY;
+   } else if (shcore::str_caseeq("SECONDARY", role)) {
+     return Member_role::SECONDARY;
++  } else if (shcore::str_caseeq("ARBITRATOR", role)) {
++    return Member_role::ARBITRATOR;
+   } else if (role.empty()) {
+     return Member_role::NONE;
+   } else {
+diff --git a/mysqlshdk/libs/mysql/group_replication.h b/mysqlshdk/libs/mysql/group_replication.h
+index 8337db933..0c28e281c 100644
+--- a/mysqlshdk/libs/mysql/group_replication.h
++++ b/mysqlshdk/libs/mysql/group_replication.h
+@@ -75,7 +75,7 @@ enum class Member_state {
+   MISSING
+ };
+ 
+-enum class Member_role { PRIMARY, SECONDARY, NONE };
++enum class Member_role { PRIMARY, SECONDARY, ARBITRATOR, NONE };
+ 
+ enum class Topology_mode { SINGLE_PRIMARY, MULTI_PRIMARY, NONE };
+ 

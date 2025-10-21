@@ -70,9 +70,9 @@ echo && \
 echo "5. compiling MySQL Shell for GreatSQL"
 su - ${MYSQL_USER} -s /bin/bash -c "cd ${OPT_DIR}; /bin/sh ${OPT_DIR}/${GREATSQLSH_MAKESH}" && \
 echo && \
-echo "6. MySQL Shell for GreatSQL 8.0.32-25 build completed!"
-pip3.8 install -i https://pypi.tuna.tsinghua.edu.cn/simple --user certifi pyclamd >> ${MAKELOG} 2>&1 && \
-echo " 6.1 MySQL Shell for GreatSQL 8.0.32-25 version:" && \
+echo "6. MySQL Shell for GreatSQL ${MYSQL_VERSION}-${RELEASE} build completed!"
+pip3.8 install -i https://pypi.tuna.tsinghua.edu.cn/simple --user certifi pyclamd numpy >> ${MAKELOG} 2>&1 && \
+echo " 6.1 MySQL Shell for GreatSQL ${MYSQL_VERSION}-${RELEASE} version:" && \
 ${BASE_DIR}/bin/mysqlsh --version && \
 cd ${OPT_DIR} && \
 tar cf ${GREATSQLSH}.tar ${GREATSQLSH} >> ${MAKELOG} 2>&1 && \

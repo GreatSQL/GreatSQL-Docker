@@ -9,7 +9,7 @@ ENV LANG en_US.utf8
 ARG OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
-GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.0.32-25/GreatSQL-Shell-Build" \
+GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.4.4-4/GreatSQL-Shell-Build" \
 GREATSQLSH_ENV="greatsqlsh-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh"
 
