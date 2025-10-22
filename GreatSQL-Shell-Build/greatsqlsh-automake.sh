@@ -3,6 +3,7 @@
 
 echo " 5.1 compiling mysqlclient and mysqlxclient" && \
 cd ${OPT_DIR}/${MYSQL} && \
+patch -p1 -f < ${OPT_DIR}/${MYSQL_PATCH} >> ${MAKELOG} 2>&1 && \
 rm -fr bld && \
 mkdir bld && \
 cd bld && \

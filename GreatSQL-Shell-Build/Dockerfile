@@ -23,6 +23,7 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*; \
 rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
+rm -f /etc/yum.repos.d/CentOS-Stream-* ; \
 curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo > /dev/null 2>&1 && \
 sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo > /dev/null 2>&1 && \
 dnf -y update > /dev/null 2>&1 ; \
