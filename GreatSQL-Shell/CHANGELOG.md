@@ -1,18 +1,6 @@
-# 8.0.32-25 更新日志
+# 8.4.4-4 更新日志
 
-## 2024.10.24
-* 更新镜像地址，增加阿里云ACR资源。
+## 2025.10.22
+* 更新到8.4.4-4版本
 
-## 2024.3.13
-* 更新GreatSQL-Shell到8.0.32-25最新版本，支持JS语法。
-
-## 2024.2.20
-* 优化GreatSQL-Shell，改用从服务器上下载，无需准备本地二进制文件包。
-* 支持x86_64/aarch64两种平台。
-
-## 2024.1.22
-
-* 版本更新到GreatSQL 8.0.32-25。
-* 支持在Docker中运行GreatSQL Shell，无需安装。
-
-[8.0.32-25]: https://gitee.com/GreatSQL/GreatSQL-Docker/tree/greatsql-8.0.32-25/GreatSQL-Shell
+[8.4.4-4]: https://gitee.com/GreatSQL/GreatSQL-Docker/tree/greatsql-8.4.4-4/GreatSQL-Shell

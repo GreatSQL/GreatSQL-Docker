@@ -2,23 +2,26 @@
 
 ## 简介
 
-在Docker环境中运行MySQL Shell for GreatSQL 8.0.32-25，无需额外安装，更方便省事。
+在Docker环境中运行MySQL Shell for GreatSQL 8.4.4-4，无需额外安装，更方便省事。
 
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.0.32-25
-- 最后更新时间：2024-10-24
+- 最新版本：GreatSQL 8.4.4-4
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
 - [latest](https://hub.docker.com/layers/greatsql/greatsql_shell/latest/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell/latest-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
+- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell/latest-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
+- [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
 
-备选阿里云 ACR 资源地址：[registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell)，支持tag
-- [latest](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:latest)
-- [8.0.32-25](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:8.0.32-25)
-
+备选阿里云、腾讯云镜像资源地址，支持的 tag 如下：
+- 阿里云 [latest](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:latest)
+- 阿里云 [8.4.4-4](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:8.4.4-4)
+- 阿里云 [8.0.32-25](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:8.0.32-25)
+- 腾讯云 [latest](ccr.ccs.tencentyun.com/greatsql/greatsql_shell:latest)
+- 腾讯云 [8.4.4-4](ccr.ccs.tencentyun.com/greatsql/greatsql_shell:8.4.4-4)
+- 腾讯云 [8.0.32-25](ccr.ccs.tencentyun.com/greatsql/greatsql_shell:8.0.32-25)
 
 ## 怎么使用这个Docker镜像
 
@@ -32,58 +35,65 @@ $ docker run -itd --hostname greatsqlsh --name greatsqlsh greatsql/greatsql_shel
 通过tcp/ip方式连接GreatSQL
 
 ```shell
-$ docker exec -it greatsqlsh bash -c "mysqlsh --uri GreatSQL@172.17.140.123"
-Please provide the password for 'GreatSQL@172.17.140.123': *************
-MySQL Shell 8.0.32
+$ docker exec -it greatsqlsh bash -c "mysqlsh --uri GreatSQL@172.16.16.10"
+Please provide the password for 'GreatSQL@172.16.16.10': *************
 ...
-Your MySQL connection id is 14891 (X protocol)
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
-No default schema selected; type \use <schema> to set one.
-
+# 切换到Python语法模式下
+ MySQL  127.0.0.1:3306 ssl  SQL > \py
+Switching to Python mode...
+...
 # 获取当前MGR状态信息
- MySQL  172.17.140.123:33060+ ssl  JS > c=dba.getCluster()
- MySQL  172.17.140.123:33060+ ssl  JS > c.status()
+ MySQL  172.16.16.10:33060+ ssl  Py > c=dba.get_cluster()
+ MySQL  172.16.16.10:33060+ ssl  Py > c.status()
 {
-    "clusterName": "mgr803225",
+    "clusterName": "mgr",
     "defaultReplicaSet": {
         "name": "default",
-        "primary": "172.17.136.59:3306",
+        "primary": "172.16.16.10:3306",
         "ssl": "REQUIRED",
-        "status": "OK_NO_TOLERANCE",
-        "statusText": "Cluster is NOT tolerant to any failures.",
+        "statusText": "Cluster is ONLINE and can tolerate up to ONE failure.",
         "topology": {
-            "172.17.136.59:3306": {
-                "address": "172.17.136.59:3306",
+            "172.16.16.10:3306": {
+                "address": "172.16.16.10:3306",
                 "memberRole": "PRIMARY",
                 "mode": "R/W",
                 "readReplicas": {},
                 "replicationLag": "applier_queue_applied",
                 "role": "HA",
                 "status": "ONLINE",
-                "version": "8.0.32"
+                "version": "8.4.4"
             },
-            "172.17.140.123:3306": {
-                "address": "172.17.140.123:3306",
+            "172.16.16.11:3306": {
+                "address": "172.16.16.11:3306",
                 "memberRole": "SECONDARY",
                 "mode": "R/O",
                 "readReplicas": {},
                 "replicationLag": "applier_queue_applied",
                 "role": "HA",
                 "status": "ONLINE",
-                "version": "8.0.32"
+                "version": "8.4.4"
+            },
+            "172.16.16.12:3306": {
+                "address": "172.16.16.12:3306",
+                "memberRole": "ARBITRATOR",
+                "mode": "R/O",
+                "readReplicas": {},
+                "role": "HA",
+                "status": "ONLINE",
+                "version": "8.4.4"
             }
         },
         "topologyMode": "Single-Primary"
     },
-    "groupInformationSourceMember": "172.17.136.59:3306"
+    "groupInformationSourceMember": "192.168.5.160:3306"
 }
- MySQL  172.17.140.123:33060+ ssl  JS >
+ MySQL  172.16.16.10:33060+ ssl  JS >
 
 # 切换到SQL命令行模式下，并查看连接列表
- MySQL  172.17.140.123:33060+ ssl  JS > \sql
+ MySQL  172.16.16.10:33060+ ssl  JS > \sql
 Switching to SQL mode... Commands end with ;
 Fetching global names for auto-completion... Press ^C to stop.
- MySQL  172.17.140.123:33060+ ssl  SQL > show processlist;
+ MySQL  172.16.16.10:33060+ ssl  SQL > show processlist;
 +-------+-------------+----------------------+------+---------+---------+----------------------------------------------------------+----------------------------------+------------+-----------+---------------+
 | Id    | User        | Host                 | db   | Command | Time    | State                                                    | Info                             | Time_ms    | Rows_sent | Rows_examined |
 +-------+-------------+----------------------+------+---------+---------+----------------------------------------------------------+----------------------------------+------------+-----------+---------------+
@@ -105,12 +115,7 @@ $ docker run -itd --hostname greatsqlsh --name greatsqlsh -v /data/GreatSQL/mysq
 ```shell
 $ docker exec -it greatsqlsh bash -c "mysqlsh -S/tmp/mysql.sock"
 Please provide the password for 'root@/tmp%2Fmysql.sock':
-MySQL Shell 8.0.32
 ...
-Fetching schema names for auto-completion... Press ^C to stop.
-Your MySQL connection id is 178
-Server version: 8.0.32-25 GreatSQL, Release 25, Revision db07cc5cb73
-No default schema selected; type \use <schema> to set one.
  MySQL  localhost  Py > \sql
 Switching to SQL mode... Commands end with ;
 Fetching global names for auto-completion... Press ^C to stop.
@@ -126,7 +131,7 @@ Fetching global names for auto-completion... Press ^C to stop.
 9 rows in set (0.0002 sec)
 ```
 
-如上所示，这就可以在Docker环境中运行MySQL Shell for GreatSQL 8.0.32-25，用它来管理GreatSQL MGR更方便省事。
+如上所示，这就可以在Docker环境中运行MySQL Shell for GreatSQL 8.4.4-4，用它来管理GreatSQL MGR更方便省事。
 
 ## 文件介绍
 - CHANGELOG.md，更新历史

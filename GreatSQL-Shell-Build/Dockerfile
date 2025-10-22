@@ -10,8 +10,8 @@ email="greatsql@greatdb.com" \
 forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Shell-Docker"
 
-ENV LANG en_US.utf8
-ARG TARGETARCH \
+ARG TARGETARCH
+ENV LANG en_US.utf8 \
 OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
