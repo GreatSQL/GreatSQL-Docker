@@ -1,3 +1,8 @@
+# Dockerfile for GreatSQL Shell 8.4.4-4
+#
+# docker version 26.1.3 (not podman)
+# docker buildx build --platform linux/arm64,linux/amd64 -t greatsql/greatsql_shell_build:8.4.4-4 . --push
+#
 FROM centos:8
 
 LABEL maintainer="greatsql.cn" \
@@ -6,7 +11,8 @@ forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Shell-Docker"
 
 ENV LANG en_US.utf8
-ARG OPT_DIR=/opt \
+ARG TARGETARCH \
+OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
 GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.4.4-4/GreatSQL-Shell-Build" \
