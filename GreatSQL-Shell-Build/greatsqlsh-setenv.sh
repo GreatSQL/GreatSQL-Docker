@@ -30,7 +30,7 @@ MYSQLSH_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/43/file"
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
 libtirpc-devel libudev-devel libuuid libuuid-devel m4 make ncurses-devel openssl openssl-devel \
-patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel" \
+patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel brotli brotli-devel nodejs-packaging" \
 
 V8_DEPS="deps-v8"
 YUM_REPOS="yum-repos"
