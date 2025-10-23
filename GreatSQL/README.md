@@ -41,6 +41,14 @@ docker pull registry.cn-beijing.aliyuncs.com/greatsql/greatsql
 $ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 ```
 
+如果是龙芯（Loongson-3A6000）架构环境，可以尝试下面的镜像：
+
+```bash
+docker pull registry.cn-shanghai.aliyuncs.com/annda/greatsql:8.4.4-4
+```
+
+**提醒**：这是社区用户 Annda](https://github.com/AnndaGH) 提交的镜像，请自行决定是否使用。
+
 > 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
 ## GreatSQL Docker镜像使用
