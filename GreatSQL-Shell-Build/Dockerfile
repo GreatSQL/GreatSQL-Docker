@@ -11,8 +11,7 @@ forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Shell-Docker"
 
 ARG TARGETARCH
-ENV LANG en_US.utf8 \
-OPT_DIR=/opt \
+ENV OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
 GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.4.4-4/GreatSQL-Shell-Build" \

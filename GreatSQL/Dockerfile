@@ -6,8 +6,7 @@ forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
 ARG TARGETARCH
-ENV LANG=en_US.utf8 \
-GREATSQL_DATA_DIR=/data/GreatSQL \
+ENV GREATSQL_DATA_DIR=/data/GreatSQL \
 GREATSQL_USER=mysql \
 GREATSQL_UID_GID=3306 \
 GREATSQL_EXTRACT_DIR=/usr/local \

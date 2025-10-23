@@ -7,8 +7,8 @@ email="greatsql@greatdb.com" \
 forum="https://greatsql.cn/forum.php" \
 gitee="https://gitee.com/GreatSQL/GreatSQL-Docker"
 
-ARG TARGETARCH \
-OPT_DIR=/opt \
+ARG TARGETARCH
+ENV OPT_DIR=/opt \
 MYSQL_UID=3306 \
 MYSQL_USER=mysql \
 GREATSQL_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/greatsql-8.4.4-4/GreatSQL-Build" \
