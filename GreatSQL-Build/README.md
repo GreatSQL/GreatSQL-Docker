@@ -17,8 +17,10 @@
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/layers/greatsql/greatsql_build/latest/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
-- [8.0.32-27](https://hub.docker.com/layers/greatsql/greatsql_build/8.0.32-27/images/sha256-16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/latest/sha256:8b2a40a07efaafca05ed966f38745f612393ad6febeb81e8f4df4e3f6346589e)
+- [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.4.4-4/sha256:8b2a40a07efaafca05ed966f38745f612393ad6febeb81e8f4df4e3f6346589e)
+- [8.0.32-27](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.0.32-27/sha256:16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
+- [8.0.32-26](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.0.32-26/sha256:2402086558d5913b2f8774c2fe39690237bb90175a22efb022471f0f62c9ac9c)
 
 拉取GreatSQL-Build镜像
 

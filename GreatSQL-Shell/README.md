@@ -11,9 +11,10 @@
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
-- [latest](https://hub.docker.com/layers/greatsql/greatsql_shell/latest/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25/images/sha256-4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell/latest-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
-- [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell/8.0.32-25-aarch64/images/sha256-46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec?context=explore)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql_shell/tags/latest/sha256:1a7a88b9923249e793158627acf66986c52156e00798c4c9d3cb5867d35f7e4f)
+- [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql_shell/tags/8.4.4-4/sha256:1a7a88b9923249e793158627acf66986c52156e00798c4c9d3cb5867d35f7e4f)
+- [8.0.32-25](https://hub.docker.com/repository/docker/greatsql/greatsql_shell/tags/8.0.32-25/sha256:4264884f14341e3b34077c52c2ee7d0d53ce00fb5e45915c3b57e950ef52d80f)
+- [8.0.32-25-aarch64](https://hub.docker.com/repository/docker/greatsql/greatsql_shell/tags/8.0.32-25-aarch64/sha256:46d3d92632256d24078948a81a6750ae808e3c2292c10eb88107633f5bde85ec)
 
 备选阿里云、腾讯云镜像资源地址，支持的 tag 如下：
 - 阿里云 [latest](registry.cn-beijing.aliyuncs.com/greatsql/greatsql_shell:latest)
