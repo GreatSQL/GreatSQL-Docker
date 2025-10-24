@@ -6,6 +6,8 @@
 
 适用于CentOS 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
+**提示**：本项目将不再更新，如果有需要编译 GreatSQL Shell 源码，请参考本项目中的几个编译脚本。
+
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们: greatsql@greatdb.com
@@ -13,8 +15,10 @@
 - 支持CPU架构：x86_64、aarch64
 
 ## 支持哪些tag
-- [latest](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest/images/sha256-8728758467097c48da15c177bb8692b4e008c3626638a2385b2a6fe4eef44687?context=explore), [8.0.32-25](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25/images/sha256-8728758467097c48da15c177bb8692b4e008c3626638a2385b2a6fe4eef44687?context=explore)
-- [latest-arch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/latest-aarch64/images/sha256-810f6a57cc065aae88c29ffd02fdccdaf383c806414ac3848e43dbedfa5f727c?context=explore), [8.0.32-25-aarch64](https://hub.docker.com/layers/greatsql/greatsql_shell_build/8.0.32-25-aarch64/images/sha256-810f6a57cc065aae88c29ffd02fdccdaf383c806414ac3848e43dbedfa5f727c?context=explore)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql_shell_build/tags/latest/sha256:cfa03ed884e3cf9007ed80dc078834f73c892d2c2ed6fb939099b773c37514a8)
+- [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql_shell_build/tags/8.4.4-4/sha256:cfa03ed884e3cf9007ed80dc078834f73c892d2c2ed6fb939099b773c37514a8)
+- [8.0.32-25](https://hub.docker.com/repository/docker/greatsql/greatsql_shell_build/tags/8.0.32-25/sha256:8728758467097c48da15c177bb8692b4e008c3626638a2385b2a6fe4eef44687)
+- [8.0.32-25-aarch64](https://hub.docker.com/repository/docker/greatsql/greatsql_shell_build/tags/8.0.32-25-aarch64/sha256:810f6a57cc065aae88c29ffd02fdccdaf383c806414ac3848e43dbedfa5f727c)
 
 ## 如何使用GreatSQL-Shell-Build
 
@@ -58,6 +62,7 @@ $ docker logs greatsqlsh | tail
  6.2 TARBALL file:
 -rw-r--r-- 1 root root 40284300 Oct 21 09:38 /opt/greatsql-shell-8.4.4-4-glibc2.28-x86_64.tar.xz
 ```
+**提示**：如果服务器在墙内或内网，可能由于下载部分资源失败而无法完成构建，请手动处理文件下载需求。
 
 接下来回退到宿主机，将容器中的二进制包拷贝出来
 

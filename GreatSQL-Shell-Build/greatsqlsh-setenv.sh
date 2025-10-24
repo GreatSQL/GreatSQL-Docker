@@ -27,7 +27,6 @@ BOOST_SRC_DOWNLOAD_URL="https://sourceforge.net/projects/boost/files/boost/1.77.
 MYSQL_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/23/file"
 MYSQLSH_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/43/file"
 JDK_DOWNLOAD_URL="https://github.com/oracle/graal/archive/refs/tags/jdk-23.0.1.zip"
-GRAALVM_DOWNLOAD_URL="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_linux-x64_bin.tar.gz"
 
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
@@ -48,3 +47,10 @@ GREATSQLSH_MAKESH="greatsqlsh-automake.sh"
 GREATSQLSH_ENV="greatsqlsh-setenv.sh"
 JDK="graal-jdk-23.0.1"
 GRAALVM="graalvm-community-openjdk-23.0.1+11.1"
+if [ "`uname -p`" = "aarch64" ] ; then
+ RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
+ GRAALVM_DOWNLOAD_URL="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_linux-aarch64_bin.tar.gz"
+else
+ RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
+ GRAALVM_DOWNLOAD_URL="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_linux-x64_bin.tar.gz"
+fi
