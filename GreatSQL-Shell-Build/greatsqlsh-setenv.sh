@@ -26,11 +26,13 @@ GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/gr
 BOOST_SRC_DOWNLOAD_URL="https://sourceforge.net/projects/boost/files/boost/1.77.0/"
 MYSQL_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/23/file"
 MYSQLSH_SRC_DOWNLOAD_URL="https://downloads.mysql.com/archives/get/p/43/file"
+JDK_DOWNLOAD_URL="https://github.com/oracle/graal/archive/refs/tags/jdk-23.0.1.zip"
+GRAALVM_DOWNLOAD_URL="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_linux-x64_bin.tar.gz"
 
 DEPS="autoconf automake binutils bison cmake cyrus-sasl-devel cyrus-sasl-scram gcc-c++ \
 gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc libcurl-devel libssh libssh-config libssh-devel \
-libtirpc-devel libudev-devel libuuid libuuid-devel m4 make ncurses-devel openssl openssl-devel \
-patch python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel brotli brotli-devel nodejs-packaging" \
+libtirpc-devel libudev-devel libuuid libuuid-devel m4 make maven ncurses-devel openssl openssl-devel \
+patch protobuf-lite python38 python38-devel python38-libs python38-pyyaml uuid wget zlib-devel brotli brotli-devel" \
 
 V8_DEPS="deps-v8"
 YUM_REPOS="yum-repos"
@@ -44,10 +46,5 @@ MYSQL_PATCH="mysql-8.4.4.patch"
 GREATSQLSH_PATCH="mysqlsh-for-greatsql-8.4.4.patch"
 GREATSQLSH_MAKESH="greatsqlsh-automake.sh"
 GREATSQLSH_ENV="greatsqlsh-setenv.sh"
-if [ "`uname -p`" = "aarch64" ] ; then
- RPCGEN="rpcgen-1.3.1-4.el8.aarch64.rpm"
- V8_LIBS_PKG="v8-libs-aarch64"
-else
- RPCGEN="rpcgen-1.3.1-4.el8.x86_64.rpm"
- V8_LIBS_PKG="v8-libs-x86_64"
-fi
+JDK="graal-jdk-23.0.1"
+GRAALVM="graalvm-community-openjdk-23.0.1+11.1"
