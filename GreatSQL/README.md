@@ -10,12 +10,13 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.4.4-4
-- 最后更新时间：2025-10-15
+- 最新版本：GreatSQL 8.4.4-5
+- 最后更新时间：2026.07.01
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256:e90496c2c83c02e8f8f6c27327bd9a0e620556961dff3f906058aad7e8c5564e)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256:)
+- [8.4.4-5](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.4.4-5/sha256:)
 - [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.4.4-4/sha256:e90496c2c83c02e8f8f6c27327bd9a0e620556961dff3f906058aad7e8c5564e)
 - [8.0.32-27](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.0.32-27/sha256:6169b1a98eaa4a2579315e30681714c102ac1d6e9881bac5606ebec67c5b7b3b)
 
@@ -28,7 +29,7 @@ docker pull greatsql/greatsql
 还可以指定具体版本号
 
 ```shell
-docker pull greatsql/greatsql:8.4.4-4
+docker pull greatsql/greatsql:8.4.4-5
 ```
 
 如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
@@ -47,7 +48,7 @@ $ docker pull ccr.ccs.tencentyun.com/greatsql/greatsql
 docker pull registry.cn-shanghai.aliyuncs.com/annda/greatsql:8.4.4-4
 ```
 
-**提醒**：这是社区用户 Annda](https://github.com/AnndaGH) 提交的镜像，请自行决定是否使用。
+**提醒**：这是社区用户 Annda](https://github.com/AnndaGH) 提交的镜像，且只更新到 8.4.4-4 版本，请自行决定是否使用。
 
 > 如果提示 timeout 连接超时错误，多重试几次应该就好了。
 
