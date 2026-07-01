@@ -15,8 +15,8 @@
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256:)
-- [8.4.4-5](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.4.4-5/sha256:)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256-5b5cd2125e0a51cd675f6f0ab3c84add1f76fd19fc0cc39673c58ae1c2f3ab5c)
+- [8.4.4-5](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/latest/sha256-5b5cd2125e0a51cd675f6f0ab3c84add1f76fd19fc0cc39673c58ae1c2f3ab5c)
 - [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.4.4-4/sha256:e90496c2c83c02e8f8f6c27327bd9a0e620556961dff3f906058aad7e8c5564e)
 - [8.0.32-27](https://hub.docker.com/repository/docker/greatsql/greatsql/tags/8.0.32-27/sha256:6169b1a98eaa4a2579315e30681714c102ac1d6e9881bac5606ebec67c5b7b3b)
 
