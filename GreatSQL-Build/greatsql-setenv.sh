@@ -44,8 +44,8 @@ if [ ${ARCH} = "x86_64" ] ; then
   CMAKE_EXE_LINKER_FLAGS=" -ljemalloc "
 fi
 
-DEPS="autoconf automake binutils bison bzip2 cmake cyrus-sasl-devel cyrus-sasl-scram \
+DEPS="autoconf automake binutils bison bzip2 lbzip2 cmake cyrus-sasl-devel cyrus-sasl-scram \
 gcc-c++ gcc-toolset-11 gcc-toolset-11-annobin-plugin-gcc gcc-toolset-11-libatomic-devel \
 jemalloc jemalloc-devel krb5-devel libaio-devel libatomic libcurl-devel libedit* libevent-devel libicu libicu-devel libtirpc-devel \
 libudev-devel lz4 lz4-devel libzstd-devel m4 make mecab-devel ncurses-devel numactl-devel openldap-devel openssl openssl-devel \
-pam-devel patchelf perl protobuf-lite* readline-devel rpcgen time systemd zlib-devel findutils procps-ng xz"
+pam-devel patchelf perl protobuf-lite* readline-devel time systemd zlib-devel findutils procps-ng xz"
