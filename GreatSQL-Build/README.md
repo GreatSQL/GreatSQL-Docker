@@ -12,12 +12,13 @@
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
 - 联系我们：greatsql@greatdb.com
-- 最新版本：GreatSQL 8.4.4-4
-- 最后更新时间：2025-10-16
+- 最新版本：GreatSQL 8.4.4-5
+- 最后更新时间：2026-07-06
 
 ## 支持哪些tag
 
-- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/latest/sha256:8b2a40a07efaafca05ed966f38745f612393ad6febeb81e8f4df4e3f6346589e)
+- [latest](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/latest/)
+- [8.4.4-5](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.4.4-5/)
 - [8.4.4-4](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.4.4-4/sha256:8b2a40a07efaafca05ed966f38745f612393ad6febeb81e8f4df4e3f6346589e)
 - [8.0.32-27](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.0.32-27/sha256:16c3b1f7336578e9ad96593d8e3b02de032ede456a5f4681f11cff538673bdd8)
 - [8.0.32-26](https://hub.docker.com/repository/docker/greatsql/greatsql_build/tags/8.0.32-26/sha256:2402086558d5913b2f8774c2fe39690237bb90175a22efb022471f0f62c9ac9c)
@@ -31,7 +32,7 @@ docker pull greatsql/greatsql_build
 还可以指定具体版本号
 
 ```shell
-docker pull greatsql/greatsql_build:8.4.4-4
+docker pull greatsql/greatsql_build:8.4.4-5
 ```
 
 如果无法从hub.docker.com拉取，可以尝试从阿里云ACR或腾讯云TCR拉取，例如：
@@ -114,8 +115,8 @@ sh-4.4# sh ./greatsql_build_init.sh
  3.3 make dynamic link for GreatSQL
 
 4. greatsql build completed!
-drwxrwxr-x 13 mysql mysql       293 Oct 11 11:54 GreatSQL-8.4.4-4-ol-glibc2.28-x86_64
-/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-4 for Linux on x86_64 (GreatSQL, Release 4, Revision d73de75905d)
+drwxrwxr-x 13 mysql mysql       293 Oct 11 11:54 GreatSQL-8.4.4-5-ol-glibc2.28-x86_64
+/opt/GreatSQL-8.4.4-5-ol-glibc2.28-x86_64/bin/mysqld  Ver 8.4.4-5 for Linux on x86_64 (GreatSQL, Release 5, Revision 39b389cdf3b)
 
 5. remove files and clean up 
 ```
@@ -123,7 +124,7 @@ drwxrwxr-x 13 mysql mysql       293 Oct 11 11:54 GreatSQL-8.4.4-4-ol-glibc2.28-x
 可以看到已经完成编译，可以将容器中编译好的二进制包文件拷贝到宿主机上，例如：
 
 ```shell
-docker cp greatsql_build:/opt/GreatSQL-8.4.4-4-ol-glibc2.28-x86_64 /usr/local/
+docker cp greatsql_build:/opt/GreatSQL-8.4.4-5-ol-glibc2.28-x86_64 /usr/local/
 ```
 
 如果宿主机环境也是 OracleLinux/CentOS x86_64 的话，这就可以在宿主机环境下直接使用该二进制文件包了。
