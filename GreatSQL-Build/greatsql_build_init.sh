@@ -3,11 +3,12 @@
 . /opt/greatsql-setenv.sh
 
 # download env and automake scripts
+cd ${OPT_DIR} && \
 curl -OL -o ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
-curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
+curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH}
 
 # reload ENVs
-. /opt/greatsql-setenv.sh
+. ${OPT_DIR}/${GREATSQL_ENV}
 
 echo "0. GreatSQL-Build INIT" && \
 microdnf install -y oracle-epel-release-el8 && \
