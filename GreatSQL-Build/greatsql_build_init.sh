@@ -2,6 +2,13 @@
 
 . /opt/greatsql-setenv.sh
 
+# download env and automake scripts
+curl -OL -o ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
+curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
+
+# reload ENVs
+. /opt/greatsql-setenv.sh
+
 echo "0. GreatSQL-Build INIT" && \
 microdnf install -y oracle-epel-release-el8 && \
 microdnf makecache && \
@@ -18,8 +25,6 @@ echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
 echo " 1.1 downloading sourcecode tarballs ..." && \
-curl -OL -o ${GREATSQL_ENV} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_ENV} && \
-curl -OL -o ${GREATSQL_MAKESH} ${GREATSQL_MAKESH_DOWNLOAD_URL}/${GREATSQL_MAKESH} && \
 curl -OL -o ${RPCGEN} ${GREATSQL_BUILD_DOWNLOAD_URL}/${RPCGEN} && \
 curl -OL -o ${PATCHELF}.tar.gz ${GREATSQL_BUILD_DOWNLOAD_URL}/${PATCHELF}.tar.gz && \
 curl -OL -o ${BOOST}.tar.bz2 ${BOOST_SRC_DOWNLOAD_URL}/${BOOST}.tar.bz2 && \
