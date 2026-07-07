@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source /opt/rh/gcc-toolset-11/enable && \
+echo 'source /opt/rh/gcc-toolset-11/enable' >> ~/.bash_profile
+
 . /opt/greatsql-setenv.sh
 
 echo " 3.1 compiling GreatSQL"
