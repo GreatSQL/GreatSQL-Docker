@@ -4,7 +4,7 @@
 
 本项目用于构建MySQL Shell for GreatSQL编译环境Docker镜像。
 
-适用于CentOS 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
+适用于 OracleLinux 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
 **提示**：本项目将不再更新，如果有需要编译 GreatSQL Shell 源码，请参考本项目中的几个编译脚本。
 
@@ -38,9 +38,7 @@ $ docker logs greatsqlsh | tail
 $ docker logs greatsqlsh | tail
 0. init GreatSQL-Shell-Build env
 0.1 touch logfile /tmp/greatsqlsh-automake.log
-0.2 install all DEPS(autoconf, gcc ...)
-0.3 download yum-repos.tar.xz and v8-libs-aarch64.tar.xz
-0.4 install yum-repos and v8-libs-aarch64
+0.2 enable EPEL and install all DEPS(autoconf, gcc ...)
 
 1. downloading sourcecode tarballs and extract
  1.1 downloading sourcecode tarballs ...
@@ -58,7 +56,7 @@ $ docker logs greatsqlsh | tail
 
 6. MySQL Shell for GreatSQL 8.4.4-4 build completed!
  6.1 MySQL Shell for GreatSQL 8.4.4-4 version:
-/opt/greatsql-shell-8.4.4-4-centos-glibc2.28-x86_64/bin/mysqlsh   Ver 8.4.4 for Linux on x86_64 - for MySQL 8.4.4 (Source distribution)
+/opt/greatsql-shell-8.4.4-4-glibc2.28-x86_64/bin/mysqlsh   Ver 8.4.4 for Linux on x86_64 - for MySQL 8.4.4 (Source distribution)
  6.2 TARBALL file:
 -rw-r--r-- 1 root root 40284300 Oct 21 09:38 /opt/greatsql-shell-8.4.4-4-glibc2.28-x86_64.tar.xz
 ```
