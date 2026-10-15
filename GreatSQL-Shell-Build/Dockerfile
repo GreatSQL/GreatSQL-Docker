@@ -3,7 +3,9 @@
 # docker version 26.1.3 (not podman)
 # docker buildx build --platform linux/arm64,linux/amd64 -t greatsql/greatsql_shell_build:8.4.4-4 . --push
 #
-FROM centos:8
+FROM oraclelinux:8-slim
+#FROM registry.cn-beijing.aliyuncs.com/greatsql/oraclelinux:8-slim
+#FROM ccr.ccs.tencentyun.com/greatsql/oraclelinux:8-slim
 
 LABEL maintainer="greatsql.cn" \
 email="greatsql@greatdb.com" \
@@ -18,22 +20,9 @@ GREATSQLSH_BUILD_DOWNLOAD_URL="https://gitee.com/GreatSQL/GreatSQL-Docker/raw/gr
 GREATSQLSH_ENV="greatsqlsh-setenv.sh" \
 ENTRYPOINT="docker-entrypoint.sh"
 
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*; \
-rm -f /etc/yum.repos.d/* ; \
-curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo > /dev/null 2>&1 && \
-sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo > /dev/null 2>&1 && \
-dnf -y update > /dev/null 2>&1 ; \
-rm -f /etc/yum.repos.d/CentOS-Linux-* ; \
-dnf clean all > /dev/null 2>&1 && \
-dnf makecache > /dev/null 2>&1 && \
+RUN echo '[main]' > /etc/dnf/dnf.conf && \
+microdnf install -y util-linux xz dnf dnf-plugins-core oracle-epel-release-el8 > /dev/null 2>&1 && \
+microdnf clean all > /dev/null 2>&1 && \
 /usr/sbin/groupadd -g ${MYSQL_UID} ${MYSQL_USER} && \
 /usr/sbin/useradd -u ${MYSQL_UID} -g ${MYSQL_UID} -s /sbin/nologin ${MYSQL_USER} && \
 mkdir -p ${OPT_DIR} && \
