@@ -5,7 +5,7 @@
 
 本项目用于构建GreatSQL Docker镜像。
 
-适用于CentOS 8 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
+适用于 OracleLinux 9 x86_64/aarch64 环境，更多环境适配请自行修改Dockerfile及相关脚本中的参数。
 
 ## 基本信息
 - 维护者: GreatSQL(greatsql@greatdb.com)
@@ -133,8 +133,6 @@ mysql -h172.16.16.10 -uXX -pXX -P4406
 下面是一个docker-compose的配置文件参考 `/data/docker/mysql.yml`:
 
 ```shell
-version: '2'
-
 services:
   greatsql:
     image: greatsql/greatsql
@@ -142,6 +140,12 @@ services:
     hostname: greatsql
     network_mode: bridge
     restart: unless-stopped
+    healthcheck:   #健康检查：mysqld可正常响应查询才算healthy
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
     environment:
       TZ: Asia/Shanghai
 ```
@@ -165,8 +169,6 @@ $ docker exec -it greatsql bash
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr.yml`:
 
 ```
-version: '2'
-
 services:
   mgr2:
     image: greatsql/greatsql #指定镜像
@@ -176,6 +178,12 @@ services:
       mgr_net:
         ipv4_address: 172.18.0.2    #设置容器使用固定IP地址，避免重启后IP变化
     restart: unless-stopped         #设定重启策略
+    healthcheck:                    #健康检查：mysqld可正常响应查询才算healthy
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s             #容器初始化（首次建库）需要一定时间，预留启动期
+      retries: 5
     environment:                    #设置多个环境变量
       TZ: Asia/Shanghai             #时区
       MYSQL_ALLOW_EMPTY_PASSWORD: 1                 #允许root账户空密码
@@ -194,7 +202,14 @@ services:
         ipv4_address: 172.18.0.3
     restart: unless-stopped
     depends_on:
-      - "mgr2"
+      mgr2:
+        condition: service_healthy #等mgr2健康（mysqld就绪）后再启动，避免MGR初始化竞态
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
     environment:
       TZ: Asia/Shanghai
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -213,7 +228,14 @@ services:
         ipv4_address: 172.18.0.4
     restart: unless-stopped
     depends_on:
-      - "mgr3"
+      mgr3:
+        condition: service_healthy #等mgr3健康后再启动
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
     environment:
       TZ: Asia/Shanghai
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -233,7 +255,7 @@ networks:
 启动所有容器:
 
 ```shell
-$ docker-compse -f /data/docker/mgr.yml up -d
+$ docker-compose -f /data/docker/mgr.yml up -d
 ```
 
 容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
@@ -261,8 +283,6 @@ $ mysql
 下面是一个docker-compose的配置文件参考 `/data/docker/mgr-multi-primary.yml`:
 
 ```
-version: '2'
-
 services:
   mgr2:
     image: greatsql/greatsql
@@ -272,6 +292,12 @@ services:
       mgr_net:
         ipv4_address: 172.18.0.2    #设置容器使用固定IP地址，避免重启后IP变化
     restart: unless-stopped         #设定重启策略
+    healthcheck:                    #健康检查：mysqld可正常响应查询才算healthy
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s             #容器初始化（首次建库）需要一定时间，预留启动期
+      retries: 5
     environment:                    #设置多个环境变量
       TZ: Asia/Shanghai             #时区
       MYSQL_ALLOW_EMPTY_PASSWORD: 1                 #允许root账户空密码
@@ -292,7 +318,14 @@ services:
         ipv4_address: 172.18.0.3
     restart: unless-stopped
     depends_on:
-      - "mgr2"
+      mgr2:
+        condition: service_healthy #等mgr2健康（mysqld就绪）后再启动，避免MGR初始化竞态
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
     environment:
       TZ: Asia/Shanghai
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -313,7 +346,14 @@ services:
         ipv4_address: 172.18.0.4
     restart: unless-stopped
     depends_on:
-      - "mgr3"
+      mgr3:
+        condition: service_healthy #等mgr3健康后再启动
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -Nse 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
     environment:
       TZ: Asia/Shanghai
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -335,7 +375,7 @@ networks:
 启动所有容器:
 
 ```shell
-$ docker-compse -f /data/docker/mgr-multi-primary.yml up -d
+$ docker-compose -f /data/docker/mgr-multi-primary.yml up -d
 ```
 
 容器启动后，会自行进行MySQL实例的初始化并自动构建MGR集群。
@@ -365,13 +405,16 @@ $ mysql
 是否初始化一个新的数据库。
 
 - **MYSQL_ALLOW_EMPTY_PASSWORD**
-是否设置MySQL root账号使用空密码，因为安全原因，不推荐这么做。
+是否设置MySQL root账号使用空密码，因为安全原因，不推荐这么做。空密码仅限内网演示使用，切勿在映射了公网端口的环境下使用。
 
 - **MYSQL_RANDOM_ROOT_PASSWORD**
 设置MySQL root账号的密码采用随机生成方式。
 
+- **MYSQL_ROOT_HOST**
+设置允许远程连接的root账号主机，默认值：localhost，即root账号默认仅允许本机连接，与官方mysql镜像一致。如果需要在容器外（远程主机）连接，请显式设置，例如 `-e MYSQL_ROOT_HOST=%`，同时务必为root账号设置强密码。
+
 - **MAXPERF**
-设置是否采用最大性能模式运行容器，默认值：1，即默认启用该模式。如果您不需要运行该模式，请在创建容器时加上 `-e MAXPERF=0` 参数。在MAXPERF模式下，会进行如下几个调整：
+设置是否采用最大性能模式运行容器，默认值：0，即默认不启用该模式。如果您需要运行该模式，请在创建容器时加上 `-e MAXPERF=1` 参数。在MAXPERF模式下，会进行如下几个调整：
 
 	- 调整 innodb_buffer_pool_size 为物理内存的75%。 
 	- 调整 rapid_memory_limit 为 innodb_buffer_pool_size 的50%。 
