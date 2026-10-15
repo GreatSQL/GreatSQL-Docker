@@ -80,7 +80,7 @@ _get_config() {
 
 file_env 'LOWER_CASE_TABLE_NAMES'
 if [ ! -z "$LOWER_CASE_TABLE_NAMES" ] ; then
-  if [ $LOWER_CASE_TABLE_NAMES -eq 1 ]; then
+  if [ ${LOWER_CASE_TABLE_NAMES:-0} -eq 1 ]; then
     echo "$(sed 's/LOWER_CASE_TABLE_NAMES/1/g' /etc/my.cnf)" > /etc/my.cnf
   else
     echo "$(sed 's/LOWER_CASE_TABLE_NAMES/0/g' /etc/my.cnf)" > /etc/my.cnf
@@ -104,8 +104,9 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		file_env 'MYSQL_ALLOW_EMPTY_PASSWORD'
 
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
-			echo >&2 '[Note] You specify none of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
-			echo >&2 'GreatSQL create root@localhost with **EMPTY PASSWORD**'
+			echo >&2 '[Warning] You specify none of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
+			echo >&2 '[Warning] GreatSQL create root@localhost with **EMPTY PASSWORD**, for demo/Intranet use ONLY!'
+			echo >&2 '[Warning] Do NOT expose this container to public network, or set a strong MYSQL_ROOT_PASSWORD instead.'
 			#echo >&2 'error: database is uninitialized and password option is not specified '
 			#echo >&2 '  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD'
 			#exit 1
@@ -230,8 +231,9 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		rootCreate=
-		# default root to listen for connections from anywhere
-		file_env 'MYSQL_ROOT_HOST' '%'
+		# default root to listen for connections from localhost only;
+		# set MYSQL_ROOT_HOST (e.g. '%') explicitly to allow remote access
+		file_env 'MYSQL_ROOT_HOST' 'localhost'
 		if [ ! -z "$MYSQL_ROOT_HOST" -a "$MYSQL_ROOT_HOST" != 'localhost' ]; then
 			# no, we don't care if read finds a terminating character in this heredoc
 			# https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
@@ -328,7 +330,7 @@ fi
 file_env 'MYSQL_INIT_MGR'
 file_env 'MYSQL_MGR_START_AS_PRIMARY'
 if [ "${MYSQL_INIT_MGR}" ]; then
-    if [ ${MYSQL_MGR_START_AS_PRIMARY} -eq 1 ]; then
+    if [ "${MYSQL_MGR_START_AS_PRIMARY:-0}" -eq 1 ]; then
 	echo "$(sed "s/START_MGR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
 	echo "$(sed "s/BOOTSTRAP_MGR/ON/ig" /etc/my.cnf)" > /etc/my.cnf
     else
@@ -346,6 +348,8 @@ cpu=`lscpu |grep '^CPU(s)'|grep -v scaling|awk '{print $2}'`
 ibp_maxperf=`expr ${mem} / 4 \* 3`
 rapid_mem_maxperf=`expr ${ibp_maxperf} / 2`
 rapid_thd_maxperf=`expr ${cpu} - 2`
+# protect against negative/zero rapid_worker_threads on 1~2 core containers
+[ ${rapid_thd_maxperf} -lt 1 ] && rapid_thd_maxperf=1
 
 if [ -z "${MAXPERF}" ]; then
     MAXPERF=${MAXPERF}
@@ -377,6 +381,29 @@ if [ "${MAXPERF}" == "1" ]; then
     echo "$(sed "s/\(.*rapid_worker_threads\).*/\1 = ${rapid_thd_maxperf}/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*rapid_hash_table_memory_limit\).*/\1 = 30/ig" /etc/my.cnf)" > /etc/my.cnf
     echo "$(sed "s/\(.*secondary_engine_parallel_load_workers\).*/\1 = 32/ig" /etc/my.cnf)" > /etc/my.cnf
+fi
+
+# Active privilege drop (official gosu/su-exec pattern): when started as
+# root, drop to the unprivileged mysql user before launching mysqld, so that
+# mysqld never runs as root even if a custom my.cnf omits "user=mysql".
+# setpriv comes from util-linux (already an image dependency).
+# Only mysqld gets dropped; other commands (mysql client, bash...) keep
+# their original behavior.
+if [ "$1" = 'mysqld' ] && [ "$(id -u)" = "0" ] && command -v setpriv >/dev/null 2>&1; then
+	# resolve datadir if not set yet (e.g. already-initialized container)
+	if [ -z "${DATADIR:-}" ]; then
+		DATADIR="$(_get_config 'datadir' "$@")"
+	fi
+	# make sure the mysql user can read/write the datadir; host bind-mounts
+	# are usually root-owned, so chown only when the owner differs from mysql
+	if [ -n "${DATADIR:-}" ] && [ -d "$DATADIR" ]; then
+		mysql_uid="$(id -u mysql 2>/dev/null || echo 3306)"
+		datadir_uid="$(stat -c %u "$DATADIR" 2>/dev/null || true)"
+		if [ -n "$datadir_uid" ] && [ "$datadir_uid" != "$mysql_uid" ]; then
+			chown -R "${mysql_uid}:${mysql_uid}" "$DATADIR" 2>/dev/null || true
+		fi
+	fi
+	exec setpriv --reuid=mysql --regid=mysql --init-groups "$@"
 fi
 
 exec "$@"
