@@ -6,23 +6,12 @@ echo "0.1 touch logfile ${MAKELOG}"
 touch ${MAKELOG} && \
 chown ${MYSQL_USER}:${MYSQL_USER} ${MAKELOG} && \
 chmod 0777 ${MAKELOG} && \
-echo "0.2 install all DEPS(autoconf, gcc ...)" && \
-rm -f /etc/yum.repos.d/CentOS*Linux-* && \
-rm -f /etc/yum.repos.d/CentOS*Stream-* && \
+echo "0.2 enable EPEL and install all DEPS(autoconf, gcc ...)" && \
 dnf clean all && dnf makecache && \
+dnf install -y 'dnf-command(config-manager)' >> ${MAKELOG} 2>&1 && \
+dnf config-manager --enable ol8_epel_testing ol8_epel_modular ol8_epel_testing_modular >> ${MAKELOG} 2>&1 && \
 dnf install -y ${DEPS} > /dev/null 2>&1 && \
 echo 'source /opt/rh/gcc-toolset-11/enable' >> /root/.bash_profile && \
-echo "0.3 download ${YUM_REPOS}.tar.xz" && \
-mkdir -p ${OPT_DIR}/${V8_DEPS} && \
-wget -c -O ${OPT_DIR}/${V8_DEPS}/${YUM_REPOS}.tar.xz ${GREATSQL_BUILD_DOWNLOAD_URL}/${V8_DEPS}/${YUM_REPOS}.tar.xz >> ${MAKELOG} 2>&1 && \
-echo "0.4 install ${YUM_REPOS}" && \
-cd ${OPT_DIR}/${V8_DEPS} && \
-tar xf ${YUM_REPOS}*z -C ${OPT_DIR}/${V8_DEPS} && \
-rpm -ivhU --nodeps ${YUM_REPOS}/centos*noarch.rpm >> ${MAKELOG} 2>&1 && \
-dnf install -y epel-release >> ${MAKELOG} 2>&1 && \
-dnf install -y 'dnf-command(config-manager)' >> ${MAKELOG} 2>&1 && \
-dnf config-manager --enable epel-testing epel-modular epel-testing-modular >> ${MAKELOG} 2>&1 && \
-rpm -Uvh ${YUM_REPOS}/epel-release*noarch.rpm >> ${MAKELOG} 2>&1 && \
 echo && \
 echo "1. downloading sourcecode tarballs and extract"
 cd ${OPT_DIR} && \
