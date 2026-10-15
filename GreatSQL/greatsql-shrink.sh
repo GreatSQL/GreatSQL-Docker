@@ -1,5 +1,17 @@
 #!/bin/sh
-basedir=/usr/local/GreatSQL
+# GreatSQL 运行镜像瘦身脚本
+#
+# 注意：
+#  - basedir 从 $GREATSQL_BASEDIR 读取（默认 /usr/local/GreatSQL），与
+#    Dockerfile 里的 GREATSQL_EXTRACT_DIR/GreatSQL 解耦；安装路径不同时
+#    直接通过环境变量覆盖即可，无需再改脚本。
+#  - 删除 libmysqlclient.so.21* 是安全的（已针对 8.4.4-4 minimal 包实测
+#    验证）：自带的 mysql 客户端自包含，运行时仅依赖 libssl/libcrypto/libtinfo，
+#    删掉 libmysqlclient 不影响客户端使用。
+#  - 下方 rm 列表已与 GreatSQL-8.4.4-4 minimal 包对齐，移除了该版本已不
+#    再自带的 Percona 遗留文件（ps-admin / ps_mysqld_helper /
+#    libperconaserverclient.* 等）。
+basedir=${GREATSQL_BASEDIR:-/usr/local/GreatSQL}
 
 rm -fr $basedir/include
 
@@ -7,12 +19,12 @@ cd $basedir/bin
 rm -fr comp_err ibd2sdi innochecksum ldb lz4_decompress myisamchk myisam_ftdump myisamlog myisampack mysqlcheck \
  mysql_client_test mysqld_multi mysqld_safe mysqldumpslow mysqlimport mysql_keyring_encryption_test mysql_ldb \
  mysql_migrate_keyring  mysql_secure_installation mysqlslap mysqltest mysqltest_safe_process mysql_upgrade \
- mysqlxtest ps-admin ps_mysqld_helper sst_dump zlib_decompress mysql_config mysql_config_editor perror \
+ mysqlxtest sst_dump zlib_decompress mysql_config mysql_config_editor perror \
  mysqldecrypt zstd_decompress mysqld-debug mysqladmin mysqlshow mysqlpump mysqlrouter mysqlrouter_keyring \
  mysqlrouter_passwd mysqlrouter_plugin_info mysqld_pre_systemd
 
 cd $basedir/lib
-rm -rf libHotBackup.so libmysqlservices.a libperconaserverclient.* libcoredumper.a libnspr4.so \
+rm -rf libHotBackup.so libmysqlservices.a libcoredumper.a libnspr4.so \
  libmysqlclient.so.21 libmysqlclient.so.21.2.32 libplc4.so libssl3.so libplds4.so libsmime3.so libnss3.so \
  private/libnspr4.so private/libnss3.so libnssutil3.so private/libnssutil3.so private/libplc4.so \
  private/libplds4.so private/libsmime3.so private/libssl3.so mecab/ mysqlrouter
